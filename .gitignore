@@ -1,0 +1,7 @@
+PDfMaker.xcodeproj/xcuserdata/
+PDfMaker.xcworkspace/
+Pods/
+*.swp
+Podfile.lock
+.DS_Store
+PDfMaker.xcodeproj/project.xcworkspace/xcuserdata/

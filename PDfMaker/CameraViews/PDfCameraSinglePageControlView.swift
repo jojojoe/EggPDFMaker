@@ -1,0 +1,170 @@
+//
+//  PDfCameraSinglePageControlView.swift
+//  PDfMaker
+//
+//  Created by JOJO on 2023/5/8.
+//
+
+import UIKit
+
+enum SinglePageControlType: String {
+    case single = "Single page shot"
+    case multi = "Multi-page shooting"
+}
+
+class PDfCameraSinglePageControlView: UIView {
+
+    let controlLabel = UILabel()
+    let topContentV = UIView()
+    var isshowStatus = false
+    var currentSingleType: SinglePageControlType = .single {
+        didSet {
+            controlLabel.text = currentSingleType.rawValue
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupContent()
+        topContentV.alpha = 0
+        topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+ 
+    func setupContent() {
+        backgroundColor = .clear
+        //
+        let controlBtn = UIButton()
+        controlBtn.backgroundColor = UIColor(hexString: "#292929")?.withAlphaComponent(0.8)
+        addSubview(controlBtn)
+        controlBtn.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.width.equalTo(130)
+            $0.height.equalTo(25)
+        }
+        controlBtn.layer.cornerRadius = 4
+        controlBtn.addTarget(self, action: #selector(controlBtnClick), for: .touchUpInside)
+        //
+        
+        controlBtn.addSubview(controlLabel)
+        controlLabel.text = SinglePageControlType.single.rawValue
+        controlLabel.textColor = .white
+        controlLabel.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview().offset(-5)
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(110)
+            $0.height.equalTo(20)
+        }
+        controlLabel.textAlignment = .center
+        controlLabel.adjustsFontSizeToFitWidth = true
+        
+        //
+        let controlArrowImgV = UIImageView()
+        controlBtn.addSubview(controlArrowImgV)
+        controlArrowImgV.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().offset(-6)
+            $0.width.equalTo(8)
+            $0.height.equalTo(4)
+        }
+        
+        //
+        
+        topContentV.backgroundColor = .clear
+        addSubview(topContentV)
+        topContentV.snp.makeConstraints {
+            $0.left.right.top.equalToSuperview()
+            $0.bottom.equalTo(controlBtn.snp.top).offset(-2)
+        }
+        
+        //
+        let topBgImgV = UIImageView()
+        topContentV.addSubview(topBgImgV)
+        topBgImgV.contentMode = .scaleToFill
+        topBgImgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        //
+        let fengeLine = UIView()
+        fengeLine.backgroundColor = UIColor(hexString: "#E0E3EA")
+        topContentV.addSubview(fengeLine)
+        fengeLine.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(-5)
+            $0.left.equalToSuperview().offset(10)
+            $0.height.equalTo(1)
+        }
+        let singleBtn = UIButton()
+        singleBtn.setTitle(SinglePageControlType.single.rawValue, for: .normal)
+        singleBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
+        
+        singleBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        topContentV.addSubview(singleBtn)
+        singleBtn.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview()
+            $0.bottom.equalTo(fengeLine.snp.top)
+        }
+        singleBtn.addTarget(self, action: #selector(singleBtnClick), for: .touchUpInside)
+        
+        //
+        let multiBtn = UIButton()
+        multiBtn.setTitle(SinglePageControlType.multi.rawValue, for: .normal)
+        multiBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
+        multiBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        topContentV.addSubview(multiBtn)
+        multiBtn.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalTo(fengeLine.snp.bottom)
+            $0.bottom.equalToSuperview().offset(-4)
+        }
+        multiBtn.addTarget(self, action: #selector(multiBtnClick), for: .touchUpInside)
+        
+        //
+        
+    }
+
+    @objc func controlBtnClick() {
+        if isshowStatus {
+            hiddenTopContentV()
+        } else {
+            showTopContentV()
+        }
+    }
+    @objc func singleBtnClick() {
+        hiddenTopContentV()
+        currentSingleType = .single
+    }
+    @objc func multiBtnClick() {
+        hiddenTopContentV()
+        currentSingleType = .multi
+    }
+    
+    func showTopContentV() {
+        isshowStatus = true
+        
+        UIView.animate(withDuration: 0.3, delay: 0) {
+            self.topContentV.alpha = 1
+            self.topContentV.transform = CGAffineTransform(translationX: 0, y: 0).scaledBy(x: 1, y: 1)
+            
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
+    
+    func hiddenTopContentV() {
+        isshowStatus = false
+        UIView.animate(withDuration: 0.3, delay: 0) {
+            self.topContentV.alpha = 0
+            self.topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
+            
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
+    
+}

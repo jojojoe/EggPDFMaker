@@ -1,0 +1,619 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */; };
+		EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */; };
+		EBAB51682A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */; };
+		EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */; };
+		EBAB516C2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB516B2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift */; };
+		EBCA1A2429FA732400473A6A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2329FA732400473A6A /* AppDelegate.swift */; };
+		EBCA1A2629FA732400473A6A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2529FA732400473A6A /* SceneDelegate.swift */; };
+		EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2729FA732400473A6A /* ViewController.swift */; };
+		EBCA1A2B29FA732400473A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A2929FA732400473A6A /* Main.storyboard */; };
+		EBCA1A2D29FA732600473A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A2C29FA732600473A6A /* Assets.xcassets */; };
+		EBCA1A3029FA732600473A6A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */; };
+		EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */; };
+		EBCA1A3C29FA7B2A00473A6A /* TEstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A3B29FA7B2A00473A6A /* TEstViewController.m */; };
+		EBCA1A5029FA7B3100473A6A /* UIColor+MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */; };
+		EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */; };
+		EBCA1A5229FA7B3100473A6A /* MADCameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */; };
+		EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */; };
+		EBCA1A5429FA7B3100473A6A /* MADCameraCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */; };
+		EBCA1A5529FA7B3100473A6A /* MADCropScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */; };
+		EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */; };
+		EBCA1A6529FBCACC00473A6A /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6029FBCAC900473A6A /* SF-Pro-Text-Bold.otf */; };
+		EBCA1A6629FBCACC00473A6A /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6129FBCACA00473A6A /* SF-Pro-Text-Regular.otf */; };
+		EBCA1A6729FBCACC00473A6A /* SF-Pro-Text-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6229FBCACB00473A6A /* SF-Pro-Text-Black.otf */; };
+		EBCA1A6829FBCACC00473A6A /* SF-Pro-Text-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6329FBCACB00473A6A /* SF-Pro-Text-Semibold.otf */; };
+		EBCA1A6929FBCACC00473A6A /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6429FBCACC00473A6A /* SF-Pro-Text-Medium.otf */; };
+		EBCA1A6D29FBCFF300473A6A /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6A29FBCFF200473A6A /* Montserrat-Bold.ttf */; };
+		EBCA1A6E29FBCFF300473A6A /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6B29FBCFF200473A6A /* Montserrat-Light.ttf */; };
+		EBCA1A6F29FBCFF300473A6A /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6C29FBCFF300473A6A /* Montserrat-Medium.otf */; };
+		EBCA1A7129FBCFFB00473A6A /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A7029FBCFFA00473A6A /* Montserrat-Regular.ttf */; };
+		EBCA1A7329FBD00100473A6A /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A7229FBD00100473A6A /* Montserrat-SemiBold.ttf */; };
+		EBCA1A7529FBD1A400473A6A /* PDfMakTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PDfMaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.release.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.release.xcconfig"; sourceTree = "<group>"; };
+		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
+		EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSinglePageControlView.swift; sourceTree = "<group>"; };
+		EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraBoundDetectControlView.swift; sourceTree = "<group>"; };
+		EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSpeedControlView.swift; sourceTree = "<group>"; };
+		EBAB516B2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraIdCardControlView.swift; sourceTree = "<group>"; };
+		EBCA1A2029FA732400473A6A /* PDfMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDfMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBCA1A2329FA732400473A6A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EBCA1A2529FA732400473A6A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		EBCA1A2729FA732400473A6A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EBCA1A2A29FA732400473A6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EBCA1A2C29FA732600473A6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EBCA1A2F29FA732600473A6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		EBCA1A3129FA732600473A6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfScanCAmeraVC.swift; sourceTree = "<group>"; };
+		EBCA1A3929FA7B2A00473A6A /* PDfMaker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PDfMaker-Bridging-Header.h"; sourceTree = "<group>"; };
+		EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TEstViewController.h; sourceTree = "<group>"; };
+		EBCA1A3B29FA7B2A00473A6A /* TEstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEstViewController.m; sourceTree = "<group>"; };
+		EBCA1A3E29FA7B3000473A6A /* MADCameraCaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCameraCaptureController.h; sourceTree = "<group>"; };
+		EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MADColor.m"; sourceTree = "<group>"; };
+		EBCA1A4129FA7B3000473A6A /* UIColor+MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MADColor.h"; sourceTree = "<group>"; };
+		EBCA1A4229FA7B3000473A6A /* MADCropScaleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCropScaleController.h; sourceTree = "<group>"; };
+		EBCA1A4429FA7B3000473A6A /* MADCGTransfromHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCGTransfromHelper.h; sourceTree = "<group>"; };
+		EBCA1A4529FA7B3000473A6A /* MADMacroDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacroDefines.h; sourceTree = "<group>"; };
+		EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCGTransfromHelper.m; sourceTree = "<group>"; };
+		EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCameraCaptureController.m; sourceTree = "<group>"; };
+		EBCA1A4929FA7B3000473A6A /* MADCropScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCropScaleView.h; sourceTree = "<group>"; };
+		EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSnapshotButton.m; sourceTree = "<group>"; };
+		EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCameraCaptureView.m; sourceTree = "<group>"; };
+		EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCropScaleView.m; sourceTree = "<group>"; };
+		EBCA1A4D29FA7B3000473A6A /* MADSnapshotButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSnapshotButton.h; sourceTree = "<group>"; };
+		EBCA1A4E29FA7B3000473A6A /* MADCameraCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCameraCaptureView.h; sourceTree = "<group>"; };
+		EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCropScaleController.m; sourceTree = "<group>"; };
+		EBCA1A6029FBCAC900473A6A /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
+		EBCA1A6129FBCACA00473A6A /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
+		EBCA1A6229FBCACB00473A6A /* SF-Pro-Text-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Black.otf"; sourceTree = "<group>"; };
+		EBCA1A6329FBCACB00473A6A /* SF-Pro-Text-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Semibold.otf"; sourceTree = "<group>"; };
+		EBCA1A6429FBCACC00473A6A /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
+		EBCA1A6A29FBCFF200473A6A /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		EBCA1A6B29FBCFF200473A6A /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
+		EBCA1A6C29FBCFF300473A6A /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.otf"; sourceTree = "<group>"; };
+		EBCA1A7029FBCFFA00473A6A /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		EBCA1A7229FBD00100473A6A /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfMakTool.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EBCA1A1D29FA732400473A6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		014B35B4470D01CE566F1D0B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */,
+				B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		1ED9753DDCBEA3F70FCCC0CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EBAB51642A08ADC5003C1838 /* CameraViews */ = {
+			isa = PBXGroup;
+			children = (
+				EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */,
+				EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */,
+				EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */,
+				EBAB516B2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift */,
+			);
+			path = CameraViews;
+			sourceTree = "<group>";
+		};
+		EBCA1A1729FA732300473A6A = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A2229FA732400473A6A /* PDfMaker */,
+				EBCA1A2129FA732400473A6A /* Products */,
+				014B35B4470D01CE566F1D0B /* Pods */,
+				1ED9753DDCBEA3F70FCCC0CE /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		EBCA1A2129FA732400473A6A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A2029FA732400473A6A /* PDfMaker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EBCA1A2229FA732400473A6A /* PDfMaker */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A2329FA732400473A6A /* AppDelegate.swift */,
+				EBCA1A2529FA732400473A6A /* SceneDelegate.swift */,
+				EBCA1A2729FA732400473A6A /* ViewController.swift */,
+				EBCA1A2C29FA732600473A6A /* Assets.xcassets */,
+				EBCA1A3129FA732600473A6A /* Info.plist */,
+				EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */,
+				EBCA1A2929FA732400473A6A /* Main.storyboard */,
+				EBCA1A3929FA7B2A00473A6A /* PDfMaker-Bridging-Header.h */,
+				EBCA1A5D29FBC6A200473A6A /* Views */,
+				EBCA1A3D29FA7B3000473A6A /* Capture */,
+				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
+				EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */,
+				EBAB51642A08ADC5003C1838 /* CameraViews */,
+				EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */,
+				EBCA1A3B29FA7B2A00473A6A /* TEstViewController.m */,
+				EBCA1A6229FBCACB00473A6A /* SF-Pro-Text-Black.otf */,
+				EBCA1A6029FBCAC900473A6A /* SF-Pro-Text-Bold.otf */,
+				EBCA1A6429FBCACC00473A6A /* SF-Pro-Text-Medium.otf */,
+				EBCA1A6129FBCACA00473A6A /* SF-Pro-Text-Regular.otf */,
+				EBCA1A6329FBCACB00473A6A /* SF-Pro-Text-Semibold.otf */,
+				EBCA1A6A29FBCFF200473A6A /* Montserrat-Bold.ttf */,
+				EBCA1A6B29FBCFF200473A6A /* Montserrat-Light.ttf */,
+				EBCA1A6C29FBCFF300473A6A /* Montserrat-Medium.otf */,
+				EBCA1A7029FBCFFA00473A6A /* Montserrat-Regular.ttf */,
+				EBCA1A7229FBD00100473A6A /* Montserrat-SemiBold.ttf */,
+			);
+			path = PDfMaker;
+			sourceTree = "<group>";
+		};
+		EBCA1A3D29FA7B3000473A6A /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A3F29FA7B3000473A6A /* category */,
+				EBCA1A3E29FA7B3000473A6A /* MADCameraCaptureController.h */,
+				EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */,
+				EBCA1A4229FA7B3000473A6A /* MADCropScaleController.h */,
+				EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */,
+				EBCA1A4329FA7B3000473A6A /* utils */,
+				EBCA1A4829FA7B3000473A6A /* view */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		EBCA1A3F29FA7B3000473A6A /* category */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */,
+				EBCA1A4129FA7B3000473A6A /* UIColor+MADColor.h */,
+			);
+			path = category;
+			sourceTree = "<group>";
+		};
+		EBCA1A4329FA7B3000473A6A /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A4429FA7B3000473A6A /* MADCGTransfromHelper.h */,
+				EBCA1A4529FA7B3000473A6A /* MADMacroDefines.h */,
+				EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		EBCA1A4829FA7B3000473A6A /* view */ = {
+			isa = PBXGroup;
+			children = (
+				EBCA1A4E29FA7B3000473A6A /* MADCameraCaptureView.h */,
+				EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */,
+				EBCA1A4929FA7B3000473A6A /* MADCropScaleView.h */,
+				EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */,
+				EBCA1A4D29FA7B3000473A6A /* MADSnapshotButton.h */,
+				EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		EBCA1A5D29FBC6A200473A6A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EBCA1A1F29FA732400473A6A /* PDfMaker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EBCA1A3429FA732600473A6A /* Build configuration list for PBXNativeTarget "PDfMaker" */;
+			buildPhases = (
+				A6E0A5D37A70ACF7708A8B39 /* [CP] Check Pods Manifest.lock */,
+				EBCA1A1C29FA732400473A6A /* Sources */,
+				EBCA1A1D29FA732400473A6A /* Frameworks */,
+				EBCA1A1E29FA732400473A6A /* Resources */,
+				B2589F71ABC29742D248CA5B /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PDfMaker;
+			productName = PDfMaker;
+			productReference = EBCA1A2029FA732400473A6A /* PDfMaker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EBCA1A1829FA732300473A6A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					EBCA1A1F29FA732400473A6A = {
+						CreatedOnToolsVersion = 14.1;
+						LastSwiftMigration = 1410;
+					};
+				};
+			};
+			buildConfigurationList = EBCA1A1B29FA732300473A6A /* Build configuration list for PBXProject "PDfMaker" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EBCA1A1729FA732300473A6A;
+			productRefGroup = EBCA1A2129FA732400473A6A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EBCA1A1F29FA732400473A6A /* PDfMaker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EBCA1A1E29FA732400473A6A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBCA1A7129FBCFFB00473A6A /* Montserrat-Regular.ttf in Resources */,
+				EBCA1A6F29FBCFF300473A6A /* Montserrat-Medium.otf in Resources */,
+				EBCA1A7329FBD00100473A6A /* Montserrat-SemiBold.ttf in Resources */,
+				EBCA1A6E29FBCFF300473A6A /* Montserrat-Light.ttf in Resources */,
+				EBCA1A3029FA732600473A6A /* LaunchScreen.storyboard in Resources */,
+				EBCA1A6729FBCACC00473A6A /* SF-Pro-Text-Black.otf in Resources */,
+				EBCA1A6629FBCACC00473A6A /* SF-Pro-Text-Regular.otf in Resources */,
+				EBCA1A2D29FA732600473A6A /* Assets.xcassets in Resources */,
+				EBCA1A6929FBCACC00473A6A /* SF-Pro-Text-Medium.otf in Resources */,
+				EBCA1A6D29FBCFF300473A6A /* Montserrat-Bold.ttf in Resources */,
+				EBCA1A6529FBCACC00473A6A /* SF-Pro-Text-Bold.otf in Resources */,
+				EBCA1A2B29FA732400473A6A /* Main.storyboard in Resources */,
+				EBCA1A6829FBCACC00473A6A /* SF-Pro-Text-Semibold.otf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A6E0A5D37A70ACF7708A8B39 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PDfMaker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2589F71ABC29742D248CA5B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PDfMaker/Pods-PDfMaker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PDfMaker/Pods-PDfMaker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PDfMaker/Pods-PDfMaker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EBCA1A1C29FA732400473A6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */,
+				EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */,
+				EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */,
+				EBCA1A5229FA7B3100473A6A /* MADCameraCaptureController.m in Sources */,
+				EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */,
+				EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */,
+				EBCA1A3C29FA7B2A00473A6A /* TEstViewController.m in Sources */,
+				EBAB516C2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift in Sources */,
+				EBCA1A5529FA7B3100473A6A /* MADCropScaleView.m in Sources */,
+				EBCA1A2429FA732400473A6A /* AppDelegate.swift in Sources */,
+				EBCA1A5429FA7B3100473A6A /* MADCameraCaptureView.m in Sources */,
+				EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */,
+				EBCA1A5029FA7B3100473A6A /* UIColor+MADColor.m in Sources */,
+				EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */,
+				EBCA1A7529FBD1A400473A6A /* PDfMakTool.swift in Sources */,
+				EBAB51682A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift in Sources */,
+				EBCA1A2629FA732400473A6A /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		EBCA1A2929FA732400473A6A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EBCA1A2A29FA732400473A6A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EBCA1A2F29FA732600473A6A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EBCA1A3229FA732600473A6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		EBCA1A3329FA732600473A6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EBCA1A3529FA732600473A6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 97Y24FFSPP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PDfMaker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "PDF Maker";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs your camera permission to record video and edit it shape, mask, cut it, add stickers, text, music and other effect.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs your photo gallery permission to choose and save video, and apply the shape editor, video cut, sticker, text, music and other effect.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xx.888888;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "PDfMaker/PDfMaker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		EBCA1A3629FA732600473A6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 97Y24FFSPP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PDfMaker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "PDF Maker";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App needs your camera permission to record video and edit it shape, mask, cut it, add stickers, text, music and other effect.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "App needs your photo gallery permission to choose and save video, and apply the shape editor, video cut, sticker, text, music and other effect.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xx.888888;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "PDfMaker/PDfMaker-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EBCA1A1B29FA732300473A6A /* Build configuration list for PBXProject "PDfMaker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBCA1A3229FA732600473A6A /* Debug */,
+				EBCA1A3329FA732600473A6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBCA1A3429FA732600473A6A /* Build configuration list for PBXNativeTarget "PDfMaker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBCA1A3529FA732600473A6A /* Debug */,
+				EBCA1A3629FA732600473A6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EBCA1A1829FA732300473A6A /* Project object */;
+}
