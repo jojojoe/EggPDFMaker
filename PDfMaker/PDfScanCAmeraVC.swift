@@ -85,7 +85,7 @@ class PDfScanCAmeraVC: UIViewController {
         }
         cancelBtn.setTitle("Cancel", for: .normal)
         cancelBtn.setTitleColor(.white, for: .normal)
-        cancelBtn.titleLabel?.font = UIFont(name: "SFProText-Medium", size: 17)
+        cancelBtn.titleLabel?.font = PDfFontNames.SFProSemiBold.font(sizePoint: 17)
         cancelBtn.addTarget(self, action: #selector(cancelBtnClick(sender: )), for: .touchUpInside)
         //
         let autoBtn = UIButton()
@@ -98,7 +98,8 @@ class PDfScanCAmeraVC: UIViewController {
         }
         autoBtn.setTitle("Auto", for: .normal)
         autoBtn.setTitleColor(.white, for: .normal)
-        autoBtn.titleLabel?.font = UIFont(name: "SFProText-Medium", size: 17)
+        
+        autoBtn.titleLabel?.font = PDfFontNames.SFProSemiBold.font(sizePoint: 17)
         autoBtn.addTarget(self, action: #selector(autoBtnClick(sender: )), for: .touchUpInside)
         //
         let btnPadding: CGFloat = (UIScreen.main.bounds.size.width - 75 * 2 - 40 * 2) / 3
@@ -112,8 +113,8 @@ class PDfScanCAmeraVC: UIViewController {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
-        lightBtn.setImage(UIImage(named: ""), for: .normal)
-        lightBtn.setImage(UIImage(named: ""), for: .selected)
+        lightBtn.setImage(UIImage(named: "filter_n"), for: .normal)
+        lightBtn.setImage(UIImage(named: "filter_s"), for: .selected)
         lightBtn.addTarget(self, action: #selector(lightBtnClick(sender: )), for: .touchUpInside)
         
         //
@@ -126,7 +127,8 @@ class PDfScanCAmeraVC: UIViewController {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
-        filterBtn.setImage(UIImage(named: ""), for: .normal)
+        filterBtn.setImage(UIImage(named: "filter_n"), for: .normal)
+        filterBtn.setImage(UIImage(named: "filter_s"), for: .selected)
         filterBtn.addTarget(self, action: #selector(filterBtnClick(sender: )), for: .touchUpInside)
         
         
@@ -202,14 +204,14 @@ class PDfScanCAmeraVC: UIViewController {
         
         //
         let captureTakeBtn = UIButton()
-        captureTakeBtn.backgroundColor = .white
+        captureTakeBtn.setImage(UIImage(named: "takephoto"), for: .normal)
+        captureTakeBtn.backgroundColor = .clear
         bottomBanner.addSubview(captureTakeBtn)
         captureTakeBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(toolBtnBar.snp.bottom).offset(10)
             $0.width.height.equalTo(72)
         }
-        captureTakeBtn.layer.cornerRadius = 72/2
         captureTakeBtn.addTarget(self, action: #selector(captureTakeBtnClick(sender: )), for: .touchUpInside)
          
         //

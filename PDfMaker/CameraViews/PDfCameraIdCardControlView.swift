@@ -20,6 +20,24 @@ class PDfCameraIdCardControlView: UIView {
     }
  
     func setupContent() {
+        //
+        let controlBtn = UIButton()
+        controlBtn.backgroundColor = UIColor(hexString: "#292929")?.withAlphaComponent(0.8)
+        addSubview(controlBtn)
+        controlBtn.setTitle("Put the ID Card in the view frame", for: .normal)
+        controlBtn.setTitleColor(.white, for: .normal)
+        controlBtn.titleLabel?.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        controlBtn.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.width.equalTo(212)
+            $0.height.equalTo(25)
+        }
+        controlBtn.layer.cornerRadius = 4
+        
+        //
+        
         
     }
 }

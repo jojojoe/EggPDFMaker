@@ -66,6 +66,7 @@ class PDfCameraSinglePageControlView: UIView {
         //
         let controlArrowImgV = UIImageView()
         controlBtn.addSubview(controlArrowImgV)
+        controlArrowImgV.image = UIImage(named: "jiantou")
         controlArrowImgV.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().offset(-6)
@@ -74,20 +75,25 @@ class PDfCameraSinglePageControlView: UIView {
         }
         
         //
-        
-        topContentV.backgroundColor = .clear
+        topContentV.clipsToBounds = false
+        topContentV.backgroundColor = .white
+        topContentV.layer.cornerRadius = 4
         addSubview(topContentV)
         topContentV.snp.makeConstraints {
             $0.left.right.top.equalToSuperview()
-            $0.bottom.equalTo(controlBtn.snp.top).offset(-2)
+            $0.bottom.equalTo(controlBtn.snp.top).offset(-10)
         }
         
         //
         let topBgImgV = UIImageView()
         topContentV.addSubview(topBgImgV)
+        topBgImgV.image = UIImage(named: "Polygon2")
         topBgImgV.contentMode = .scaleToFill
         topBgImgV.snp.makeConstraints {
-            $0.left.right.top.bottom.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(topContentV.snp.bottom).offset(0)
+            $0.width.equalTo(10)
+            $0.height.equalTo(5)
         }
         //
         let fengeLine = UIView()
@@ -95,7 +101,7 @@ class PDfCameraSinglePageControlView: UIView {
         topContentV.addSubview(fengeLine)
         fengeLine.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-5)
+            $0.centerY.equalToSuperview()
             $0.left.equalToSuperview().offset(10)
             $0.height.equalTo(1)
         }
