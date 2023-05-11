@@ -54,7 +54,7 @@ class PDfCameraSpeedControlView: UIView {
         controlBtn.addSubview(controlLabel)
         controlLabel.text = BoundSpeedControlType.speed.rawValue
         controlLabel.textColor = .white
-        controlLabel.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlLabel.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-5)
             $0.centerY.equalToSuperview()
@@ -111,7 +111,7 @@ class PDfCameraSpeedControlView: UIView {
         let speedBtn = UIButton()
         speedBtn.setTitle(BoundSpeedControlType.speed.rawValue, for: .normal)
         speedBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
-        speedBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        speedBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(speedBtn)
         speedBtn.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
@@ -123,7 +123,7 @@ class PDfCameraSpeedControlView: UIView {
         let qualityBtn = UIButton()
         qualityBtn.setTitle(BoundSpeedControlType.quality.rawValue, for: .normal)
         qualityBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
-        qualityBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        qualityBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(qualityBtn)
         qualityBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()

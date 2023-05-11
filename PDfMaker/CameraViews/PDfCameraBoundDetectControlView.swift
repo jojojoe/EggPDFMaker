@@ -54,7 +54,7 @@ class PDfCameraBoundDetectControlView: UIView {
         controlBtn.addSubview(controlLabel)
         controlLabel.text = BoundDetectControlType.auto.rawValue
         controlLabel.textColor = .white
-        controlLabel.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlLabel.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-5)
             $0.centerY.equalToSuperview()
@@ -110,7 +110,7 @@ class PDfCameraBoundDetectControlView: UIView {
         autoBtn.setTitle(BoundDetectControlType.auto.rawValue, for: .normal)
         autoBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
         
-        autoBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        autoBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(autoBtn)
         autoBtn.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
@@ -122,7 +122,7 @@ class PDfCameraBoundDetectControlView: UIView {
         let manuBtn = UIButton()
         manuBtn.setTitle(BoundDetectControlType.manu.rawValue, for: .normal)
         manuBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
-        manuBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        manuBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(manuBtn)
         manuBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()

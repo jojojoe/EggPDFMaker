@@ -26,18 +26,31 @@ class PDfCameraIdCardControlView: UIView {
         addSubview(controlBtn)
         controlBtn.setTitle("Put the ID Card in the view frame", for: .normal)
         controlBtn.setTitleColor(.white, for: .normal)
-        controlBtn.titleLabel?.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlBtn.titleLabel?.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        
+        controlBtn.layer.cornerRadius = 4
+        controlBtn.isUserInteractionEnabled = false
+        //
+        let imgH = bounds.size.height - 70
+        let imgW = imgH * (30.0/45.0)
+        let contentImgV = UIImageView()
+        addSubview(contentImgV)
+        contentImgV.snp.makeConstraints {
+            $0.width.equalTo(Int(imgW))
+            $0.height.equalTo(Int(imgH))
+            $0.centerY.equalToSuperview().offset(25)
+            $0.centerX.equalToSuperview()
+        }
+        contentImgV.contentMode = .scaleAspectFill
+        contentImgV.image = UIImage(named: "idcard")
+        //
         controlBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview()
+            $0.bottom.equalTo(contentImgV.snp.top).offset(-10)
             $0.width.equalTo(212)
             $0.height.equalTo(25)
         }
-        controlBtn.layer.cornerRadius = 4
-        
-        //
-        
         
     }
 }

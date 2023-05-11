@@ -10,7 +10,7 @@ import SnapKit
 import SwifterSwift
 
 
-enum PDfFontNames: String {
+enum FontCusNames: String {
     case SFProRegular = "SFProText-Regular"
     case SFProMedium = "SFProText-Medium"
     case SFProSemiBold = "SFProText-Semibold"
@@ -43,36 +43,7 @@ class ViewController: UIViewController {
         scaneBtn.backgroundColor = .lightGray
         scaneBtn.addTarget(self, action: #selector(scaneBtnClick(sender: )), for: .touchUpInside)
         
-        //
-        let singleV = PDfCameraSinglePageControlView()
-        view.addSubview(singleV)
-        singleV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-150)
-            $0.width.equalTo(140)
-            $0.height.equalTo(100)
-        }
-        
-        //
-        let boundV = PDfCameraBoundDetectControlView()
-        view.addSubview(boundV)
-        boundV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(50)
-            $0.width.equalTo(140)
-            $0.height.equalTo(100)
-        }
-        
-        //
-        let speedV = PDfCameraSpeedControlView()
-        view.addSubview(speedV)
-        speedV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(200)
-            $0.width.equalTo(160)
-            $0.height.equalTo(100)
-        }
-        
+         
         
         
         

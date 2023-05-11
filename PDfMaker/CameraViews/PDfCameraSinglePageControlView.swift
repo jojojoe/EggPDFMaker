@@ -53,7 +53,7 @@ class PDfCameraSinglePageControlView: UIView {
         controlBtn.addSubview(controlLabel)
         controlLabel.text = SinglePageControlType.single.rawValue
         controlLabel.textColor = .white
-        controlLabel.font = PDfFontNames.SFProRegular.font(sizePoint: 11)
+        controlLabel.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-5)
             $0.centerY.equalToSuperview()
@@ -109,7 +109,7 @@ class PDfCameraSinglePageControlView: UIView {
         singleBtn.setTitle(SinglePageControlType.single.rawValue, for: .normal)
         singleBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
         
-        singleBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        singleBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(singleBtn)
         singleBtn.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
@@ -121,7 +121,7 @@ class PDfCameraSinglePageControlView: UIView {
         let multiBtn = UIButton()
         multiBtn.setTitle(SinglePageControlType.multi.rawValue, for: .normal)
         multiBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
-        multiBtn.titleLabel?.font = PDfFontNames.SFProMedium.font(sizePoint: 12)
+        multiBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         topContentV.addSubview(multiBtn)
         multiBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()
