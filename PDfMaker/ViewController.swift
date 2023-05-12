@@ -51,9 +51,54 @@ class ViewController: UIViewController {
     }
 
     @objc func scaneBtnClick(sender: UIButton) {
-        let vc = PDfScanCAmeraVC()
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let vc = PDfScanCAmeraVC()
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        
+        
+//        edit(image: UIImage(named: "testimg")!)
+        
+        editwescan(image: UIImage(named: "test2")!)
+        
+        
+        
     }
+    
+    func edit(image: UIImage) {
+        let cropViewController = DDPerspectiveTransformViewController()
+        cropViewController.delegate = self
+        cropViewController.image = image
+        cropViewController.pointSize = CGSize(width: 40, height: 40)
 
+        navigationController?.pushViewController(cropViewController, animated: true)
+    }
+    
+    
+    func editwescan(image: UIImage) {
+        
+        WeScanCropManager.default.detect(image: image) { [weak self] detectedQuad in
+            guard let self else { return }
+            let editViewController = EditScanViewController(image: image, quad: detectedQuad, rotateImage: false)
+            self.navigationController?.pushViewController(editViewController, animated: true)
+        }
+        
+        
+    }
+    
+
+    
 }
 
+
+
+
+
+extension ViewController: DDPerspectiveTransformProtocol {
+    func perspectiveTransformingDidFinish(controller: DDPerspectiveTransformViewController, croppedImage: UIImage) {
+        debugPrint("cropedImg = \(croppedImage)")
+    }
+    
+    func perspectiveTransformingDidCancel(controller: DDPerspectiveTransformViewController) {
+        _ = controller.navigationController?.popViewController(animated: true)
+    }
+}

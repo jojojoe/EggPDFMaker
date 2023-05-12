@@ -10,7 +10,7 @@ import UIKit
 class UserImgItem: NSObject {
     var originImg: UIImage
     var cropedImg: UIImage?
-    init(originImg: UIImage, cropedImg: UIImage = nil) {
+    init(originImg: UIImage, cropedImg: UIImage? = nil) {
         self.originImg = originImg
         super.init()
     }
@@ -45,7 +45,7 @@ class PDfScanCAmeraVC: UIViewController {
     
     var onceLayout = Once()
     
-    var currentScanType = .scanDoc
+    var currentScanType: ScanType = .scanDoc
     
     lazy var captureCameraView: MADCameraCaptureView = {
         
@@ -404,31 +404,31 @@ extension PDfScanCAmeraVC {
         captureCameraView.captureImage {[weak self] img, borderDetectFeature in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                if currentScanType == .scanDoc {
-                    if boundFloatV.currentDetectType == .auto {
+                if self.currentScanType == .scanDoc {
+                    if self.boundFloatV.currentDetectType == .auto {
                         
                     } else {
                         
                     }
-                    if singleFloatV.currentSingleType == .single {
-                        
-                    } else {
-                        
-                    }
-                    
-                } else if currentScanType == .scanPhoto {
-                    if singleFloatV.currentSingleType == .single {
-                        
-                    } else {
-                        
-                    }
-                    if speedFloatV.currentDetectType == .quality {
+                    if self.singleFloatV.currentSingleType == .single {
                         
                     } else {
                         
                     }
                     
-                } else if currentScanType == .scanIDCard {
+                } else if self.currentScanType == .scanPhoto {
+                    if self.singleFloatV.currentSingleType == .single {
+                        
+                    } else {
+                        
+                    }
+                    if self.speedFloatV.currentDetectType == .quality {
+                        
+                    } else {
+                        
+                    }
+                    
+                } else if self.currentScanType == .scanIDCard {
                     
                 }
                 
