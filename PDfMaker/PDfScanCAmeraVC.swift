@@ -9,9 +9,10 @@ import UIKit
 
 class UserImgItem: NSObject {
     var originImg: UIImage
-    var cropedImg: UIImage?
-    init(originImg: UIImage, cropedImg: UIImage? = nil) {
+    var processedImg: UIImage
+    init(originImg: UIImage, processedImg: UIImage? = nil) {
         self.originImg = originImg
+        self.processedImg = processedImg ?? originImg
         super.init()
     }
 }
@@ -442,7 +443,7 @@ extension PDfScanCAmeraVC {
         let imgItem = UserImgItem(originImg: img)
         userImageItemList.append(imgItem)
         if let img = userImageItemList.last {
-            multiPhotoAreaView.image = img.cropedImg ?? img.originImg
+            multiPhotoAreaView.image = img.processedImg
             multiPhotoAreaCountLabel.text = "\(userImageItemList.count)"
             multiPhotoAreaView.isHidden = false
             multiPhotoAreaCountLabel.isHidden = false

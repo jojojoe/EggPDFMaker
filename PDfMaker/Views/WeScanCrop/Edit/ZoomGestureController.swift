@@ -16,7 +16,7 @@ final class ZoomGestureController {
     private let quadView: QuadrilateralView
     private var previousPanPosition: CGPoint?
     private var closestCorner: CornerPosition?
-
+    var touchMoveBlock: (()->Void)?
     init(image: UIImage, quadView: QuadrilateralView) {
         self.image = image
         self.quadView = quadView
@@ -31,6 +31,7 @@ final class ZoomGestureController {
             self.previousPanPosition = nil
             self.closestCorner = nil
             quadView.resetHighlightedCornerViews()
+            touchMoveBlock?()
             return
         }
 
@@ -59,6 +60,8 @@ final class ZoomGestureController {
         }
 
         quadView.highlightCornerAtPosition(position: closestCorner, with: zoomedImage)
+        
+        
     }
 
 }

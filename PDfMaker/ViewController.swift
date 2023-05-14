@@ -54,32 +54,28 @@ class ViewController: UIViewController {
 //        let vc = PDfScanCAmeraVC()
 //        self.navigationController?.pushViewController(vc, animated: true)
         
-        
-        
-//        edit(image: UIImage(named: "testimg")!)
-        
-        editwescan(image: UIImage(named: "test2")!)
-        
-        
-        
-    }
-    
-    func edit(image: UIImage) {
-        let cropViewController = DDPerspectiveTransformViewController()
-        cropViewController.delegate = self
-        cropViewController.image = image
-        cropViewController.pointSize = CGSize(width: 40, height: 40)
+        let item = UserImgItem(originImg: UIImage(named: "test1")!)
+        let rotatevc = PDfPhotoRotateVC(imgItem: item)
+        self.navigationController?.pushViewController(rotatevc, animated: true)
 
-        navigationController?.pushViewController(cropViewController, animated: true)
+        
+//        editwescan(image: UIImage(named: "test1")!)
+        
+        
+        
     }
     
+   
     
     func editwescan(image: UIImage) {
-        
+        let item = UserImgItem(originImg: image)
         WeScanCropManager.default.detect(image: image) { [weak self] detectedQuad in
             guard let self else { return }
-            let editViewController = EditScanViewController(image: image, quad: detectedQuad, rotateImage: false)
+            
+            let editViewController = PDfPhotoCropVC(imgItem: item, quad: detectedQuad, rotateImage: false)
             self.navigationController?.pushViewController(editViewController, animated: true)
+//            EditScanViewController
+            // PDfPhotoCropVC
         }
         
         

@@ -28,6 +28,98 @@ class WeScanCropManager: NSObject {
         
     }
     
+    func defaultQuad(forImage image: UIImage) -> Quadrilateral {
+        let topLeft = CGPoint(x: image.size.width * 0.0, y: image.size.height * 0.0)
+        let topRight = CGPoint(x: image.size.width * 1.0, y: image.size.height * 0.0)
+        let bottomRight = CGPoint(x: image.size.width * 1.0, y: image.size.height * 1.0)
+        let bottomLeft = CGPoint(x: image.size.width * 0.0, y: image.size.height * 1.0)
+
+        let quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+
+        return quad
+    }
+    
+    func defaultQuad11(forImage image: UIImage) -> Quadrilateral {
+        let minlenght: CGFloat = min(image.size.width, image.size.height)
+        let topoffx: CGFloat = (image.size.width - minlenght) / 2
+        let topoffy: CGFloat = (image.size.height - minlenght) / 2
+        
+        
+        let topLeft = CGPoint(x: topoffx, y: topoffy)
+        let topRight = CGPoint(x: image.size.width - topoffx, y: topoffy)
+        let bottomRight = CGPoint(x: image.size.width - topoffx, y: image.size.height - topoffy)
+        let bottomLeft = CGPoint(x: topoffx, y: image.size.height - topoffy)
+
+        let quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+
+        return quad
+    }
+    
+    func defaultQuad23(forImage image: UIImage) -> Quadrilateral {
+        
+        var topoffx: CGFloat = image.size.width
+        var topoffy: CGFloat = image.size.height
+        
+        let ratio: CGFloat = 2.0/3.0
+        if (image.size.width / image.size.height) < ratio {
+            let width: CGFloat = image.size.width
+            let heigh: CGFloat = image.size.width / ratio
+            topoffx = 0
+            topoffy = (image.size.height - heigh) / 2
+        } else {
+            let heigh: CGFloat = image.size.height
+            let width: CGFloat = image.size.height * ratio
+            topoffx = (image.size.width - width) / 2
+            topoffy = 0
+        }
+        
+        let topLeft = CGPoint(x: topoffx, y: topoffy)
+        let topRight = CGPoint(x: image.size.width - topoffx, y: topoffy)
+        let bottomRight = CGPoint(x: image.size.width - topoffx, y: image.size.height - topoffy)
+        let bottomLeft = CGPoint(x: topoffx, y: image.size.height - topoffy)
+
+        let quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+
+        return quad
+    }
+    
+    func defaultQuad34(forImage image: UIImage) -> Quadrilateral {
+        var topoffx: CGFloat = image.size.width
+        var topoffy: CGFloat = image.size.height
+        
+        let ratio: CGFloat = 3.0/4.0
+        if (image.size.width / image.size.height) < ratio {
+            let width: CGFloat = image.size.width
+            let heigh: CGFloat = image.size.width / ratio
+            topoffx = 0
+            topoffy = (image.size.height - heigh) / 2
+        } else {
+            let heigh: CGFloat = image.size.height
+            let width: CGFloat = image.size.height * ratio
+            topoffx = (image.size.width - width) / 2
+            topoffy = 0
+        }
+        
+        let topLeft = CGPoint(x: topoffx, y: topoffy)
+        let topRight = CGPoint(x: image.size.width - topoffx, y: topoffy)
+        let bottomRight = CGPoint(x: image.size.width - topoffx, y: image.size.height - topoffy)
+        let bottomLeft = CGPoint(x: topoffx, y: image.size.height - topoffy)
+
+        let quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+
+        return quad
+    }
+    func defaultQuad00(forImage image: UIImage) -> Quadrilateral {
+        let topLeft = CGPoint(x: image.size.width * 0.05, y: image.size.height * 0.05)
+        let topRight = CGPoint(x: image.size.width * 0.95, y: image.size.height * 0.05)
+        let bottomRight = CGPoint(x: image.size.width * 0.95, y: image.size.height * 0.95)
+        let bottomLeft = CGPoint(x: image.size.width * 0.05, y: image.size.height * 0.95)
+
+        let quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+
+        return quad
+    }
+    
 }
 
 

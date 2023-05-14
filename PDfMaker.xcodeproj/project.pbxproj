@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */; };
+		D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */; };
+		D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */; };
+		D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */; };
 		EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */; };
 		EB55EEAB2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEAA2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift */; };
 		EB55EEAD2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEAC2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift */; };
@@ -47,7 +50,6 @@
 		EB55EF2C2A0E475A007D7B15 /* Quadrilateral.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEFB2A0E475A007D7B15 /* Quadrilateral.swift */; };
 		EB55EF2F2A0E4767007D7B15 /* WeScanCropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EF2E2A0E4767007D7B15 /* WeScanCropManager.swift */; };
 		EB55EF312A0E48DB007D7B15 /* ImageScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EF302A0E48DB007D7B15 /* ImageScannerController.swift */; };
-		EB55EF332A0E4A2F007D7B15 /* WeScanImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EF322A0E4A2F007D7B15 /* WeScanImageCropView.swift */; };
 		EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */; };
 		EBAB51682A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */; };
 		EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */; };
@@ -83,6 +85,9 @@
 /* Begin PBXFileReference section */
 		06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PDfMaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.release.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.release.xcconfig"; sourceTree = "<group>"; };
+		D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropVC.swift; sourceTree = "<group>"; };
+		D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoRotateVC.swift; sourceTree = "<group>"; };
+		D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotosEditVC.swift; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
 		EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropView.swift; sourceTree = "<group>"; };
 		EB55EEAA2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDPerspectiveTransformViewController.swift; sourceTree = "<group>"; };
@@ -123,7 +128,6 @@
 		EB55EEFB2A0E475A007D7B15 /* Quadrilateral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quadrilateral.swift; sourceTree = "<group>"; };
 		EB55EF2E2A0E4767007D7B15 /* WeScanCropManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeScanCropManager.swift; sourceTree = "<group>"; };
 		EB55EF302A0E48DB007D7B15 /* ImageScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageScannerController.swift; sourceTree = "<group>"; };
-		EB55EF322A0E4A2F007D7B15 /* WeScanImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeScanImageCropView.swift; sourceTree = "<group>"; };
 		EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSinglePageControlView.swift; sourceTree = "<group>"; };
 		EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraBoundDetectControlView.swift; sourceTree = "<group>"; };
 		EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSpeedControlView.swift; sourceTree = "<group>"; };
@@ -219,7 +223,6 @@
 				EB55EEEB2A0E4759007D7B15 /* Session */,
 				EB55EF2E2A0E4767007D7B15 /* WeScanCropManager.swift */,
 				EB55EF302A0E48DB007D7B15 /* ImageScannerController.swift */,
-				EB55EF322A0E4A2F007D7B15 /* WeScanImageCropView.swift */,
 			);
 			path = WeScanCrop;
 			sourceTree = "<group>";
@@ -350,6 +353,9 @@
 				EBCA1A3D29FA7B3000473A6A /* Capture */,
 				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
 				EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */,
+				D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */,
+				D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */,
+				D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */,
 				EBCA1A5D29FBC6A200473A6A /* Views */,
 				EBAB51642A08ADC5003C1838 /* CameraViews */,
 				EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */,
@@ -585,7 +591,6 @@
 				EB55EEAB2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift in Sources */,
 				EB55EF1A2A0E475A007D7B15 /* RectangleFeaturesFunnel.swift in Sources */,
 				EB55EF1C2A0E475A007D7B15 /* ShutterButton.swift in Sources */,
-				EB55EF332A0E4A2F007D7B15 /* WeScanImageCropView.swift in Sources */,
 				EB55EF152A0E475A007D7B15 /* CGRect+Utils.swift in Sources */,
 				EB55EF242A0E475A007D7B15 /* CaptureDevice.swift in Sources */,
 				EBCA1A3C29FA7B2A00473A6A /* TEstViewController.m in Sources */,
@@ -600,6 +605,7 @@
 				EB55EF222A0E475A007D7B15 /* CaptureSession.swift in Sources */,
 				EBCA1A5529FA7B3100473A6A /* MADCropScaleView.m in Sources */,
 				EBCA1A2429FA732400473A6A /* AppDelegate.swift in Sources */,
+				D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */,
 				EB55EF0D2A0E475A007D7B15 /* ZoomGestureController.swift in Sources */,
 				EBCA1A5429FA7B3100473A6A /* MADCameraCaptureView.m in Sources */,
 				EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */,
@@ -607,6 +613,7 @@
 				EB55EF1B2A0E475A007D7B15 /* CaptureSessionManager.swift in Sources */,
 				EB55EF0E2A0E475A007D7B15 /* EditScanViewController.swift in Sources */,
 				EB55EEAF2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift in Sources */,
+				D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */,
 				EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */,
 				EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */,
 				EBCA1A7529FBD1A400473A6A /* PDfMakTool.swift in Sources */,
@@ -620,6 +627,7 @@
 				EB55EF212A0E475A007D7B15 /* CaptureSession+Orientation.swift in Sources */,
 				EB55EF292A0E475A007D7B15 /* VisionRectangleDetector.swift in Sources */,
 				EB55EF2B2A0E475A007D7B15 /* QuadrilateralView.swift in Sources */,
+				D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */,
 				EB55EF202A0E475A007D7B15 /* CaptureSession+Flash.swift in Sources */,
 				EB55EF102A0E475A007D7B15 /* CGPoint+Utils.swift in Sources */,
 				EBCA1A2629FA732400473A6A /* SceneDelegate.swift in Sources */,
