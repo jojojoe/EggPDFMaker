@@ -13,11 +13,9 @@ class PDfPhotoCropVC: UIViewController {
     private let imgItem: UserImgItem
 
     /// The detected quadrilateral that can be edited by the user. Uses the image's coordinates.
-    private var quad: Quadrilateral
     
-    init(imgItem: UserImgItem, quad: Quadrilateral?, rotateImage: Bool = true) {
+    init(imgItem: UserImgItem, rotateImage: Bool = true) {
         self.imgItem = imgItem
-        self.quad = quad ?? WeScanCropManager.default.defaultQuad(forImage: imgItem.originImg)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,7 +31,7 @@ class PDfPhotoCropVC: UIViewController {
     }
     
     func setupContentV() {
-        let cropV = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: imgItem, quad: quad)
+        let cropV = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: imgItem)
         view.addSubview(cropV)
         cropV.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()

@@ -54,14 +54,19 @@ class ViewController: UIViewController {
 //        let vc = PDfScanCAmeraVC()
 //        self.navigationController?.pushViewController(vc, animated: true)
         
-        let item = UserImgItem(originImg: UIImage(named: "test1")!)
-        let rotatevc = PDfPhotoRotateVC(imgItem: item)
-        self.navigationController?.pushViewController(rotatevc, animated: true)
-
+//        let item = UserImgItem(originImg: UIImage(named: "test1")!)
+//        let rotatevc = PDfPhotoRotateVC(imgItem: item)
+//        self.navigationController?.pushViewController(rotatevc, animated: true)
+        
         
 //        editwescan(image: UIImage(named: "test1")!)
-        
-        
+        let item1 = UserImgItem(originImg: UIImage(named: "test1")!)
+        let item2 = UserImgItem(originImg: UIImage(named: "test2")!)
+        let item3 = UserImgItem(originImg: UIImage(named: "test1")!)
+        let item4 = UserImgItem(originImg: UIImage(named: "test2")!)
+        let itemList: [UserImgItem] = [item1, item2, item3, item4]
+        let editVC = PDfPhotosEditVC(imgItems: itemList)
+        self.navigationController?.pushViewController(editVC, animated: true)
         
     }
     
@@ -72,10 +77,9 @@ class ViewController: UIViewController {
         WeScanCropManager.default.detect(image: image) { [weak self] detectedQuad in
             guard let self else { return }
             
-            let editViewController = PDfPhotoCropVC(imgItem: item, quad: detectedQuad, rotateImage: false)
+            let editViewController = PDfPhotoCropVC(imgItem: item, rotateImage: false)
             self.navigationController?.pushViewController(editViewController, animated: true)
-//            EditScanViewController
-            // PDfPhotoCropVC
+
         }
         
         
@@ -88,13 +92,4 @@ class ViewController: UIViewController {
 
 
 
-
-extension ViewController: DDPerspectiveTransformProtocol {
-    func perspectiveTransformingDidFinish(controller: DDPerspectiveTransformViewController, croppedImage: UIImage) {
-        debugPrint("cropedImg = \(croppedImage)")
-    }
-    
-    func perspectiveTransformingDidCancel(controller: DDPerspectiveTransformViewController) {
-        _ = controller.navigationController?.popViewController(animated: true)
-    }
-}
+ 

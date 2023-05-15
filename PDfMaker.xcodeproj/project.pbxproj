@@ -11,10 +11,9 @@
 		D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */; };
 		D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */; };
 		D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */; };
+		EB340FC62A121DED007C8DD1 /* PDfToolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */; };
+		EB340FC82A123F2D007C8DD1 /* PDfWePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */; };
 		EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */; };
-		EB55EEAB2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEAA2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift */; };
-		EB55EEAD2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEAC2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift */; };
-		EB55EEAF2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEAE2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift */; };
 		EB55EF0C2A0E475A007D7B15 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EED52A0E4758007D7B15 /* EditImageViewController.swift */; };
 		EB55EF0D2A0E475A007D7B15 /* ZoomGestureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EED62A0E4758007D7B15 /* ZoomGestureController.swift */; };
 		EB55EF0E2A0E475A007D7B15 /* EditScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EED72A0E4758007D7B15 /* EditScanViewController.swift */; };
@@ -89,10 +88,9 @@
 		D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoRotateVC.swift; sourceTree = "<group>"; };
 		D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotosEditVC.swift; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
+		EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfToolManager.swift; sourceTree = "<group>"; };
+		EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfWePreviewVC.swift; sourceTree = "<group>"; };
 		EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropView.swift; sourceTree = "<group>"; };
-		EB55EEAA2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDPerspectiveTransformViewController.swift; sourceTree = "<group>"; };
-		EB55EEAC2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDPerspectiveTransformImageView.swift; sourceTree = "<group>"; };
-		EB55EEAE2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDPerspectiveTransformPointView.swift; sourceTree = "<group>"; };
 		EB55EED52A0E4758007D7B15 /* EditImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
 		EB55EED62A0E4758007D7B15 /* ZoomGestureController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomGestureController.swift; sourceTree = "<group>"; };
 		EB55EED72A0E4758007D7B15 /* EditScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditScanViewController.swift; sourceTree = "<group>"; };
@@ -201,14 +199,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EB55EEA92A0E4027007D7B15 /* DDPerspectiveTransform */ = {
+		EB340FC42A121DDB007C8DD1 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				EB55EEAE2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift */,
-				EB55EEAC2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift */,
-				EB55EEAA2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift */,
+				EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */,
 			);
-			path = DDPerspectiveTransform;
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		EB55EEB02A0E468F007D7B15 /* WeScanCrop */ = {
@@ -350,10 +346,12 @@
 				EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */,
 				EBCA1A2929FA732400473A6A /* Main.storyboard */,
 				EBCA1A3929FA7B2A00473A6A /* PDfMaker-Bridging-Header.h */,
+				EB340FC42A121DDB007C8DD1 /* Manager */,
 				EBCA1A3D29FA7B3000473A6A /* Capture */,
 				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
 				EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */,
 				D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */,
+				EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */,
 				D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */,
 				D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */,
 				EBCA1A5D29FBC6A200473A6A /* Views */,
@@ -424,7 +422,6 @@
 			isa = PBXGroup;
 			children = (
 				EB55EEB02A0E468F007D7B15 /* WeScanCrop */,
-				EB55EEA92A0E4027007D7B15 /* DDPerspectiveTransform */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -588,7 +585,7 @@
 				EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */,
 				EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */,
 				EB55EF132A0E475A007D7B15 /* CIImage+Utils.swift in Sources */,
-				EB55EEAB2A0E4046007D7B15 /* DDPerspectiveTransformViewController.swift in Sources */,
+				EB340FC62A121DED007C8DD1 /* PDfToolManager.swift in Sources */,
 				EB55EF1A2A0E475A007D7B15 /* RectangleFeaturesFunnel.swift in Sources */,
 				EB55EF1C2A0E475A007D7B15 /* ShutterButton.swift in Sources */,
 				EB55EF152A0E475A007D7B15 /* CGRect+Utils.swift in Sources */,
@@ -597,7 +594,6 @@
 				EB55EF192A0E475A007D7B15 /* UIImage+SFSymbol.swift in Sources */,
 				EB55EF1F2A0E475A007D7B15 /* ScannerViewController.swift in Sources */,
 				EB55EF0C2A0E475A007D7B15 /* EditImageViewController.swift in Sources */,
-				EB55EEAD2A0E40EE007D7B15 /* DDPerspectiveTransformImageView.swift in Sources */,
 				EB55EF312A0E48DB007D7B15 /* ImageScannerController.swift in Sources */,
 				EBAB516C2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift in Sources */,
 				EB55EF252A0E475A007D7B15 /* Transformable.swift in Sources */,
@@ -612,7 +608,6 @@
 				EBCA1A5029FA7B3100473A6A /* UIColor+MADColor.m in Sources */,
 				EB55EF1B2A0E475A007D7B15 /* CaptureSessionManager.swift in Sources */,
 				EB55EF0E2A0E475A007D7B15 /* EditScanViewController.swift in Sources */,
-				EB55EEAF2A0E4122007D7B15 /* DDPerspectiveTransformPointView.swift in Sources */,
 				D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */,
 				EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */,
 				EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */,
@@ -628,6 +623,7 @@
 				EB55EF292A0E475A007D7B15 /* VisionRectangleDetector.swift in Sources */,
 				EB55EF2B2A0E475A007D7B15 /* QuadrilateralView.swift in Sources */,
 				D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */,
+				EB340FC82A123F2D007C8DD1 /* PDfWePreviewVC.swift in Sources */,
 				EB55EF202A0E475A007D7B15 /* CaptureSession+Flash.swift in Sources */,
 				EB55EF102A0E475A007D7B15 /* CGPoint+Utils.swift in Sources */,
 				EBCA1A2629FA732400473A6A /* SceneDelegate.swift in Sources */,

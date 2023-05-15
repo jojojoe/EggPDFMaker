@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KRProgressHUD
 
 class PDfPhotosEditVC: UIViewController {
     
@@ -14,6 +15,10 @@ class PDfPhotosEditVC: UIViewController {
     var collection: UICollectionView!
     let canvasV = UIView()
     var currentIndexP: IndexPath = IndexPath(item: 0, section: 0)
+    let moveLeftBtn = UIButton()
+    let moveRightBtn = UIButton()
+    let pageLabel = UILabel()
+    var clickScrollEnd: Bool = true
     
     
     init(imgItems: [UserImgItem]) {
@@ -32,6 +37,13 @@ class PDfPhotosEditVC: UIViewController {
         super.viewDidLoad()
 
         setupContent()
+        moveLeftBtn.isEnabled = false
+        if currentIndexP.item == imgItems.count - 1 {
+            moveRightBtn.isEnabled = false
+        } else {
+            moveRightBtn.isEnabled = true
+        }
+        pageLabel.text = "\(currentIndexP.item + 1)/\(imgItems.count)"
     }
    
     func setupContent() {
@@ -47,17 +59,17 @@ class PDfPhotosEditVC: UIViewController {
         backBtn.setImage(UIImage(named: "close"), for: .normal)
         backBtn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         //
-        let saveBtn = UIButton()
-        view.addSubview(saveBtn)
-        saveBtn.snp.makeConstraints {
+        let shareBtn = UIButton()
+        view.addSubview(shareBtn)
+        shareBtn.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             $0.right.equalToSuperview().offset(-10)
             $0.width.height.equalTo(44)
         }
-        saveBtn.setTitle("Save", for: .normal)
-        saveBtn.setTitleColor(UIColor.white, for: .normal)
-        saveBtn.titleLabel?.font = FontCusNames.MontSemiBold.font(sizePoint: 16)
-        saveBtn.addTarget(self, action: #selector(saveBtnClick), for: .touchUpInside)
+        shareBtn.setImage(UIImage(named: "Share"), for: .normal)
+        shareBtn.setTitleColor(UIColor.white, for: .normal)
+        shareBtn.titleLabel?.font = FontCusNames.MontSemiBold.font(sizePoint: 16)
+        shareBtn.addTarget(self, action: #selector(shareBtnClick), for: .touchUpInside)
 
         //
         let bottomV = UIView()
@@ -90,16 +102,18 @@ class PDfPhotosEditVC: UIViewController {
         rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
          
         //
-        let pageLabel = UILabel()
+        
         bottomV.addSubview(pageLabel)
         pageLabel.adjustsFontSizeToFitWidth = true
         pageLabel.textColor = .white
         pageLabel.font = FontCusNames.MontSemiBold.font(sizePoint: 14)
         pageLabel.textAlignment = .center
         //
-        let moveLeftBtn = UIButton()
+
         bottomV.addSubview(moveLeftBtn)
         moveLeftBtn.setImage(UIImage(named: "CaretCircleLeft"), for: .normal)
+        moveLeftBtn.setImage(UIImage(named: "CaretCircleLeft_d"), for: .disabled)
+        
         moveLeftBtn.snp.makeConstraints {
             $0.left.equalToSuperview().offset(10)
             $0.centerY.equalToSuperview()
@@ -107,9 +121,10 @@ class PDfPhotosEditVC: UIViewController {
         }
         moveLeftBtn.addTarget(self, action: #selector(moveLeftBtnClick), for: .touchUpInside)
         //
-        let moveRightBtn = UIButton()
+        
         bottomV.addSubview(moveRightBtn)
         moveRightBtn.setImage(UIImage(named: "CaretCircleRight"), for: .normal)
+        moveRightBtn.setImage(UIImage(named: "CaretCircleRight_d"), for: .disabled)
         moveRightBtn.snp.makeConstraints {
             $0.left.equalTo(moveLeftBtn.snp.right).offset(40)
             $0.centerY.equalToSuperview()
@@ -155,45 +170,150 @@ class PDfPhotosEditVC: UIViewController {
     }
     
     @objc func rotateBtnClick() {
-        
+        let item = imgItems[currentIndexP.item]
+        let rotatevc = PDfPhotoRotateVC(imgItem: item)
+        self.navigationController?.pushViewController(rotatevc, animated: true)
     }
     
     @objc func cropBtnClick() {
+        let item = imgItems[currentIndexP.item]
+        let editViewController = PDfPhotoCropVC(imgItem: item, rotateImage: false)
+        self.navigationController?.pushViewController(editViewController, animated: true)
+    }
+    
+    @objc func backBtnClick() {
+        if self.navigationController != nil {
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    @objc func shareBtnClick() {
+        let sheetAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Print", style: .default) { (action) in
+            self.printAction()
+            sheetAlert.dismiss(animated: true)
+        }
+        let photoAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
+            self.exportAction()
+            sheetAlert.dismiss(animated: true)
+        }
+        let shareAction = UIAlertAction(title: "Share", style: .default) { (action) in
+            self.shareAction()
+            sheetAlert.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        sheetAlert.addAction(cameraAction)
+        sheetAlert.addAction(photoAction)
+        sheetAlert.addAction(shareAction)
+        sheetAlert.addAction(cancelAction)
+        self.present(sheetAlert, animated: true, completion: nil)
+        
+        sheetAlert.title = "Export"
+        
         
     }
     
     @objc func moveLeftBtnClick() {
-        theContinueBtnClick(add: -1)
+        clickScrollEnd = false
+        if currentIndexP.item > 0 {
+            theContinueBtnClick(add: -1)
+            
+        }
+        if currentIndexP.item == 0 {
+            moveLeftBtn.isEnabled = false
+        }
+        if currentIndexP.item < imgItems.count - 1 {
+            moveRightBtn.isEnabled = true
+        }
+        
     }
     
     @objc func moveRightBtnClick() {
-        theContinueBtnClick(add: 1)
+        clickScrollEnd = false
+        if currentIndexP.item < imgItems.count - 1 {
+            theContinueBtnClick(add: 1)
+        }
+        if currentIndexP.item == imgItems.count - 1 {
+            moveRightBtn.isEnabled = false
+        }
+        if currentIndexP.item > 0 {
+            moveLeftBtn.isEnabled = true
+        }
+        
     }
     
     func theContinueBtnClick(add: Int) {
-        if currentIndexP.item == 2 {
-            continueCloseBlock?()
-            debugPrint("currentIndexP = close")
-        } else {
-            collection.isPagingEnabled = false
-            
-            currentIndexP = IndexPath(item: currentIndexP.item + 1, section: 0)
-            collection.selectItem(at: currentIndexP, animated: true, scrollPosition: .centeredHorizontally)
-            debugPrint("currentIndexP = \(currentIndexP.item)")
-            collection.isPagingEnabled = true
-        }
+        collection.isPagingEnabled = false
+        
+        currentIndexP = IndexPath(item: currentIndexP.item + add, section: 0)
+        collection.selectItem(at: currentIndexP, animated: true, scrollPosition: .centeredHorizontally)
+        debugPrint("currentIndexP = \(currentIndexP.item)")
+        collection.isPagingEnabled = true
+        
+        pageLabel.text = "\(currentIndexP.item + 1)/\(imgItems.count)"
     }
 
+}
+
+extension PDfPhotosEditVC {
+    func printAction() {
+        
+        let imgs = imgItems.compactMap {
+            $0.processedImg
+        }
+        
+        let printInVC = UIPrintInteractionController.shared
+        printInVC.showsPaperSelectionForLoadedPapers = true
+        let info = UIPrintInfo(dictionary: nil)
+        info.jobName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Sample Print"
+//        info.orientation = .portrait // Portrait or Landscape
+//        info.outputType = .general //ContentType
+        printInVC.printInfo = info
+        printInVC.printingItems = imgs //array of NSData, NSURL, UIImage.
+        printInVC.present(animated: true) {
+            controller, completed, error in
+            debugPrint("completed = \(completed)")
+            if completed {
+                KRProgressHUD.showSuccess(withMessage: "Print complete!")
+            }
+        }
+        printInVC.delegate = self
+    }
+    
+    func exportAction() {
+        let imgs = imgItems.compactMap {
+            $0.processedImg
+        }
+        let item = PDfMakTool.default.saveHistoryImgsToPDF(images: imgs)
+        let pdfURL = item.pdfPathUrl()
+        debugPrint("pdfurl = \(pdfURL)")
+        let previewVc = PDfWePreviewVC(webUrl: pdfURL)
+        self.navigationController?.pushViewController(previewVc, animated: true)
+//        KRProgressHUD.showSuccess(withMessage: "The PDF file was exported successfully, please check it on the home page")
+        
+        
+    }
+    
+    func shareAction() {
+        let imgs = imgItems.compactMap {
+            $0.processedImg
+        }
+        let vc = UIActivityViewController(activityItems: imgs, applicationActivities: nil)
+        vc.popoverPresentationController?.sourceView = self.view
+        self.present(vc, animated: true)
+    }
+    
 }
 
 extension PDfPhotosEditVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: PDfPhotosEditCell.self, for: indexPath)
         let item = imgItems[indexPath.item]
-        cell.contentImgV = item.processedImg
+        cell.contentImgV.image = item.processedImg
         return cell
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imgItems.count
@@ -232,8 +352,47 @@ extension PDfPhotosEditVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
     }
+     
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        debugPrint("ScrollingAnimation")
+        clickScrollEnd = true
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        debugPrint("scrollViewDidScroll")
+        if clickScrollEnd {
+            if scrollView == collection {
+                if let indexP = collection.indexPathForItem(at: CGPoint(x: view.bounds.width/2 + collection.contentOffset.x, y: 50)) {
+                    if indexP.item != currentIndexP.item {
+
+                        currentIndexP = indexP
+                        pageLabel.text = "\(currentIndexP.item + 1)/\(imgItems.count)"
+                        if currentIndexP.item == 0 {
+                            moveLeftBtn.isEnabled = false
+                        } else if currentIndexP.item < imgItems.count - 1 {
+                            moveLeftBtn.isEnabled = true
+                        }
+                        if currentIndexP.item == imgItems.count - 1 {
+                            moveRightBtn.isEnabled = false
+                        } else if currentIndexP.item > 0 {
+                            moveRightBtn.isEnabled = true
+                        }
+                        
+                    }
+
+                }
+            }
+        }
+        
+    }
 }
 
+extension PDfPhotosEditVC: UIPrintInteractionControllerDelegate {
+    func printInteractionControllerWillStartJob(_ printInteractionController: UIPrintInteractionController) {
+        
+    }
+    
+}
 
 class PDfPhotoEditBtn: UIButton {
     var iconName: String
@@ -259,10 +418,14 @@ class PDfPhotoEditBtn: UIButton {
             $0.top.equalTo(iconImgV.snp.bottom)
             $0.left.equalToSuperview()
         }
-        titLabel.font = FontCusNames.MontMedium
+        titLabel.font = FontCusNames.MontMedium.font(sizePoint: 12)
         titLabel.textColor = .white
         titLabel.textAlignment = .center
         titLabel.text = titName
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

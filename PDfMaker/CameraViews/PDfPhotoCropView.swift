@@ -46,9 +46,9 @@ class PDfPhotoCropView: UIView {
 
     private var zoomGestureController: ZoomGestureController!
     
-    init(frame: CGRect, imgItem: UserImgItem, quad: Quadrilateral?, rotateImage: Bool = true) {
+    init(frame: CGRect, imgItem: UserImgItem, rotateImage: Bool = true) {
         self.imgItem = imgItem
-        self.quad = quad ?? WeScanCropManager.default.defaultQuad(forImage: imgItem.processedImg)
+        self.quad = WeScanCropManager.default.defaultQuad(forImage: imgItem.processedImg)
         
         super.init(frame: frame)
         setupContent()
