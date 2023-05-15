@@ -43,16 +43,13 @@ class ViewController: UIViewController {
         scaneBtn.backgroundColor = .lightGray
         scaneBtn.addTarget(self, action: #selector(scaneBtnClick(sender: )), for: .touchUpInside)
         
-         
-        
-        
         
         
     }
 
     @objc func scaneBtnClick(sender: UIButton) {
-//        let vc = PDfScanCAmeraVC()
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = PDfScanCAmeraVC()
+        self.navigationController?.pushViewController(vc, animated: true)
         
 //        let item = UserImgItem(originImg: UIImage(named: "test1")!)
 //        let rotatevc = PDfPhotoRotateVC(imgItem: item)
@@ -60,13 +57,15 @@ class ViewController: UIViewController {
         
         
 //        editwescan(image: UIImage(named: "test1")!)
-        let item1 = UserImgItem(originImg: UIImage(named: "test1")!)
-        let item2 = UserImgItem(originImg: UIImage(named: "test2")!)
-        let item3 = UserImgItem(originImg: UIImage(named: "test1")!)
-        let item4 = UserImgItem(originImg: UIImage(named: "test2")!)
-        let itemList: [UserImgItem] = [item1, item2, item3, item4]
-        let editVC = PDfPhotosEditVC(imgItems: itemList)
-        self.navigationController?.pushViewController(editVC, animated: true)
+        
+        
+//        let item1 = UserImgItem(originImg: UIImage(named: "test1")!)
+//        let item2 = UserImgItem(originImg: UIImage(named: "test2")!)
+//        let item3 = UserImgItem(originImg: UIImage(named: "test1")!)
+//        let item4 = UserImgItem(originImg: UIImage(named: "test2")!)
+//        let itemList: [UserImgItem] = [item1, item2, item3, item4]
+//        let editVC = PDfPhotosEditVC(imgItems: itemList)
+//        self.navigationController?.pushViewController(editVC, animated: true)
         
     }
     

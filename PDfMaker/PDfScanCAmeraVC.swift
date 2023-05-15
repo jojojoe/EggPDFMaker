@@ -43,7 +43,7 @@ class PDfScanCAmeraVC: UIViewController {
     let multiPhotoAreaCountLabel = UILabel()
     
     var userImageItemList: [UserImgItem] = []
-    
+    var userIdCardImageList: [UIImage] = []
     var onceLayout = Once()
     
     var currentScanType: ScanType = .scanDoc
@@ -315,7 +315,7 @@ class PDfScanCAmeraVC: UIViewController {
 
     func addCaptureView() {
         centerBgV.addSubview(captureCameraView)
-        captureCameraView.setupCameraView()
+        captureCameraView.setupCameraView(true)
         captureCameraView.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
@@ -325,7 +325,11 @@ class PDfScanCAmeraVC: UIViewController {
         captureCameraView.addGestureRecognizer(tapGestureRecognizer)
     }
      
-    
+    func updateCaptureCameraViewPhotoSession(isHigh: Bool) {
+        captureCameraView.stop()
+        captureCameraView.setupCameraView(isHigh)
+        captureCameraView.start()
+    }
     
     
 }
@@ -359,7 +363,18 @@ extension PDfScanCAmeraVC {
             $0.width.equalTo(160)
             $0.height.equalTo(100)
         }
-        
+        speedFloatV.valueChangeBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                if self.speedFloatV.currentDetectType == .speed {
+                    self.updateCaptureCameraViewPhotoSession(isHigh: false)
+                } else {
+                    self.updateCaptureCameraViewPhotoSession(isHigh: true)
+                }
+                
+            }
+        }
         //
         idcardFloatV = PDfCameraIdCardControlView(frame: centerBgV.frame)
         view.addSubview(idcardFloatV)
@@ -400,37 +415,121 @@ extension PDfScanCAmeraVC {
 
 extension PDfScanCAmeraVC {
     
+    func applySharpeningEffect(to image: UIImage) -> UIImage? {
+        // 定义锐化滤镜
+        let sharpness = 0.5
+        let filter = CIFilter(name: "CIUnsharpMask")!
+        let ciImage = CIImage(image: image)!
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(sharpness, forKey: kCIInputIntensityKey)
+        // 应用滤镜并生成输出图像
+        let outputImage = filter.outputImage!
+        let context = CIContext(options: nil)
+        let outputCGImage = context.createCGImage(outputImage, from: outputImage.extent)!
+        // 将输出图像转换为 UIImage
+        let sharpenedImage = UIImage(cgImage: outputCGImage)
+        return sharpenedImage
+    }
+}
+
+extension PDfScanCAmeraVC {
+    
+    func processBlackFilter(img: UIImage) -> UIImage {
+        if filterBtn.isSelected {
+            return self.applySharpeningEffect(to: img) ?? img
+        } else {
+            return img
+        }
+    }
+    
     func captureImgAction() {
         
         captureCameraView.captureImage {[weak self] img, borderDetectFeature in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
+                guard let img_m = img else { return }
+                let filteredImg = self.processBlackFilter(img: img_m)
+                
                 if self.currentScanType == .scanDoc {
-                    if self.boundFloatV.currentDetectType == .auto {
-                        
-                    } else {
-                        
-                    }
+                    
                     if self.singleFloatV.currentSingleType == .single {
-                        
+                        let item = UserImgItem(originImg: filteredImg)
+                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                        self.navigationController?.pushViewController(photoEditVC, animated: true)
                     } else {
-                        
+                        if self.boundFloatV.currentDetectType == .auto {
+                            let item = UserImgItem(originImg: filteredImg)
+                            self.addNewCapturePhoto(imgItem: item)
+                        } else {
+                            let item = UserImgItem(originImg: filteredImg)
+                            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item)
+                            self.view.addSubview(boundDetectCropView)
+                            boundDetectCropView.closeClickBlock = {
+                                [weak self] in
+                                guard let `self` = self else {return}
+                                DispatchQueue.main.async {
+                                    boundDetectCropView.removeFromSuperview()
+                                }
+                            }
+                            boundDetectCropView.saveClickBlock = {
+                                [weak self] imgI in
+                                guard let `self` = self else {return}
+                                DispatchQueue.main.async {
+                                    self.addNewCapturePhoto(imgItem: imgI)
+                                    boundDetectCropView.removeFromSuperview()
+                                }
+                            }
+                        }
                     }
                     
                 } else if self.currentScanType == .scanPhoto {
                     if self.singleFloatV.currentSingleType == .single {
                         
+                        let item = UserImgItem(originImg: filteredImg)
+                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                        self.navigationController?.pushViewController(photoEditVC, animated: true)
                     } else {
+                        let item = UserImgItem(originImg: filteredImg)
+                        self.addNewCapturePhoto(imgItem: item)
                         
                     }
-                    if self.speedFloatV.currentDetectType == .quality {
-                        
-                    } else {
-                        
-                    }
+                    
                     
                 } else if self.currentScanType == .scanIDCard {
-                    
+                    if self.userIdCardImageList.count == 0 {
+                        self.idcardFloatV.contentImgV.isHighlighted = true
+                        self.userIdCardImageList.append(filteredImg)
+                    } else if self.userIdCardImageList.count == 1 {
+                        self.userIdCardImageList.append(filteredImg)
+                        let pageWidth: CGFloat = 210 * 5
+                        let pageHeight: CGFloat = 297 * 5
+                        let imgWidth: CGFloat = pageWidth/2
+                        let imgHieght: CGFloat = pageHeight/4 + 50
+                        let verpadding: CGFloat = (pageHeight - imgHieght) / 3
+                        
+                        
+                        let imgV1Frame = CGRect(x: (pageWidth - imgWidth), y: verpadding, width: imgWidth, height: imgHieght)
+                        let imgV2Frame = CGRect(x: (pageWidth - imgWidth), y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
+                        
+                        
+                        let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+                        let imgV1 = UIImageView(frame: imgV1Frame)
+                        imgV1.image = self.userIdCardImageList.first
+                        whiterPage.addSubview(imgV1)
+                        let imgV2 = UIImageView(frame: imgV2Frame)
+                        imgV2.image = self.userIdCardImageList.last
+                        whiterPage.addSubview(imgV2)
+                        if let cardpageImg = whiterPage.screenshot {
+                            let item = UserImgItem(originImg: cardpageImg)
+                            let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                            self.navigationController?.pushViewController(photoEditVC, animated: true)
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                            self.idcardFloatV.contentImgV.isHighlighted = false
+                        }
+                        
+                    }
                 }
                 
             }
@@ -439,8 +538,8 @@ extension PDfScanCAmeraVC {
     }
     
     
-    func addNewCapturePhoto(img: UIImage) {
-        let imgItem = UserImgItem(originImg: img)
+    func addNewCapturePhoto(imgItem: UserImgItem) {
+        
         userImageItemList.append(imgItem)
         if let img = userImageItemList.last {
             multiPhotoAreaView.image = img.processedImg
@@ -512,6 +611,12 @@ extension PDfScanCAmeraVC {
         speedFloatV.isHidden = true
         idcardFloatV.isHidden = true
         
+        if boundFloatV.currentDetectType == .auto {
+            captureCameraView.isBorderDetectionEnabled = true
+        } else {
+            captureCameraView.isBorderDetectionEnabled = false
+        }
+        
     }
     @objc func scanPhotoBtnClick(sender: UIButton) {
         currentScanType = .scanPhoto
@@ -533,6 +638,11 @@ extension PDfScanCAmeraVC {
         boundFloatV.isHidden = true
         speedFloatV.isHidden = false
         idcardFloatV.isHidden = true
+        
+        //
+        captureCameraView.isBorderDetectionEnabled = false
+        
+        
     }
     @objc func scanCardBtnClick(sender: UIButton) {
         currentScanType = .scanIDCard
@@ -549,6 +659,8 @@ extension PDfScanCAmeraVC {
         speedFloatV.isHidden = true
         idcardFloatV.isHidden = false
         
+        //
+        captureCameraView.isBorderDetectionEnabled = true
     }
      
     

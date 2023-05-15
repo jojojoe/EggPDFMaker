@@ -12,7 +12,7 @@ typedef void(^CompletionHandler)(UIImage *image, CIRectangleFeature *borderDetec
 @interface MADCameraCaptureView : UIView
 
 /// 创建视图捕获view
-- (void)setupCameraView;
+- (void)setupCameraView: (BOOL)isQuality;
 /// 开始捕获视图
 - (void)start;
 /// 结束视图捕获

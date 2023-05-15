@@ -9,6 +9,7 @@ import UIKit
 
 class PDfCameraIdCardControlView: UIView {
 
+    let contentImgV = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +35,7 @@ class PDfCameraIdCardControlView: UIView {
         //
         let imgH = bounds.size.height - 70
         let imgW = imgH * (30.0/45.0)
-        let contentImgV = UIImageView()
+        
         addSubview(contentImgV)
         contentImgV.snp.makeConstraints {
             $0.width.equalTo(Int(imgW))
@@ -44,6 +45,7 @@ class PDfCameraIdCardControlView: UIView {
         }
         contentImgV.contentMode = .scaleAspectFill
         contentImgV.image = UIImage(named: "idcard")
+        contentImgV.highlightedImage = UIImage(named: "idcard_2")
         //
         controlBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()

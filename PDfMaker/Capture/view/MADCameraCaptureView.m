@@ -187,7 +187,7 @@
     [EAGLContext setCurrentContext:self.context];
 }
 
-- (void)setupCameraView
+- (void)setupCameraView:(BOOL) isQuality
 {
     [self createGLKView];
     
@@ -204,7 +204,12 @@
     
     NSError *error = nil;
     AVCaptureDeviceInput* input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    session.sessionPreset = AVCaptureSessionPresetPhoto;
+    if (isQuality == YES) {
+        session.sessionPreset = AVCaptureSessionPresetHigh;
+    } else {
+        session.sessionPreset = AVCaptureSessionPresetLow;
+    }
+    
     [session addInput:input];
     
     AVCaptureVideoDataOutput *dataOutput = [[AVCaptureVideoDataOutput alloc] init];

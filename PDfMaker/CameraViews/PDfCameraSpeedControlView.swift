@@ -24,6 +24,8 @@ class PDfCameraSpeedControlView: UIView {
         }
     }
     
+    var valueChangeBlock: (()->Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContent()
@@ -146,10 +148,12 @@ class PDfCameraSpeedControlView: UIView {
     @objc func speedBtnClick() {
         hiddenTopContentV()
         currentDetectType = .speed
+        valueChangeBlock?()
     }
     @objc func qualityBtnClick() {
         hiddenTopContentV()
         currentDetectType = .quality
+        valueChangeBlock?()
     }
     
     func showTopContentV() {

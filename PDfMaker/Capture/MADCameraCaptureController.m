@@ -73,7 +73,8 @@
     [self.navToolBar addSubview:self.navTitleLabel];
     // 拍照视图
     [self.view addSubview:self.captureCameraView];
-    [self.captureCameraView setupCameraView];
+    
+    [self.captureCameraView setupCameraView: YES];
     // 添加单机手势
     [self.captureCameraView addGestureRecognizer:self.tapGestureRecognizer];
     [self.tapGestureRecognizer addTarget:self action:@selector(handleTapGesture:)];
