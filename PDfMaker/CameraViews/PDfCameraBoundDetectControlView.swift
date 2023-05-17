@@ -24,6 +24,8 @@ class PDfCameraBoundDetectControlView: UIView {
         }
     }
     
+    var valueChangeBlock: (()->Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContent()
@@ -145,10 +147,12 @@ class PDfCameraBoundDetectControlView: UIView {
     @objc func autoBtnClick() {
         hiddenTopContentV()
         currentDetectType = .auto
+        valueChangeBlock?()
     }
     @objc func manuBtnClick() {
         hiddenTopContentV()
         currentDetectType = .manu
+        valueChangeBlock?()
     }
     
     func showTopContentV() {

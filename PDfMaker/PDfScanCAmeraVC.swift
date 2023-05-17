@@ -353,7 +353,20 @@ extension PDfScanCAmeraVC {
             $0.left.equalTo(view.snp.centerX).offset(5)
             $0.bottom.equalTo(bottomBanner.snp.top).offset(-15)
         }
-        
+        boundFloatV.valueChangeBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+
+                if self.boundFloatV.currentDetectType == .auto {
+                    self.captureCameraView.isBorderDetectionEnabled = true
+                    self.autoBtn.isSelected = false
+                } else {
+                    self.captureCameraView.isBorderDetectionEnabled = false
+                    self.autoBtn.isSelected = true
+                }
+            }
+        }
         //
         
         view.addSubview(speedFloatV)
@@ -417,7 +430,7 @@ extension PDfScanCAmeraVC {
     
     func applySharpeningEffect(to image: UIImage) -> UIImage? {
         // 定义锐化滤镜
-        let sharpness = 0.5
+        let sharpness = 1
         let filter = CIFilter(name: "CIUnsharpMask")!
         let ciImage = CIImage(image: image)!
         filter.setValue(ciImage, forKey: kCIInputImageKey)
@@ -442,12 +455,35 @@ extension PDfScanCAmeraVC {
         }
     }
     
+    func cropFixBoundViewImg(originImg: UIImage, cropImgOffsetYBili: CGFloat) -> UIImage {
+        if cropImgOffsetYBili == 0 {
+            return originImg
+        }
+        let offsetX: CGFloat = 0
+        let offsetY = originImg.size.height * cropImgOffsetYBili
+        let croW = originImg.size.width
+        let croH = originImg.size.height - offsetY * 2
+        
+        let cropRect = CGRect(x: offsetX, y: offsetY, width: croW, height: croH)
+        
+        if let croppedCGImage = originImg.cgImage?.cropping(to: cropRect) {
+            let croppedImage = UIImage(cgImage: croppedCGImage, scale: originImg.scale, orientation: originImg.imageOrientation)
+            return croppedImage
+        } else {
+            return originImg
+        }
+        
+        
+    }
+    
     func captureImgAction() {
         
-        captureCameraView.captureImage {[weak self] img, borderDetectFeature in
+        captureCameraView.captureImage {[weak self] img, borderDetectFeature, cropImgOffsetYBili in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                guard let img_m = img else { return }
+                guard var img_m = img else { return }
+                img_m = img_m.fixOrientation()
+                img_m = self.cropFixBoundViewImg(originImg: img_m, cropImgOffsetYBili: cropImgOffsetYBili)
                 let filteredImg = self.processBlackFilter(img: img_m)
                 
                 if self.currentScanType == .scanDoc {
@@ -675,5 +711,69 @@ extension PDfScanCAmeraVC {
                 }
             }
         }
+    }
+}
+
+
+extension UIImage {
+    func fixOrientation() -> UIImage {
+        if self.imageOrientation == .up {
+            return self
+        }
+        
+        var transform = CGAffineTransform.identity
+        
+        switch self.imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: self.size.width, y: self.size.height)
+            transform = transform.rotated(by: .pi)
+            break
+            
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: self.size.width, y: 0)
+            transform = transform.rotated(by: .pi / 2)
+            break
+            
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: self.size.height)
+            transform = transform.rotated(by: -.pi / 2)
+            break
+            
+        default:
+            break
+        }
+        
+        switch self.imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: self.size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+            break
+            
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: self.size.height, y: 0);
+            transform = transform.scaledBy(x: -1, y: 1)
+            break
+            
+        default:
+            break
+        }
+        
+        let ctx = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: self.cgImage!.bitsPerComponent, bytesPerRow: 0, space: self.cgImage!.colorSpace!, bitmapInfo: self.cgImage!.bitmapInfo.rawValue)
+        ctx?.concatenate(transform)
+        
+        switch self.imageOrientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            ctx?.draw(self.cgImage!, in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(size.height), height: CGFloat(size.width)))
+            break
+            
+        default:
+            ctx?.draw(self.cgImage!, in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(size.width), height: CGFloat(size.height)))
+            break
+        }
+        
+        let cgimg: CGImage = (ctx?.makeImage())!
+        let img = UIImage(cgImage: cgimg)
+        
+        return img
     }
 }

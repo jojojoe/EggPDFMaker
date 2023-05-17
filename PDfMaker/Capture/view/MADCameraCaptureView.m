@@ -28,6 +28,8 @@
     __block BOOL _isCapturing;
     
     CAShapeLayer *_rectOverlay;//边缘识别遮盖
+    
+    CGFloat cropOffsetYBili;
 }
 
 @property (nonatomic,strong) AVCaptureSession *captureSession;
@@ -178,6 +180,7 @@
     view.context = self.context;
     view.contentScaleFactor = 1.0f;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    
     [self insertSubview:view atIndex:0];
     _glkView = view;
     glGenRenderbuffers(1, &_renderBuffer);
@@ -205,15 +208,27 @@
     NSError *error = nil;
     AVCaptureDeviceInput* input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
     if (isQuality == YES) {
-        session.sessionPreset = AVCaptureSessionPresetHigh;
+        session.sessionPreset = AVCaptureSessionPresetPhoto;//AVCaptureSessionPreset3840x2160;
+
+//        CGFloat imgWH = 3840.0/2160.0;
+//        CGFloat glkW = self.bounds.size.width;
+//        CGFloat glkH = self.bounds.size.width * imgWH;
+//        CGFloat offsetY = (self.bounds.size.height - glkH)/2;
+         
+//        _glkView.frame = CGRectMake(0, offsetY, glkW, glkH);
     } else {
-        session.sessionPreset = AVCaptureSessionPresetLow;
+        session.sessionPreset = AVCaptureSessionPreset640x480;
+        
+//
+         
+//        _glkView.frame = CGRectMake(0, offsetY, glkW, glkH);
     }
     
     [session addInput:input];
     
     AVCaptureVideoDataOutput *dataOutput = [[AVCaptureVideoDataOutput alloc] init];
-    [dataOutput setAlwaysDiscardsLateVideoFrames:YES];
+    [dataOutput setAlwaysDiscardsLateVideoFrames:NO];
+    
     [dataOutput setVideoSettings:@{(id)kCVPixelBufferPixelFormatTypeKey:@(kCVPixelFormatType_32BGRA)}];
     [dataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
     [session addOutput:dataOutput];
@@ -383,12 +398,40 @@
                 _rectOverlay.path = nil;
             }
         }
+    } else {
+        _rectOverlay.path = nil;
     }
     
     if (self.context && _coreImageContext)
     {
-        // 将捕获到的图片绘制进_coreImageContext
-        [_coreImageContext drawImage:image inRect:self.bounds fromRect:image.extent];
+        CGFloat imgWH = image.extent.size.width / image.extent.size.height;
+        CGFloat glkW = self.bounds.size.width;
+        CGFloat glkH = self.bounds.size.width / imgWH;
+        CGFloat offsetY = (self.bounds.size.height - glkH)/2;
+        CGFloat offsetX = 0;
+        
+        if (imgWH > (self.bounds.size.width/self.bounds.size.height)) {
+            glkW = self.bounds.size.width;
+            glkH = self.bounds.size.width / imgWH;
+            offsetY = (self.bounds.size.height - glkH)/2;
+        } else {
+            glkH = self.bounds.size.height;
+            glkW = self.bounds.size.height * imgWH;
+            offsetY = 0;
+            offsetX = (self.bounds.size.width - glkW) / 2;
+        }
+        
+        CGRect intargetRect = CGRectMake(offsetX, offsetY, glkW, glkH);
+        
+        
+        if (offsetY < 0) {
+            cropOffsetYBili = -(offsetY/self.bounds.size.height);
+        } else {
+            cropOffsetYBili = 0;
+        }
+        
+        // 将捕获到的图片绘制进_coreImageContext self.bounds
+        [_coreImageContext drawImage:image inRect:intargetRect fromRect:image.extent];
         [self.context presentRenderbuffer:GL_RENDERBUFFER];
         
         [_glkView setNeedsDisplay];
@@ -462,38 +505,47 @@
          __strong typeof(self) strongSelf = weakSelf;
 
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
-         if (strongSelf.isBorderDetectionEnabled)
-         {
+        if (strongSelf.isBorderDetectionEnabled) {
+         
              CIImage *enhancedImage = [CIImage imageWithData:imageData];
              enhancedImage = [strongSelf filteredImageUsingContrastFilterOnImage:enhancedImage];
              // 判断边缘识别度阈值, 再对拍照后的进行边缘识别
              CIRectangleFeature *rectangleFeature;
-              if (rectangleDetectionConfidenceHighEnough(_imageDedectionConfidence))
-              {
+            if (rectangleDetectionConfidenceHighEnough(_imageDedectionConfidence)) {
                   // 获取边缘识别最大矩形
                   rectangleFeature = [strongSelf biggestRectangleInRectangles:[[self highAccuracyRectangleDetector] featuresInImage:enhancedImage]];
 
-                  if (rectangleFeature)
-                  {
+                  if (rectangleFeature) {
                       enhancedImage = [strongSelf correctPerspectiveForImage:enhancedImage withFeatures:rectangleFeature];
+                      // 获取拍照图片
+                      UIGraphicsBeginImageContext(CGSizeMake(enhancedImage.extent.size.height, enhancedImage.extent.size.width));
+                      // UIImageOrientationDown
+                      [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationRight] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
+                      UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+                      UIGraphicsEndImageContext();
+                      
+                      completionHandler(image, rectangleFeature, 0);
                   }
               }
              
-             // 获取拍照图片
-             UIGraphicsBeginImageContext(CGSizeMake(enhancedImage.extent.size.height, enhancedImage.extent.size.width));
-             // UIImageOrientationDown
-//             [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationRight] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
+            // 获取拍照图片
+            UIGraphicsBeginImageContext(CGSizeMake(enhancedImage.extent.size.height, enhancedImage.extent.size.width));
+            // UIImageOrientationDown
+            [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationRight] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
+            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+//                      image = [self processFixBoundCropImg:image];
+            completionHandler(image, rectangleFeature, cropOffsetYBili);
              
 //# warn 这里的UIImageOrientationDown设置是和拍摄时图片的原始方向布局一样的，要是用UIImageOrientationRight的话会出现剪切的图片为横屏的，和原始的图片方向不同（做了一个90度的旋转）
-                [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationDown] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
-             UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-             UIGraphicsEndImageContext();
+//                [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationDown] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
              
-             completionHandler(image, rectangleFeature);
-         }
-         else//未开启边缘识别，直接返回图片
-         {
-             completionHandler([UIImage imageWithData:imageData], nil);
+         } else {
+             //未开启边缘识别，直接返回图片
+             UIImage *img = [UIImage imageWithData:imageData];
+//             img = [self processFixBoundCropImg:img];
+             completionHandler(img, nil, cropOffsetYBili);
          }
          
          _isCapturing = NO;
@@ -513,6 +565,17 @@
 //           }];
      }];
 }
+
+//- (UIImage *)processFixBoundCropImg: (UIImage *)originImg {
+//    if cropOffsetYBili == 0 {
+//        return originImg;
+//    }
+//
+//
+//
+////    CGFloat cropRect = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+//
+//}
 
 
 // 添加边缘识别遮盖
