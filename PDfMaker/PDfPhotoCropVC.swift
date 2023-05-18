@@ -14,6 +14,8 @@ class PDfPhotoCropVC: UIViewController {
 
     /// The detected quadrilateral that can be edited by the user. Uses the image's coordinates.
     
+    var cropRefreshBlock: (()->Void)?
+    
     init(imgItem: UserImgItem, rotateImage: Bool = true) {
         self.imgItem = imgItem
         super.init(nibName: nil, bundle: nil)
@@ -40,19 +42,26 @@ class PDfPhotoCropVC: UIViewController {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                
+                self.closeAction()
             }
         }
         cropV.saveClickBlock = {
             [weak self] imgResult in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                
+                self.closeAction()
+                self.cropRefreshBlock?()
             }
         }
     }
 
-    
+    func closeAction() {
+        if self.navigationController != nil {
+            self.navigationController?.popViewController()
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
 
 }

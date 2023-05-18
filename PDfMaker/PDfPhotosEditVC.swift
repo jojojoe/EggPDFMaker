@@ -178,7 +178,16 @@ class PDfPhotosEditVC: UIViewController {
     @objc func cropBtnClick() {
         let item = imgItems[currentIndexP.item]
         let editViewController = PDfPhotoCropVC(imgItem: item, rotateImage: false)
-        self.navigationController?.pushViewController(editViewController, animated: true)
+        editViewController.modalPresentationStyle = .fullScreen
+        self.present(editViewController, animated: true)
+        editViewController.cropRefreshBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+            }
+        }
+//        self.navigationController?.pushViewController(editViewController, animated: true)
     }
     
     @objc func backBtnClick() {

@@ -41,6 +41,7 @@ class PDfScanCAmeraVC: UIViewController {
     var idcardFloatV: PDfCameraIdCardControlView!
     let multiPhotoAreaView = UIImageView()
     let multiPhotoAreaCountLabel = UILabel()
+    let saveBtn = UIButton()
     
     var userImageItemList: [UserImgItem] = []
     var userIdCardImageList: [UIImage] = []
@@ -250,9 +251,10 @@ class PDfScanCAmeraVC: UIViewController {
          
         //
         multiPhotoAreaView.contentMode = .scaleAspectFill
+        multiPhotoAreaView.isUserInteractionEnabled = true
         multiPhotoAreaView.clipsToBounds = true
         multiPhotoAreaView.layer.cornerRadius = 5
-        multiPhotoAreaView.backgroundColor = .lightGray
+        multiPhotoAreaView.backgroundColor = .clear
         bottomBanner.addSubview(multiPhotoAreaView)
         multiPhotoAreaView.snp.makeConstraints {
             $0.centerY.equalTo(captureTakeBtn.snp.centerY)
@@ -274,9 +276,15 @@ class PDfScanCAmeraVC: UIViewController {
         multiPhotoAreaCountLabel.textColor = UIColor(hexString: "#AE0000")
         multiPhotoAreaCountLabel.adjustsFontSizeToFitWidth = true
         
-        
         //
-        let saveBtn = UIButton()
+        let multiPhotoAreaBtn = UIButton()
+        multiPhotoAreaView.addSubview(multiPhotoAreaBtn)
+        multiPhotoAreaBtn.snp.makeConstraints {
+            $0.left.right.top.bottom.equalTo(multiPhotoAreaView)
+        }
+        multiPhotoAreaBtn.addTarget(self, action: #selector(multiPhotoAreaBtnClick), for: .touchUpInside)
+        //
+        
         bottomBanner.addSubview(saveBtn)
         saveBtn.snp.makeConstraints {
             $0.centerY.equalTo(captureTakeBtn.snp.centerY)
@@ -289,8 +297,9 @@ class PDfScanCAmeraVC: UIViewController {
         saveBtn.setTitleColor(UIColor(hexString: "#1C1E37"), for: .normal)
         
         saveBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 17)
-        saveBtn.addTarget(self, action: #selector(saveBtnClick(sender: )), for: .touchUpInside)
+        saveBtn.addTarget(self, action: #selector(saveBtnClick), for: .touchUpInside)
         saveBtn.layer.cornerRadius = 16
+        saveBtn.isHidden = true
         
         //
         let line1 = UIView()
@@ -429,11 +438,13 @@ extension PDfScanCAmeraVC {
 extension PDfScanCAmeraVC {
     
     func applySharpeningEffect(to image: UIImage) -> UIImage? {
-        // 定义锐化滤镜
+        // 定义锐化滤镜 //CIUnsharpMask
+        //
         let sharpness = 1
-        let filter = CIFilter(name: "CIUnsharpMask")!
+        let filter = CIFilter(name: "CIColorMonochrome")!
         let ciImage = CIImage(image: image)!
         filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(CIColor.black, forKey: kCIInputColorKey)
         filter.setValue(sharpness, forKey: kCIInputIntensityKey)
         // 应用滤镜并生成输出图像
         let outputImage = filter.outputImage!
@@ -540,25 +551,41 @@ extension PDfScanCAmeraVC {
                         let pageWidth: CGFloat = 210 * 5
                         let pageHeight: CGFloat = 297 * 5
                         let imgWidth: CGFloat = pageWidth/2
-                        let imgHieght: CGFloat = pageHeight/4 + 50
-                        let verpadding: CGFloat = (pageHeight - imgHieght) / 3
+                        let imgHieght: CGFloat = imgWidth * (3.0/4.0)
+                        let verpadding: CGFloat = (pageHeight - imgHieght * 2) / 3
                         
                         
-                        let imgV1Frame = CGRect(x: (pageWidth - imgWidth), y: verpadding, width: imgWidth, height: imgHieght)
-                        let imgV2Frame = CGRect(x: (pageWidth - imgWidth), y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
+                        let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
+                        let imgV2Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
                         
                         
                         let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+                        whiterPage.backgroundColor = .white
                         let imgV1 = UIImageView(frame: imgV1Frame)
-                        imgV1.image = self.userIdCardImageList.first
+                        if let firstImg = self.userIdCardImageList.first {
+                            let img = self.fixIDcardImg(cardImg: firstImg)
+                            imgV1.image = img
+                        }
+                        
                         whiterPage.addSubview(imgV1)
                         let imgV2 = UIImageView(frame: imgV2Frame)
-                        imgV2.image = self.userIdCardImageList.last
+                        if let lastImg = self.userIdCardImageList.last {
+                            let img = self.fixIDcardImg(cardImg: lastImg)
+                            imgV2.image = img
+                        }
                         whiterPage.addSubview(imgV2)
+                        
+                        imgV1.contentMode = .scaleAspectFill
+                        imgV1.clipsToBounds = false
+                        imgV2.contentMode = .scaleAspectFill
+                        imgV2.clipsToBounds = false
+                        
+                        
                         if let cardpageImg = whiterPage.screenshot {
                             let item = UserImgItem(originImg: cardpageImg)
                             let photoEditVC = PDfPhotosEditVC(imgItems: [item])
                             self.navigationController?.pushViewController(photoEditVC, animated: true)
+                            self.userIdCardImageList = []
                         }
                         
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
@@ -573,16 +600,71 @@ extension PDfScanCAmeraVC {
          
     }
     
+    func fixIDcardImg(cardImg: UIImage) -> UIImage {
+        // 获取拍照图片
+        var transform = CGAffineTransform.identity
+        
+        transform = transform.translatedBy(x: cardImg.size.width, y: 0)
+        transform = transform.rotated(by: .pi / 2)
+        
+//        transform = transform.translatedBy(x: 0, y: cardImg.size.height)
+//        transform = transform.rotated(by: -.pi / 2)
+        
+        
+        let ctx = CGContext(data: nil, width: Int(cardImg.size.width), height: Int(cardImg.size.height), bitsPerComponent: cardImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: cardImg.cgImage!.colorSpace!, bitmapInfo: cardImg.cgImage!.bitmapInfo.rawValue)
+        ctx?.concatenate(transform)
+        ctx?.draw(cardImg.cgImage!, in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(cardImg.size.height), height: CGFloat(cardImg.size.width)))
+        
+        let cgimg: CGImage = (ctx?.makeImage())!
+        let img = UIImage(cgImage: cgimg)
+        
+        return img
+    }
+    
     
     func addNewCapturePhoto(imgItem: UserImgItem) {
         
         userImageItemList.append(imgItem)
         if let img = userImageItemList.last {
-            multiPhotoAreaView.image = img.processedImg
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                self.multiPhotoAreaView.image = img.processedImg
+            }
+            
             multiPhotoAreaCountLabel.text = "\(userImageItemList.count)"
             multiPhotoAreaView.isHidden = false
             multiPhotoAreaCountLabel.isHidden = false
         }
+        
+        saveBtn.isHidden = false
+        
+        addMoveAnimation(img: imgItem.processedImg)
+        
+    }
+    
+    func addMoveAnimation(img: UIImage) {
+        let firstImgV = UIImageView()
+        firstImgV.frame = CGRect(x: 0, y: 0, width: captureCameraView.bounds.size.width/3 * 2, height: captureCameraView.bounds.size.height/3 * 2)
+        centerBgV.addSubview(firstImgV)
+        firstImgV.center = CGPoint(x: centerBgV.bounds.size.width/2, y: centerBgV.bounds.size.height/2)
+        firstImgV.contentMode = .scaleAspectFill
+        firstImgV.alpha = 1
+        firstImgV.image = img
+        
+//        let targetFrame
+        
+        let targetCenter = bottomBanner.convert(multiPhotoAreaView.center, to: centerBgV)
+        debugPrint("targetCenter - \(targetCenter)")
+        //
+        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {
+            firstImgV.frame = CGRect(x: targetCenter.x - 30, y: targetCenter.y - 30, width: 60, height: 60)
+            firstImgV.alpha = 0.2
+        } completion: { finished in
+            if finished {
+                firstImgV.removeFromSuperview()
+            }
+        }
+
+        
     }
     
     func updateDefaultMultiPhotoAreaStatus() {
@@ -622,9 +704,11 @@ extension PDfScanCAmeraVC {
         hiddenFloatPop()
         captureImgAction()
     }
-    @objc func saveBtnClick(sender: UIButton) {
+    @objc func saveBtnClick() {
         hiddenFloatPop()
         
+        let photoEditVC = PDfPhotosEditVC(imgItems: userImageItemList)
+        self.navigationController?.pushViewController(photoEditVC, animated: true)
     }
     @objc func scanDocBtnClick(sender: UIButton) {
         currentScanType = .scanDoc
@@ -711,6 +795,10 @@ extension PDfScanCAmeraVC {
                 }
             }
         }
+    }
+    
+    @objc func multiPhotoAreaBtnClick() {
+        saveBtnClick()
     }
 }
 

@@ -448,7 +448,7 @@
 //        _rectOverlay.fillColor = [UIColor colorWithRed:73/255.0 green:130/255.0 blue:180/255.0 alpha:0.4].CGColor;
         _rectOverlay.fillColor = [UIColor clearColor].CGColor;
         _rectOverlay.strokeColor = [UIColor whiteColor].CGColor;
-        _rectOverlay.lineWidth = 1.0f;
+        _rectOverlay.lineWidth = 0.0f;
     }
     if (!_rectOverlay.superlayer) {
         self.layer.masksToBounds = YES;

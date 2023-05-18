@@ -200,7 +200,8 @@ class PDfPhotoCropView: UIView {
         
         addSubview(canvasV)
         canvasV.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalTo(bottomV.snp.top)
             $0.top.equalTo(backBtn.snp.bottom).offset(10)
         }
