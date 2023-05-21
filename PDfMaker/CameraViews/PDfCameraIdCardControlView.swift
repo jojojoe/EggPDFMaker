@@ -10,7 +10,9 @@ import UIKit
 class PDfCameraIdCardControlView: UIView {
 
     let contentImgV = UIImageView()
-    
+    let cardStr1 = "Put the ID Card in the view frame 1/2"
+    let cardStr2 = "Put the ID Card in the view frame 2/2"
+    let controlBtn = UIButton()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContent()
@@ -22,10 +24,11 @@ class PDfCameraIdCardControlView: UIView {
  
     func setupContent() {
         //
-        let controlBtn = UIButton()
+        
         controlBtn.backgroundColor = UIColor(hexString: "#292929")?.withAlphaComponent(0.8)
         addSubview(controlBtn)
-        controlBtn.setTitle("Put the ID Card in the view frame", for: .normal)
+        controlBtn.setTitle(cardStr1, for: .normal)
+        controlBtn.setTitle(cardStr2, for: .selected)
         controlBtn.setTitleColor(.white, for: .normal)
         controlBtn.titleLabel?.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlBtn.titleLabel?.adjustsFontSizeToFitWidth = true

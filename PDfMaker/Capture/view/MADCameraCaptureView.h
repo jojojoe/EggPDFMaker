@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^CompletionHandler)(UIImage *image, CIRectangleFeature *borderDetectFeature, CGFloat cropImgOffsetYBili);
+typedef void(^CompletionHandler)(UIImage *originImage, UIImage *detectImage, CIRectangleFeature *borderDetectFeature, CGFloat cropImgOffsetYBili);
 @interface MADCameraCaptureView : UIView
 
 /// 创建视图捕获view

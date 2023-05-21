@@ -173,6 +173,13 @@ class PDfPhotosEditVC: UIViewController {
         let item = imgItems[currentIndexP.item]
         let rotatevc = PDfPhotoRotateVC(imgItem: item)
         self.navigationController?.pushViewController(rotatevc, animated: true)
+        rotatevc.saveBlock = {
+            [weak self] imgItem in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+            }
+        }
     }
     
     @objc func cropBtnClick() {
@@ -187,7 +194,6 @@ class PDfPhotosEditVC: UIViewController {
                 self.collection.reloadData()
             }
         }
-//        self.navigationController?.pushViewController(editViewController, animated: true)
     }
     
     @objc func backBtnClick() {
@@ -300,8 +306,6 @@ extension PDfPhotosEditVC {
         debugPrint("pdfurl = \(pdfURL)")
         let previewVc = PDfWePreviewVC(webUrl: pdfURL)
         self.navigationController?.pushViewController(previewVc, animated: true)
-//        KRProgressHUD.showSuccess(withMessage: "The PDF file was exported successfully, please check it on the home page")
-        
         
     }
     

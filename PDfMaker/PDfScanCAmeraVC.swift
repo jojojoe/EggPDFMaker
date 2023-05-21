@@ -10,8 +10,14 @@ import UIKit
 class UserImgItem: NSObject {
     var originImg: UIImage
     var processedImg: UIImage
-    init(originImg: UIImage, processedImg: UIImage? = nil) {
+    var quad: Quadrilateral
+    init(originImg: UIImage, processedImg: UIImage? = nil, quad: Quadrilateral? = nil) {
         self.originImg = originImg
+        if let quad_m = quad {
+            self.quad = quad_m
+        } else {
+            self.quad = WeScanCropManager.default.defaultQuad(forImage: originImg)
+        }
         self.processedImg = processedImg ?? originImg
         super.init()
     }
@@ -466,50 +472,60 @@ extension PDfScanCAmeraVC {
         }
     }
     
-    func cropFixBoundViewImg(originImg: UIImage, cropImgOffsetYBili: CGFloat) -> UIImage {
-        if cropImgOffsetYBili == 0 {
-            return originImg
-        }
-        let offsetX: CGFloat = 0
-        let offsetY = originImg.size.height * cropImgOffsetYBili
-        let croW = originImg.size.width
-        let croH = originImg.size.height - offsetY * 2
-        
-        let cropRect = CGRect(x: offsetX, y: offsetY, width: croW, height: croH)
-        
-        if let croppedCGImage = originImg.cgImage?.cropping(to: cropRect) {
-            let croppedImage = UIImage(cgImage: croppedCGImage, scale: originImg.scale, orientation: originImg.imageOrientation)
-            return croppedImage
-        } else {
-            return originImg
-        }
-        
-        
-    }
+//    func cropFixBoundViewImg(originImg: UIImage, cropImgOffsetYBili: CGFloat) -> UIImage {
+//        if cropImgOffsetYBili == 0 {
+//            return originImg
+//        }
+//        let offsetX: CGFloat = 0
+//        let offsetY = originImg.size.height * cropImgOffsetYBili
+//        let croW = originImg.size.width
+//        let croH = originImg.size.height - offsetY * 2
+//
+//        let cropRect = CGRect(x: offsetX, y: offsetY, width: croW, height: croH)
+//
+//        if let croppedCGImage = originImg.cgImage?.cropping(to: cropRect) {
+//            let croppedImage = UIImage(cgImage: croppedCGImage, scale: originImg.scale, orientation: originImg.imageOrientation)
+//            return croppedImage
+//        } else {
+//            return originImg
+//        }
+//
+//
+//    }
     
     func captureImgAction() {
         
-        captureCameraView.captureImage {[weak self] img, borderDetectFeature, cropImgOffsetYBili in
+        captureCameraView.captureImage {[weak self] originImg, detectCropImg, borderDetectFeature, cropImgOffsetYBili in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                guard var img_m = img else { return }
-                img_m = img_m.fixOrientation()
-                img_m = self.cropFixBoundViewImg(originImg: img_m, cropImgOffsetYBili: cropImgOffsetYBili)
-                let filteredImg = self.processBlackFilter(img: img_m)
+                guard var imgOrigin_m = originImg else { return }
+                guard var imgDetect_m = detectCropImg else { return }
+                imgOrigin_m = imgOrigin_m.fixOrientation()
+                imgDetect_m = imgDetect_m.fixOrientation()
+                let filteredOriginImg = self.processBlackFilter(img: imgOrigin_m)
+                let filteredDetectImg = self.processBlackFilter(img: imgDetect_m)
+                //
+                var quad: Quadrilateral?
+                if let borderDetectFeature_m = borderDetectFeature {
+                    let topLeft: CGPoint = CGPoint(x: borderDetectFeature_m.topLeft.y, y: borderDetectFeature_m.topLeft.x)
+                    let bottomLeft: CGPoint = CGPoint(x: borderDetectFeature_m.bottomLeft.y, y: borderDetectFeature_m.bottomLeft.x)
+                    let topRight: CGPoint = CGPoint(x: borderDetectFeature_m.topRight.y, y: borderDetectFeature_m.topRight.x)
+                    let bottomRight: CGPoint = CGPoint(x: borderDetectFeature_m.bottomRight.y, y: borderDetectFeature_m.bottomRight.x)
+                    
+                    quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+                }
+                
+                let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                 
                 if self.currentScanType == .scanDoc {
-                    
                     if self.singleFloatV.currentSingleType == .single {
-                        let item = UserImgItem(originImg: filteredImg)
                         let photoEditVC = PDfPhotosEditVC(imgItems: [item])
                         self.navigationController?.pushViewController(photoEditVC, animated: true)
                     } else {
                         if self.boundFloatV.currentDetectType == .auto {
-                            let item = UserImgItem(originImg: filteredImg)
                             self.addNewCapturePhoto(imgItem: item)
                         } else {
-                            let item = UserImgItem(originImg: filteredImg)
-                            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item)
+                            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
                             self.view.addSubview(boundDetectCropView)
                             boundDetectCropView.closeClickBlock = {
                                 [weak self] in
@@ -532,67 +548,43 @@ extension PDfScanCAmeraVC {
                 } else if self.currentScanType == .scanPhoto {
                     if self.singleFloatV.currentSingleType == .single {
                         
-                        let item = UserImgItem(originImg: filteredImg)
+//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                         let photoEditVC = PDfPhotosEditVC(imgItems: [item])
                         self.navigationController?.pushViewController(photoEditVC, animated: true)
                     } else {
-                        let item = UserImgItem(originImg: filteredImg)
+//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                         self.addNewCapturePhoto(imgItem: item)
                         
                     }
                     
                     
                 } else if self.currentScanType == .scanIDCard {
-                    if self.userIdCardImageList.count == 0 {
-                        self.idcardFloatV.contentImgV.isHighlighted = true
-                        self.userIdCardImageList.append(filteredImg)
-                    } else if self.userIdCardImageList.count == 1 {
-                        self.userIdCardImageList.append(filteredImg)
-                        let pageWidth: CGFloat = 210 * 5
-                        let pageHeight: CGFloat = 297 * 5
-                        let imgWidth: CGFloat = pageWidth/2
-                        let imgHieght: CGFloat = imgWidth * (3.0/4.0)
-                        let verpadding: CGFloat = (pageHeight - imgHieght * 2) / 3
+                    
+                    if let originImg_m = originImg {
+//                        let item = UserImgItem(originImg: originImg_m, quad: quad)
+//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                         
-                        
-                        let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
-                        let imgV2Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
-                        
-                        
-                        let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
-                        whiterPage.backgroundColor = .white
-                        let imgV1 = UIImageView(frame: imgV1Frame)
-                        if let firstImg = self.userIdCardImageList.first {
-                            let img = self.fixIDcardImg(cardImg: firstImg)
-                            imgV1.image = img
+                        let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+                        self.view.addSubview(boundDetectCropView)
+                        boundDetectCropView.closeClickBlock = {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            DispatchQueue.main.async {
+                                boundDetectCropView.removeFromSuperview()
+                            }
                         }
-                        
-                        whiterPage.addSubview(imgV1)
-                        let imgV2 = UIImageView(frame: imgV2Frame)
-                        if let lastImg = self.userIdCardImageList.last {
-                            let img = self.fixIDcardImg(cardImg: lastImg)
-                            imgV2.image = img
+                        boundDetectCropView.saveClickBlock = {
+                            [weak self] imgI in
+                            guard let `self` = self else {return}
+                            DispatchQueue.main.async {
+                                //
+                                self.processAddCardImg(filteredImg: imgI.processedImg)
+                                boundDetectCropView.removeFromSuperview()
+                            }
                         }
-                        whiterPage.addSubview(imgV2)
-                        
-                        imgV1.contentMode = .scaleAspectFill
-                        imgV1.clipsToBounds = false
-                        imgV2.contentMode = .scaleAspectFill
-                        imgV2.clipsToBounds = false
-                        
-                        
-                        if let cardpageImg = whiterPage.screenshot {
-                            let item = UserImgItem(originImg: cardpageImg)
-                            let photoEditVC = PDfPhotosEditVC(imgItems: [item])
-                            self.navigationController?.pushViewController(photoEditVC, animated: true)
-                            self.userIdCardImageList = []
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                            self.idcardFloatV.contentImgV.isHighlighted = false
-                        }
-                        
                     }
+                    
+                    
                 }
                 
             }
@@ -600,20 +592,76 @@ extension PDfScanCAmeraVC {
          
     }
     
+    func processAddCardImg(filteredImg: UIImage) {
+        
+        if self.userIdCardImageList.count == 0 {
+            self.idcardFloatV.contentImgV.isHighlighted = true
+            self.idcardFloatV.controlBtn.isSelected = true
+            self.userIdCardImageList.append(filteredImg)
+        } else if self.userIdCardImageList.count == 1 {
+            self.userIdCardImageList.append(filteredImg)
+            let pageWidth: CGFloat = 210 * 5
+            let pageHeight: CGFloat = 297 * 5
+            let imgWidth: CGFloat = pageWidth/10 * 4
+            let imgHieght: CGFloat = imgWidth * (3.0/4.0)
+            let verpadding: CGFloat = (pageHeight - imgHieght * 2) / 3
+            
+            
+            let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
+            let imgV2Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
+            
+            
+            let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+            whiterPage.backgroundColor = .white
+            let imgV1 = UIImageView(frame: imgV1Frame)
+            if let firstImg = self.userIdCardImageList.first {
+                let img = self.fixIDcardImg(cardImg: firstImg)
+                imgV1.image = img
+            }
+            
+            whiterPage.addSubview(imgV1)
+            let imgV2 = UIImageView(frame: imgV2Frame)
+            if let lastImg = self.userIdCardImageList.last {
+                let img = self.fixIDcardImg(cardImg: lastImg)
+                imgV2.image = img
+            }
+            whiterPage.addSubview(imgV2)
+            
+            imgV1.contentMode = .scaleAspectFit
+            imgV1.clipsToBounds = false
+            imgV2.contentMode = .scaleAspectFit
+            imgV2.clipsToBounds = false
+            
+            
+            if let cardpageImg = whiterPage.screenshot {
+                let item = UserImgItem(originImg: cardpageImg)
+                let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                self.navigationController?.pushViewController(photoEditVC, animated: true)
+                self.userIdCardImageList = []
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                self.idcardFloatV.contentImgV.isHighlighted = false
+                self.idcardFloatV.controlBtn.isSelected = false
+            }
+            
+        }
+    }
+    
     func fixIDcardImg(cardImg: UIImage) -> UIImage {
         // 获取拍照图片
         var transform = CGAffineTransform.identity
         
-        transform = transform.translatedBy(x: cardImg.size.width, y: 0)
+        transform = transform.translatedBy(x: cardImg.size.height, y: 0)
         transform = transform.rotated(by: .pi / 2)
         
 //        transform = transform.translatedBy(x: 0, y: cardImg.size.height)
 //        transform = transform.rotated(by: -.pi / 2)
         
         
-        let ctx = CGContext(data: nil, width: Int(cardImg.size.width), height: Int(cardImg.size.height), bitsPerComponent: cardImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: cardImg.cgImage!.colorSpace!, bitmapInfo: cardImg.cgImage!.bitmapInfo.rawValue)
+        let ctx = CGContext(data: nil, width: Int(cardImg.size.height), height: Int(cardImg.size.width), bitsPerComponent: cardImg.cgImage!.bitsPerComponent, bytesPerRow: 0, space: cardImg.cgImage!.colorSpace!, bitmapInfo: cardImg.cgImage!.bitmapInfo.rawValue)
         ctx?.concatenate(transform)
-        ctx?.draw(cardImg.cgImage!, in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(cardImg.size.height), height: CGFloat(cardImg.size.width)))
+        ctx?.draw(cardImg.cgImage!, in: CGRect(x: CGFloat(0), y: CGFloat(0), width: CGFloat(cardImg.size.width), height: CGFloat(cardImg.size.height)))
         
         let cgimg: CGImage = (ctx?.makeImage())!
         let img = UIImage(cgImage: cgimg)

@@ -185,7 +185,7 @@ class PDfPhotoRotateVC: UIViewController {
         }
     }
     @objc func saveBtnClick() {
-
+        backBtnClick()
         imgItem.processedImg = processingImg
         saveBlock?(imgItem)
     }

@@ -202,7 +202,7 @@
 - (void)onSnapshotBtn:(id)sender {
     
     __weak typeof(self) weakSelf = self;
-    [self.captureCameraView captureImageWithCompletionHandler:^(UIImage *data, CIRectangleFeature *borderDetectFeature, CGFloat offsetYbili) {
+    [self.captureCameraView captureImageWithCompletionHandler:^(UIImage *originData, UIImage *data, CIRectangleFeature *borderDetectFeature, CGFloat offsetYbili) {
         __strong typeof(self) strongSelf = weakSelf;
     
         MADCropScaleController *vc = [[MADCropScaleController alloc] init];

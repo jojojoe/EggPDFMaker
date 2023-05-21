@@ -13,11 +13,12 @@ class PDfPhotoCropVC: UIViewController {
     private let imgItem: UserImgItem
 
     /// The detected quadrilateral that can be edited by the user. Uses the image's coordinates.
-    
+    var quad: Quadrilateral?
     var cropRefreshBlock: (()->Void)?
     
     init(imgItem: UserImgItem, rotateImage: Bool = true) {
         self.imgItem = imgItem
+        self.quad = imgItem.quad
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,7 +34,7 @@ class PDfPhotoCropVC: UIViewController {
     }
     
     func setupContentV() {
-        let cropV = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: imgItem)
+        let cropV = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: imgItem, quad: quad)
         view.addSubview(cropV)
         cropV.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()

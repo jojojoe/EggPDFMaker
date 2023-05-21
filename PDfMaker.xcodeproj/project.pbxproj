@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */; };
+		D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */; };
+		D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */; };
 		D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */; };
 		D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */; };
 		D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */; };
-		EB340FC62A121DED007C8DD1 /* PDfToolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */; };
 		EB340FC82A123F2D007C8DD1 /* PDfWePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */; };
 		EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */; };
 		EB55EF0C2A0E475A007D7B15 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EED52A0E4758007D7B15 /* EditImageViewController.swift */; };
@@ -84,11 +85,12 @@
 /* Begin PBXFileReference section */
 		06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PDfMaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.release.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.release.xcconfig"; sourceTree = "<group>"; };
+		D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfHomeRecentListView.swift; sourceTree = "<group>"; };
+		D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSettingPage.swift; sourceTree = "<group>"; };
 		D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropVC.swift; sourceTree = "<group>"; };
 		D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoRotateVC.swift; sourceTree = "<group>"; };
 		D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotosEditVC.swift; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
-		EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfToolManager.swift; sourceTree = "<group>"; };
 		EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfWePreviewVC.swift; sourceTree = "<group>"; };
 		EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropView.swift; sourceTree = "<group>"; };
 		EB55EED52A0E4758007D7B15 /* EditImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
@@ -199,10 +201,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D88C1EE12A18D0A60040CE44 /* HomeViews */ = {
+			isa = PBXGroup;
+			children = (
+				D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */,
+				D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */,
+			);
+			path = HomeViews;
+			sourceTree = "<group>";
+		};
 		EB340FC42A121DDB007C8DD1 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				EB340FC52A121DED007C8DD1 /* PDfToolManager.swift */,
+				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -346,9 +357,9 @@
 				EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */,
 				EBCA1A2929FA732400473A6A /* Main.storyboard */,
 				EBCA1A3929FA7B2A00473A6A /* PDfMaker-Bridging-Header.h */,
+				D88C1EE12A18D0A60040CE44 /* HomeViews */,
 				EB340FC42A121DDB007C8DD1 /* Manager */,
 				EBCA1A3D29FA7B3000473A6A /* Capture */,
-				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
 				EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */,
 				D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */,
 				EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */,
@@ -571,9 +582,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */,
 				EB55EF0F2A0E475A007D7B15 /* AVCaptureVideoOrientation+Utils.swift in Sources */,
 				EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */,
 				EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */,
+				D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */,
 				EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */,
 				EB55EF1D2A0E475A007D7B15 /* CameraScannerViewController.swift in Sources */,
 				EBCA1A5229FA7B3100473A6A /* MADCameraCaptureController.m in Sources */,
@@ -585,7 +598,6 @@
 				EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */,
 				EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */,
 				EB55EF132A0E475A007D7B15 /* CIImage+Utils.swift in Sources */,
-				EB340FC62A121DED007C8DD1 /* PDfToolManager.swift in Sources */,
 				EB55EF1A2A0E475A007D7B15 /* RectangleFeaturesFunnel.swift in Sources */,
 				EB55EF1C2A0E475A007D7B15 /* ShutterButton.swift in Sources */,
 				EB55EF152A0E475A007D7B15 /* CGRect+Utils.swift in Sources */,

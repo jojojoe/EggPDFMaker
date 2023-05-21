@@ -505,6 +505,10 @@
          __strong typeof(self) strongSelf = weakSelf;
 
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
+        
+        UIImage *originImg = [UIImage imageWithData:imageData];
+        
+        
         if (strongSelf.isBorderDetectionEnabled) {
          
              CIImage *enhancedImage = [CIImage imageWithData:imageData];
@@ -524,28 +528,33 @@
                       UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
                       UIGraphicsEndImageContext();
                       
-                      completionHandler(image, rectangleFeature, 0);
+                      completionHandler(originImg, image, rectangleFeature, 0);
                   }
-              }
+            } else {
+                //未开启边缘识别，直接返回图片
+                
+   //             img = [self processFixBoundCropImg:img];
+                completionHandler(originImg, originImg, nil, cropOffsetYBili);
+            }
              
             // 获取拍照图片
-            UIGraphicsBeginImageContext(CGSizeMake(enhancedImage.extent.size.height, enhancedImage.extent.size.width));
-            // UIImageOrientationDown
-            [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationRight] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
-            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-//                      image = [self processFixBoundCropImg:image];
-            completionHandler(image, rectangleFeature, cropOffsetYBili);
+//            UIGraphicsBeginImageContext(CGSizeMake(enhancedImage.extent.size.height, enhancedImage.extent.size.width));
+//            // UIImageOrientationDown
+//            [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationRight] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
+//            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+//            UIGraphicsEndImageContext();
+//
+////                      image = [self processFixBoundCropImg:image];
+//            completionHandler(image, rectangleFeature, cropOffsetYBili);
              
 //# warn 这里的UIImageOrientationDown设置是和拍摄时图片的原始方向布局一样的，要是用UIImageOrientationRight的话会出现剪切的图片为横屏的，和原始的图片方向不同（做了一个90度的旋转）
 //                [[UIImage imageWithCIImage:enhancedImage scale:1.0 orientation:UIImageOrientationDown] drawInRect:CGRectMake(0,0, enhancedImage.extent.size.height, enhancedImage.extent.size.width)];
              
          } else {
              //未开启边缘识别，直接返回图片
-             UIImage *img = [UIImage imageWithData:imageData];
+//             UIImage *img = [UIImage imageWithData:imageData];
 //             img = [self processFixBoundCropImg:img];
-             completionHandler(img, nil, cropOffsetYBili);
+             completionHandler(originImg, originImg, nil, cropOffsetYBili);
          }
          
          _isCapturing = NO;

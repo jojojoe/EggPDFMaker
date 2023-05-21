@@ -15,6 +15,8 @@ class PDfPhotoCropView: UIView {
     
     
     private var quad: Quadrilateral
+    private var originQuad: Quadrilateral
+    
     var closeClickBlock: (()->Void)?
     var saveClickBlock: ((UserImgItem)->Void)?
     let ra34Btn = UIButton()
@@ -30,7 +32,7 @@ class PDfPhotoCropView: UIView {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.isOpaque = true
-        imageView.image = imgItem.processedImg
+        imageView.image = imgItem.originImg
         imageView.backgroundColor = .black
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,14 +48,20 @@ class PDfPhotoCropView: UIView {
 
     private var zoomGestureController: ZoomGestureController!
     
-    init(frame: CGRect, imgItem: UserImgItem, rotateImage: Bool = true) {
+    init(frame: CGRect, imgItem: UserImgItem, quad: Quadrilateral?, rotateImage: Bool = true) {
         self.imgItem = imgItem
-        self.quad = WeScanCropManager.default.defaultQuad(forImage: imgItem.processedImg)
+        if let quad_m = quad {
+            self.originQuad = quad_m
+        } else {
+            self.originQuad = WeScanCropManager.default.defaultQuad(forImage: imgItem.originImg)
+        }
+
+        self.quad = self.originQuad
         
         super.init(frame: frame)
         setupContent()
         setupCropCanvas()
-        zoomGestureController = ZoomGestureController(image: imgItem.processedImg, quadView: quadView)
+        zoomGestureController = ZoomGestureController(image: imgItem.originImg, quadView: quadView)
         let touchDown = UILongPressGestureRecognizer(target: zoomGestureController, action: #selector(zoomGestureController.handle(pan:)))
         touchDown.minimumPressDuration = 0
         canvasV.addGestureRecognizer(touchDown)
@@ -65,6 +73,7 @@ class PDfPhotoCropView: UIView {
             }
         }
         resetBtn.isEnabled = false
+        
     }
     
     required init?(coder: NSCoder) {
@@ -215,38 +224,38 @@ class PDfPhotoCropView: UIView {
     
     @objc func resetBtnClick() {
         resetBtn.isEnabled = false
-        self.quad = WeScanCropManager.default.defaultQuad(forImage: imgItem.processedImg)
+        self.quad = self.originQuad
         displayQuad()
     }
     @objc func ra11BtnClick() {
         resetBtn.isEnabled = true
-        self.quad = WeScanCropManager.default.defaultQuad11(forImage: imgItem.processedImg)
+        self.quad = WeScanCropManager.default.defaultQuad11(forImage: imgItem.originImg)
         displayQuad()
     }
     @objc func ra23BtnClick() {
         resetBtn.isEnabled = true
-        self.quad = WeScanCropManager.default.defaultQuad23(forImage: imgItem.processedImg)
+        self.quad = WeScanCropManager.default.defaultQuad23(forImage: imgItem.originImg)
         displayQuad()
     }
     @objc func ra34BtnClick() {
         resetBtn.isEnabled = true
-        self.quad = WeScanCropManager.default.defaultQuad34(forImage: imgItem.processedImg)
+        self.quad = WeScanCropManager.default.defaultQuad34(forImage: imgItem.originImg)
         displayQuad()
     }
     
     @objc func saveBtnClick() {
         guard let quad = quadView.quad,
-            let ciImage = CIImage(image: imgItem.processedImg) else {
+            let ciImage = CIImage(image: imgItem.originImg) else {
             KRProgressHUD.showInfo(withMessage: "Something wrong!")
             return
         }
-        let cgOrientation = CGImagePropertyOrientation(imgItem.processedImg.imageOrientation) // 图像方向
+        let cgOrientation = CGImagePropertyOrientation(imgItem.originImg.imageOrientation) // 图像方向
         let orientedImage = ciImage.oriented(forExifOrientation: Int32(cgOrientation.rawValue))
-        let scaledQuad = quad.scale(quadView.bounds.size, imgItem.processedImg.size)
+        let scaledQuad = quad.scale(quadView.bounds.size, imgItem.originImg.size)
         self.quad = scaledQuad
 
         // Cropped Image
-        var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: imgItem.processedImg.size.height)
+        var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: imgItem.originImg.size.height)
         cartesianScaledQuad.reorganize()
 
         let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
@@ -277,7 +286,7 @@ class PDfPhotoCropView: UIView {
 
 extension PDfPhotoCropView {
     private func displayQuad() {
-        let imageSize = imgItem.processedImg.size
+        let imageSize = imgItem.originImg.size
         let imageFrame = CGRect(
             origin: quadView.frame.origin,
             size: CGSize(width: quadViewWidthConstraint.constant, height: quadViewHeightConstraint.constant)
@@ -292,7 +301,7 @@ extension PDfPhotoCropView {
     
     private func adjustQuadViewConstraints() {
         let imgViewBound: CGRect = CGRect(x: 0, y: 0, width: canvasV.bounds.size.width, height: canvasV.bounds.size.height)
-        let frame = AVMakeRect(aspectRatio: imgItem.processedImg.size, insideRect: imgViewBound)
+        let frame = AVMakeRect(aspectRatio: imgItem.originImg.size, insideRect: imgViewBound)
         quadViewWidthConstraint.constant = frame.size.width
         quadViewHeightConstraint.constant = frame.size.height
     }
