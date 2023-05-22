@@ -62,7 +62,7 @@ class PDfWePreviewVC: UIViewController {
             $0.centerX.equalToSuperview()
             $0.width.height.greaterThanOrEqualTo(10)
         }
-        titLB.text = "Recent files"
+        titLB.text = "Previews"
         
         //
         let webV = WKWebView()

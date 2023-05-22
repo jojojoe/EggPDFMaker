@@ -43,6 +43,7 @@ class PDfMakTool: NSObject {
     static let `default` = PDfMakTool()
     var historyItems: [HistoryItem] = []
     
+    let k_historyItemChange = "historyItemChange"
     
     override init() {
         super.init()
@@ -51,9 +52,22 @@ class PDfMakTool: NSObject {
     
     func postAddHistoryItem() {
         // 发送添加历史记录通知
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: k_historyItemChange),
+            object: nil,
+            userInfo: nil)
+        
     }
     
     // 在history collection添加通知 刷新页面
+    
+    func searchingHistory(contnetStr: String) -> [HistoryItem] {
+        
+        let results = historyItems.filter {
+            $0.displayName.contains(contnetStr)
+        }
+        return results
+    }
     
     
     func loadHistoryItem() {
@@ -87,6 +101,7 @@ class PDfMakTool: NSObject {
             print("Error parsing info.json files: \(error.localizedDescription)")
         }
         return dictArray
+        
     }
  
     
@@ -153,6 +168,9 @@ class PDfMakTool: NSObject {
         } else {
             historyItems.insert(item, at: 0)
         }
+        //
+        postAddHistoryItem()
+        
         return item
     }
     
@@ -241,6 +259,9 @@ class PDfMakTool: NSObject {
         } else {
             historyItems.insert(item, at: 0)
         }
+        //
+        postAddHistoryItem()
+        
         return item
     }
     

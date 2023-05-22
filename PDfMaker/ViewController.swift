@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     let settingBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_sett_s", iconStrN: "tab_setting_n", nameStr: "Setting")
     let scaneCameraBtn = UIButton()
     
+    var isSearchingStr: String? = nil
  
     
     
@@ -32,9 +33,40 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#EFEFEF")
         PDfMakTool.default.loadHistoryItem()
+        addnoti()
         setupHomePage()
         setupSettingPage()
+        setupScaneCamera()
         
+        
+    }
+    
+    
+    func addnoti() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
+    }
+
+    @objc func updateContentProStatus(noti: Notification) {
+        DispatchQueue.main.async {
+            self.updateHistoryStatus()
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    func updateHistoryStatus() {
+        if isSearchingStr == nil {
+            fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
+        }
+    }
+    
+}
+
+
+extension ViewController {
+    func setupScaneCamera() {
         view.addSubview(scaneCameraBtn)
         scaneCameraBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -43,21 +75,8 @@ class ViewController: UIViewController {
         }
         scaneCameraBtn.setImage(UIImage(named: "home_camera"), for: .normal)
         scaneCameraBtn.addTarget(self, action: #selector(scaneBtnClick(sender: )), for: .touchUpInside)
-        
-        
-        
     }
     
-    
-    
-    
-
-
-    
-}
-
-
-extension ViewController {
     func setupHomePage() {
         view.addSubview(homePageV)
         homePageV.backgroundColor = UIColor(hexString: "#EFEFEF")
@@ -202,14 +221,14 @@ extension ViewController {
             [weak self] fileitem in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                
+                self.showURLPreviewVC(url: fileitem.pdfPathUrl())
             }
         }
         fileCollection.itemMoreClickBlock = {
             [weak self] fileitem in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                
+                self.showItemMoreSheetAlert(item: fileitem)
             }
         }
         
@@ -269,6 +288,28 @@ extension ViewController {
         
     }
     
+   
+    
+}
+
+extension ViewController {
+    
+    func showURLPreviewVC(url: URL) {
+        let _ = PDfMakTool.default.saveHistoryFile(originFileUrl: url)
+        let previewVC = PDfWePreviewVC(webUrl: url)
+        self.navigationController?.pushViewController(previewVC, animated: true)
+    }
+    
+    func showItemMoreSheetAlert(item: HistoryItem) {
+        
+    }
+    
+    func startSearching(contentStr: String) {
+        let searchingItemList = PDfMakTool.default.searchingHistory(contnetStr: contentStr)
+        self.fileCollection.updateContent(fileList: searchingItemList)
+    }
+    
+    
 }
 
 extension ViewController {
@@ -281,7 +322,10 @@ extension ViewController {
     }
     
     @objc func fileBtnClick() {
-        
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.microsoft.word.doc", "com.microsoft.excel.xls", "com.adobe.pdf", "public.text"], in: .import)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .fullScreen
+        self.present(documentPicker, animated: true)
     }
     
     @objc func recentEnterBtnClick() {
@@ -323,6 +367,44 @@ extension ViewController: UITextFieldDelegate {
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        TaskDelay.default.taskDelay(afterTime: 1) {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                
+                if let textStr = textField.text, textStr != "" {
+                    self.isSearchingStr = textStr
+                    self.startSearching(contentStr: textStr)
+                } else {
+                    self.isSearchingStr = nil
+                    self.updateHistoryStatus()
+                }
+                
+            }
+            
+        }
+        
+        return true
+    }
+    
+}
+
+extension ViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if controller.documentPickerMode == .import {
+            // What should be the line below?
+            for (ind, url) in urls.enumerated() {
+                debugPrint("documentURLs - \(ind) path - \(url)")
+            }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                if let targetUrl = urls.first {
+                    self.showURLPreviewVC(url: targetUrl)
+                }
+            }
+        }
+    }
+   
 }
 
 extension ViewController {

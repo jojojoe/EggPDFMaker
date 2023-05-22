@@ -54,6 +54,8 @@
 		EBAB51682A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */; };
 		EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */; };
 		EBAB516C2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB516B2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift */; };
+		EBB3B59E2A1B6EB200884EA7 /* TaskDelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB3B59D2A1B6EB200884EA7 /* TaskDelay.swift */; };
+		EBB3B5A12A1B801600884EA7 /* PDfHistoryRecentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB3B5A02A1B801600884EA7 /* PDfHistoryRecentVC.swift */; };
 		EBCA1A2429FA732400473A6A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2329FA732400473A6A /* AppDelegate.swift */; };
 		EBCA1A2629FA732400473A6A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2529FA732400473A6A /* SceneDelegate.swift */; };
 		EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A2729FA732400473A6A /* ViewController.swift */; };
@@ -132,6 +134,8 @@
 		EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraBoundDetectControlView.swift; sourceTree = "<group>"; };
 		EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSpeedControlView.swift; sourceTree = "<group>"; };
 		EBAB516B2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraIdCardControlView.swift; sourceTree = "<group>"; };
+		EBB3B59D2A1B6EB200884EA7 /* TaskDelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDelay.swift; sourceTree = "<group>"; };
+		EBB3B5A02A1B801600884EA7 /* PDfHistoryRecentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfHistoryRecentVC.swift; sourceTree = "<group>"; };
 		EBCA1A2029FA732400473A6A /* PDfMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDfMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBCA1A2329FA732400473A6A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EBCA1A2529FA732400473A6A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
+				EBB3B59D2A1B6EB200884EA7 /* TaskDelay.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 				EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */,
 				D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */,
 				D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */,
+				EBB3B5A02A1B801600884EA7 /* PDfHistoryRecentVC.swift */,
 				EBCA1A5D29FBC6A200473A6A /* Views */,
 				EBAB51642A08ADC5003C1838 /* CameraViews */,
 				EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */,
@@ -586,6 +592,7 @@
 				EB55EF0F2A0E475A007D7B15 /* AVCaptureVideoOrientation+Utils.swift in Sources */,
 				EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */,
 				EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */,
+				EBB3B59E2A1B6EB200884EA7 /* TaskDelay.swift in Sources */,
 				D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */,
 				EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */,
 				EB55EF1D2A0E475A007D7B15 /* CameraScannerViewController.swift in Sources */,
@@ -597,6 +604,7 @@
 				EB55EF162A0E475A007D7B15 /* Array+Utils.swift in Sources */,
 				EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */,
 				EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */,
+				EBB3B5A12A1B801600884EA7 /* PDfHistoryRecentVC.swift in Sources */,
 				EB55EF132A0E475A007D7B15 /* CIImage+Utils.swift in Sources */,
 				EB55EF1A2A0E475A007D7B15 /* RectangleFeaturesFunnel.swift in Sources */,
 				EB55EF1C2A0E475A007D7B15 /* ShutterButton.swift in Sources */,
