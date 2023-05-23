@@ -44,6 +44,16 @@ class PDfMakTool: NSObject {
         return results
     }
     
+    func deleteHistoryItem(item: HistoryItem) {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: outputURL.path) {
+            do {
+                try fileManager.removeItem(atPath: outputURL.path)
+            } catch {
+                ypLog("Can't remove the file for some reason.")
+            }
+        }
+    }
     
     func loadHistoryItem() {
         let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
