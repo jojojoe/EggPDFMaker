@@ -206,11 +206,11 @@ class PDfPhotosEditVC: UIViewController {
     
     @objc func shareBtnClick() {
         let sheetAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let cameraAction = UIAlertAction(title: "Print", style: .default) { (action) in
+        let printAction = UIAlertAction(title: "Print", style: .default) { (action) in
             self.printAction()
             sheetAlert.dismiss(animated: true)
         }
-        let photoAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
+        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
             self.exportAction()
             sheetAlert.dismiss(animated: true)
         }
@@ -219,8 +219,8 @@ class PDfPhotosEditVC: UIViewController {
             sheetAlert.dismiss(animated: true)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        sheetAlert.addAction(cameraAction)
-        sheetAlert.addAction(photoAction)
+        sheetAlert.addAction(printAction)
+        sheetAlert.addAction(exportpdfAction)
         sheetAlert.addAction(shareAction)
         sheetAlert.addAction(cancelAction)
         self.present(sheetAlert, animated: true, completion: nil)
@@ -306,6 +306,8 @@ extension PDfPhotosEditVC {
         debugPrint("pdfurl = \(pdfURL)")
         let previewVc = PDfWePreviewVC(webUrl: pdfURL)
         self.navigationController?.pushViewController(previewVc, animated: true)
+        //
+        KRProgressHUD.showSuccess(withMessage: "Export PDF successfully!")
         
     }
     

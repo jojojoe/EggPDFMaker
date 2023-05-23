@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import QuickLook
 
 class PDfHomeRecentListView: UIView {
 
@@ -75,7 +76,7 @@ class PDfHomeRecentListView: UIView {
     func setupV() {
         
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
         collection.showsVerticalScrollIndicator = false
         collection.showsHorizontalScrollIndicator = false
@@ -168,6 +169,30 @@ class PDfRecentFileCell: UICollectionViewCell {
     
     func updateContentStatus(item: HistoryItem) {
         self.histroyItem = item
+        fileNameL.text = item.displayName
+        timeLb.text = item.timeStr
+        
+        let request = QLThumbnailGenerator.Request(
+          fileAt: item.pdfPathUrl(),
+          size: CGSize(width: 120, height: 160),
+          scale: 1,
+          representationTypes: .all)
+
+        // 2
+        let generator = QLThumbnailGenerator.shared
+        generator.generateRepresentations(for: request) {[weak self] thumbnail,
+            _, error in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                if let thumbnail = thumbnail {
+                    debugPrint("thumbnail generated")
+                    self.coverImgV.image = thumbnail.uiImage
+                } else if let error = error {
+                    self.coverImgV.image = UIImage(named: "fileimagecover")
+                    debugPrint(" - \(error)")
+                }
+            }
+        }
         
     }
     

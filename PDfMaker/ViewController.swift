@@ -11,7 +11,7 @@ import SwifterSwift
 import YPImagePicker
 import Photos
 import AVFoundation
-
+import KRProgressHUD
 
 
 class ViewController: UIViewController {
@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     let homeBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_home_s", iconStrN: "tab_home_n", nameStr: "Home")
     let settingBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_sett_s", iconStrN: "tab_setting_n", nameStr: "Setting")
     let scaneCameraBtn = UIButton()
+    let settingPage = UIView()
+    
     
     var isSearchingStr: String? = nil
  
@@ -295,13 +297,9 @@ extension ViewController {
 extension ViewController {
     
     func showURLPreviewVC(url: URL) {
-        let _ = PDfMakTool.default.saveHistoryFile(originFileUrl: url)
+
         let previewVC = PDfWePreviewVC(webUrl: url)
         self.navigationController?.pushViewController(previewVC, animated: true)
-    }
-    
-    func showItemMoreSheetAlert(item: HistoryItem) {
-        
     }
     
     func startSearching(contentStr: String) {
@@ -309,6 +307,95 @@ extension ViewController {
         self.fileCollection.updateContent(fileList: searchingItemList)
     }
     
+}
+
+extension ViewController {
+    
+    func showItemMoreSheetAlert(item: HistoryItem) {
+        let sheetAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let renameAction = UIAlertAction(title: "Rename", style: .default) { (action) in
+            self.renameAction(item: item)
+            sheetAlert.dismiss(animated: true)
+        }
+        let printAction = UIAlertAction(title: "Print", style: .default) { (action) in
+            self.printAction(item: item)
+            sheetAlert.dismiss(animated: true)
+        }
+        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
+            self.exportAction(item: item)
+            sheetAlert.dismiss(animated: true)
+        }
+        let shareAction = UIAlertAction(title: "Share", style: .default) { (action) in
+            self.shareAction(item: item)
+            sheetAlert.dismiss(animated: true)
+        }
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            self.deleteAction(item: item)
+            sheetAlert.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        sheetAlert.addAction(renameAction)
+        sheetAlert.addAction(printAction)
+        if let urltypeStr = PDfMakTool.default.extractFileType(from: item.pdfFilePath), urltypeStr.lowercased() == "pdf" {
+            
+        } else {
+            sheetAlert.addAction(exportpdfAction)
+        }
+        
+        sheetAlert.addAction(shareAction)
+        sheetAlert.addAction(deleteAction)
+        sheetAlert.addAction(cancelAction)
+        self.present(sheetAlert, animated: true, completion: nil)
+        
+    }
+    
+    func printAction(item: HistoryItem) {
+        
+        let printInVC = UIPrintInteractionController.shared
+        printInVC.showsPaperSelectionForLoadedPapers = true
+        let info = UIPrintInfo(dictionary: nil)
+        info.jobName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Sample Print"
+        printInVC.printInfo = info
+        printInVC.printingItems = [item.pdfPathUrl()] //array of NSData, NSURL, UIImage.
+        printInVC.present(animated: true) {
+            controller, completed, error in
+            debugPrint("completed = \(completed)")
+            if completed {
+                KRProgressHUD.showSuccess(withMessage: "Print complete!")
+            }
+        }
+        printInVC.delegate = self
+    }
+    func shareAction(item: HistoryItem) {
+        let vc = UIActivityViewController(activityItems: [item.pdfPathUrl()], applicationActivities: nil)
+        vc.popoverPresentationController?.sourceView = self.view
+        self.present(vc, animated: true)
+    }
+     
+    func exportAction(item: HistoryItem) {
+//        PDfMakTool.default.exportDocFileToPDF(targetUrl: item.pdfPathUrl())
+        PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
+        
+    }
+    func renameAction(item: HistoryItem) {
+        
+    }
+    func deleteAction(item: HistoryItem) {
+        
+    }
+    
+    
+}
+
+extension ViewController {
+    
+}
+
+
+extension ViewController: UIPrintInteractionControllerDelegate {
+    func printInteractionControllerWillStartJob(_ printInteractionController: UIPrintInteractionController) {
+        
+    }
     
 }
 
@@ -329,7 +416,8 @@ extension ViewController {
     }
     
     @objc func recentEnterBtnClick() {
-        
+        let vc = PDfHistoryRecentVC()
+        self.navigationController?.pushViewController(vc)
     }
     
     @objc func homeBottomBtnClick() {
@@ -380,11 +468,8 @@ extension ViewController: UITextFieldDelegate {
                     self.isSearchingStr = nil
                     self.updateHistoryStatus()
                 }
-                
             }
-            
         }
-        
         return true
     }
     
@@ -399,7 +484,9 @@ extension ViewController: UIDocumentPickerDelegate {
             }
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
                 if let targetUrl = urls.first {
+                    let _ = PDfMakTool.default.saveHistoryFile(originFileUrl: targetUrl)
                     self.showURLPreviewVC(url: targetUrl)
+                    KRProgressHUD.showSuccess(withMessage: "Import File successfully!")
                 }
             }
         }

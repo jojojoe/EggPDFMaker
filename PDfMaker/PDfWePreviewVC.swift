@@ -55,7 +55,7 @@ class PDfWePreviewVC: UIViewController {
         //
         let titLB = UILabel()
         titLB.textColor = UIColor(hexString: "#1C1E37")
-        titLB.font = FontCusNames.MontMedium.font(sizePoint: 20)
+        titLB.font = FontCusNames.MontSemiBold.font(sizePoint: 20)
         view.addSubview(titLB)
         titLB.snp.makeConstraints {
             $0.centerY.equalTo(backbtn.snp.centerY).offset(0)
@@ -64,8 +64,14 @@ class PDfWePreviewVC: UIViewController {
         }
         titLB.text = "Previews"
         
-        //
-        let webV = WKWebView()
+        let jscript = "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta); var imgs = document.getElementsByTagName('img');for (var i in imgs){imgs[i].style.maxWidth='100%';imgs[i].style.height='auto';}"
+        let script = WKUserScript(source: jscript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let wkUController = WKUserContentController()
+        wkUController.addUserScript(script)
+        let wkWebConfig = WKWebViewConfiguration()
+        wkWebConfig.userContentController = wkUController
+        
+        let webV = WKWebView(frame: .zero, configuration: wkWebConfig)
         view.addSubview(webV)
         webV.snp.makeConstraints {
             $0.top.equalTo(backbtn.snp.bottom).offset(10)
@@ -73,8 +79,24 @@ class PDfWePreviewVC: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        let request = URLRequest(url: webUrl)
-        webV.load(request)
+        //
+        
+        if webUrl.absoluteString.lowercased().contains("txt") {
+            do {
+                let data = try Data(contentsOf: webUrl)
+                webV.load(data, mimeType: "text/html", characterEncodingName: "UTF-8", baseURL: webUrl)
+            } catch {
+                
+            }
+        } else {
+            let request = URLRequest(url: webUrl)
+            webV.load(request)
+        }
+        
+        
+        //
+        
+        
         
     }
 
