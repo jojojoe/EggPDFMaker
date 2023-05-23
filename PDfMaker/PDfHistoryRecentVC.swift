@@ -11,13 +11,33 @@ import KRProgressHUD
 
 class PDfHistoryRecentVC: UIViewController {
 
+    let fileCollection = PDfHomeRecentListView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        addnoti()
         setupContentV()
     }
     
+    
+    
+    func addnoti() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
+    }
 
+    @objc func updateContentProStatus(noti: Notification) {
+        DispatchQueue.main.async {
+            self.updateHistoryStatus()
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    func updateHistoryStatus() {
+        fileCollection.collection.reloadData()
+    }
 
 }
 
@@ -51,7 +71,7 @@ extension PDfHistoryRecentVC {
         titLB.text = "Recent files"
         
         //
-        let fileCollection = PDfHomeRecentListView()
+        
         view.addSubview(fileCollection)
         fileCollection.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
@@ -136,41 +156,19 @@ extension PDfHistoryRecentVC {
     }
     
     func printAction(item: HistoryItem) {
-        
-        let printInVC = UIPrintInteractionController.shared
-        printInVC.showsPaperSelectionForLoadedPapers = true
-        let info = UIPrintInfo(dictionary: nil)
-        info.jobName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Sample Print"
-        printInVC.printInfo = info
-        printInVC.printingItems = [item.pdfPathUrl()] //array of NSData, NSURL, UIImage.
-        printInVC.present(animated: true) {
-            controller, completed, error in
-            debugPrint("completed = \(completed)")
-            if completed {
-                KRProgressHUD.showSuccess(withMessage: "Print complete!")
-            }
-        }
-        printInVC.delegate = self
+        PDfMakTool.default.printFile(item: item)
     }
     func shareAction(item: HistoryItem) {
-        let vc = UIActivityViewController(activityItems: [item.pdfPathUrl()], applicationActivities: nil)
-        vc.popoverPresentationController?.sourceView = self.view
-        self.present(vc, animated: true)
+        PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
     func exportAction(item: HistoryItem) {
-        
+        PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
     }
     func renameAction(item: HistoryItem) {
-        
+        PDfMakTool.default.showRenameFileAlert(item: item, fatherVC: self)
     }
     func deleteAction(item: HistoryItem) {
-        
+        PDfMakTool.default.deleteHistoryItem(item: item)
     }
 }
 
-extension PDfHistoryRecentVC: UIPrintInteractionControllerDelegate {
-    func printInteractionControllerWillStartJob(_ printInteractionController: UIPrintInteractionController) {
-        
-    }
-    
-}

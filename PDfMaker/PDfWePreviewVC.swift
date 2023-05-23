@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import KRProgressHUD
 
 class PDfWePreviewVC: UIViewController {
     var webUrl: URL
@@ -14,7 +15,7 @@ class PDfWePreviewVC: UIViewController {
     init(webUrl: URL) {
         self.webUrl = webUrl
         super.init(nibName: nil, bundle: nil)
-        
+        KRProgressHUD.show()
     }
     
     required init?(coder: NSCoder) {
@@ -78,10 +79,10 @@ class PDfWePreviewVC: UIViewController {
             $0.left.right.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-        
+        webV.navigationDelegate = self
         //
         
-        if webUrl.absoluteString.lowercased().contains("txt") {
+        if webUrl.absoluteString.lowercased().contains("txt") || webUrl.absoluteString.lowercased().contains("md") {
             do {
                 let data = try Data(contentsOf: webUrl)
                 webV.load(data, mimeType: "text/html", characterEncodingName: "UTF-8", baseURL: webUrl)
@@ -102,6 +103,15 @@ class PDfWePreviewVC: UIViewController {
 
 }
 
+
+
+extension PDfWePreviewVC: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        debugPrint("webView: WKWebView, didFinish")
+        KRProgressHUD.dismiss()
+    }
+}
 extension PDfWePreviewVC {
     @objc func backBtnClick() {
         if self.navigationController != nil {

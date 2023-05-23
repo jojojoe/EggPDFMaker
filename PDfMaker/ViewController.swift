@@ -61,6 +61,8 @@ class ViewController: UIViewController {
     func updateHistoryStatus() {
         if isSearchingStr == nil {
             fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
+        } else {
+            fileCollection.collection.reloadData()
         }
     }
     
@@ -350,52 +352,28 @@ extension ViewController {
     }
     
     func printAction(item: HistoryItem) {
-        
-        let printInVC = UIPrintInteractionController.shared
-        printInVC.showsPaperSelectionForLoadedPapers = true
-        let info = UIPrintInfo(dictionary: nil)
-        info.jobName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? "Sample Print"
-        printInVC.printInfo = info
-        printInVC.printingItems = [item.pdfPathUrl()] //array of NSData, NSURL, UIImage.
-        printInVC.present(animated: true) {
-            controller, completed, error in
-            debugPrint("completed = \(completed)")
-            if completed {
-                KRProgressHUD.showSuccess(withMessage: "Print complete!")
-            }
-        }
-        printInVC.delegate = self
+        PDfMakTool.default.printFile(item: item)
+
     }
     func shareAction(item: HistoryItem) {
-        let vc = UIActivityViewController(activityItems: [item.pdfPathUrl()], applicationActivities: nil)
-        vc.popoverPresentationController?.sourceView = self.view
-        self.present(vc, animated: true)
+        PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
      
     func exportAction(item: HistoryItem) {
-//        PDfMakTool.default.exportDocFileToPDF(targetUrl: item.pdfPathUrl())
         PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
-        
     }
     func renameAction(item: HistoryItem) {
         
-    }
-    func deleteAction(item: HistoryItem) {
+        PDfMakTool.default.showRenameFileAlert(item: item, fatherVC: self)
+        
         
     }
-    
-    
+    func deleteAction(item: HistoryItem) {
+        PDfMakTool.default.deleteHistoryItem(item: item)
+    }
 }
 
 extension ViewController {
-    
-}
-
-
-extension ViewController: UIPrintInteractionControllerDelegate {
-    func printInteractionControllerWillStartJob(_ printInteractionController: UIPrintInteractionController) {
-        
-    }
     
 }
 
@@ -461,7 +439,7 @@ extension ViewController: UITextFieldDelegate {
             guard let `self` = self else {return}
             DispatchQueue.main.async {
                 
-                if let textStr = textField.text, textStr != "" {
+                if let textStr = textField.text?.lowercased(), textStr != "" {
                     self.isSearchingStr = textStr
                     self.startSearching(contentStr: textStr)
                 } else {
