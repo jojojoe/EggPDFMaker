@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     let settingBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_sett_s", iconStrN: "tab_setting_n", nameStr: "Setting")
     let scaneCameraBtn = UIButton()
     let settingPage = UIView()
-    
+    let settingV = PDfSettingPage()
     
     var isSearchingStr: String? = nil
  
@@ -289,7 +289,12 @@ extension ViewController {
     
     
     func setupSettingPage() {
-        
+        settingV.fahterViewController = self
+        view.addSubview(settingV)
+        settingV.snp.makeConstraints {
+            $0.left.top.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
     }
     
    
@@ -323,10 +328,10 @@ extension ViewController {
             self.printAction(item: item)
             sheetAlert.dismiss(animated: true)
         }
-        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
-            self.exportAction(item: item)
-            sheetAlert.dismiss(animated: true)
-        }
+//        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
+//            self.exportAction(item: item)
+//            sheetAlert.dismiss(animated: true)
+//        }
         let shareAction = UIAlertAction(title: "Share", style: .default) { (action) in
             self.shareAction(item: item)
             sheetAlert.dismiss(animated: true)
@@ -338,11 +343,10 @@ extension ViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         sheetAlert.addAction(renameAction)
         sheetAlert.addAction(printAction)
-        if let urltypeStr = PDfMakTool.default.extractFileType(from: item.pdfFilePath), urltypeStr.lowercased() == "pdf" {
-            
-        } else {
-            sheetAlert.addAction(exportpdfAction)
-        }
+//        if let urltypeStr = PDfMakTool.default.extractFileType(from: item.pdfFilePath), urltypeStr.lowercased() == "pdf" {
+//        } else {
+//            sheetAlert.addAction(exportpdfAction)
+//        }
         
         sheetAlert.addAction(shareAction)
         sheetAlert.addAction(deleteAction)
@@ -353,21 +357,20 @@ extension ViewController {
     
     func printAction(item: HistoryItem) {
         PDfMakTool.default.printFile(item: item)
-
     }
+    
     func shareAction(item: HistoryItem) {
         PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
      
-    func exportAction(item: HistoryItem) {
-        PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
-    }
+//    func exportAction(item: HistoryItem) {
+//
+//    }
+    
     func renameAction(item: HistoryItem) {
-        
         PDfMakTool.default.showRenameFileAlert(item: item, fatherVC: self)
-        
-        
     }
+    
     func deleteAction(item: HistoryItem) {
         PDfMakTool.default.deleteHistoryItem(item: item)
     }
@@ -387,7 +390,7 @@ extension ViewController {
     }
     
     @objc func fileBtnClick() {
-        let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.microsoft.word.doc", "com.microsoft.excel.xls", "com.adobe.pdf", "public.text"], in: .import)
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.microsoft.word.doc", "com.microsoft.excel.xls", "com.adobe.pdf", "public.text", "public.utf8-plain-text", "public.composite-content", "public.image"], in: .import)
         documentPicker.delegate = self
         documentPicker.modalPresentationStyle = .fullScreen
         self.present(documentPicker, animated: true)
@@ -430,6 +433,8 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.isSearchingStr = nil
+        self.updateHistoryStatus()
         return true
     }
     
@@ -460,14 +465,29 @@ extension ViewController: UIDocumentPickerDelegate {
             for (ind, url) in urls.enumerated() {
                 debugPrint("documentURLs - \(ind) path - \(url)")
             }
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
                 if let targetUrl = urls.first {
-                    let _ = PDfMakTool.default.saveHistoryFile(originFileUrl: targetUrl)
-                    self.showURLPreviewVC(url: targetUrl)
-                    KRProgressHUD.showSuccess(withMessage: "Import File successfully!")
+                    if targetUrl.absoluteString.lowercased().contains("pdf") {
+                        let fileitem = PDfMakTool.default.saveHistoryFile(originFileUrl: targetUrl)
+                        self.showPreviewPage(fileitem: fileitem)
+
+                    } else {
+                        PDfMakTool.default.exportFileToPDF(targetUrl: targetUrl, fatherV: self.view) {[weak self] fileitem in
+                            guard let `self` = self else {return}
+                            DispatchQueue.main.async {
+                                self.showPreviewPage(fileitem: fileitem)
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+    
+    func showPreviewPage(fileitem: HistoryItem) {
+        
+        self.showURLPreviewVC(url: fileitem.pdfPathUrl())
+        KRProgressHUD.showSuccess(withMessage: "Import PDF successfully!")
     }
    
 }

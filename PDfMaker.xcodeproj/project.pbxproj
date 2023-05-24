@@ -10,6 +10,7 @@
 		54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */; };
 		D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */; };
 		D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */; };
+		D88C1EE92A1E59360040CE44 /* PDfSubscribeStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C1EE82A1E59360040CE44 /* PDfSubscribeStoreManager.swift */; };
 		D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */; };
 		D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */; };
 		D88C8A522A108DF800CE73F2 /* PDfPhotosEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */; };
@@ -89,6 +90,7 @@
 		B8284C125E2BFADD0E5EECBA /* Pods-PDfMaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.release.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.release.xcconfig"; sourceTree = "<group>"; };
 		D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfHomeRecentListView.swift; sourceTree = "<group>"; };
 		D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSettingPage.swift; sourceTree = "<group>"; };
+		D88C1EE82A1E59360040CE44 /* PDfSubscribeStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSubscribeStoreManager.swift; sourceTree = "<group>"; };
 		D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropVC.swift; sourceTree = "<group>"; };
 		D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoRotateVC.swift; sourceTree = "<group>"; };
 		D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotosEditVC.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				EBCA1A7429FBD1A400473A6A /* PDfMakTool.swift */,
 				EBB3B59D2A1B6EB200884EA7 /* TaskDelay.swift */,
 				EBB3B5B32A1C970700884EA7 /* uchardet */,
+				D88C1EE82A1E59360040CE44 /* PDfSubscribeStoreManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				EB55EF1F2A0E475A007D7B15 /* ScannerViewController.swift in Sources */,
 				EB55EF0C2A0E475A007D7B15 /* EditImageViewController.swift in Sources */,
 				EB55EF312A0E48DB007D7B15 /* ImageScannerController.swift in Sources */,
+				D88C1EE92A1E59360040CE44 /* PDfSubscribeStoreManager.swift in Sources */,
 				EBAB516C2A08AF0A003C1838 /* PDfCameraIdCardControlView.swift in Sources */,
 				EB55EF252A0E475A007D7B15 /* Transformable.swift in Sources */,
 				EB55EF142A0E475A007D7B15 /* CGAffineTransform+Utils.swift in Sources */,

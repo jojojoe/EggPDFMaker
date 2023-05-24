@@ -172,12 +172,17 @@ class PDfRecentFileCell: UICollectionViewCell {
         fileNameL.text = item.displayName
         timeLb.text = item.timeStr
         
+//        if let img1 = UIImage(contentsOfFile: item.thumbImgPathUrl().absoluteString) {
+//            self.coverImgV.image = img1
+//        } else {
+//            self.coverImgV.image = UIImage(named: "fileimagecover")
+//        }
+        
         let request = QLThumbnailGenerator.Request(
           fileAt: item.pdfPathUrl(),
-          size: CGSize(width: 120, height: 160),
+          size: CGSize(width: 60, height: 80),
           scale: 1,
           representationTypes: .all)
-
         // 2
         let generator = QLThumbnailGenerator.shared
         generator.generateRepresentations(for: request) {[weak self] thumbnail,
@@ -206,8 +211,13 @@ class PDfRecentFileCell: UICollectionViewCell {
     }
     
     func setupView() {
+        backgroundColor = .white
+        layer.cornerRadius = 20
+        clipsToBounds = true
+        //
         coverImgV.contentMode = .scaleAspectFill
         coverImgV.clipsToBounds = true
+        coverImgV.backgroundColor = UIColor(hexString: "#EFEFEF")
         contentView.addSubview(coverImgV)
         coverImgV.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -215,9 +225,9 @@ class PDfRecentFileCell: UICollectionViewCell {
             $0.width.equalTo(60)
             $0.height.equalTo(80)
         }
-        
+        coverImgV.layer.borderColor = UIColor(hexString: "#EFEFEF")?.cgColor
+        coverImgV.layer.borderWidth = 1.5
         //
-        
         contentView.addSubview(fileNameL)
         fileNameL.snp.makeConstraints {
             $0.bottom.equalTo(contentView.snp.centerY).offset(-5)

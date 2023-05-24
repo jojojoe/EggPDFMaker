@@ -127,10 +127,10 @@ extension PDfHistoryRecentVC {
             self.printAction(item: item)
             sheetAlert.dismiss(animated: true)
         }
-        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
-            self.exportAction(item: item)
-            sheetAlert.dismiss(animated: true)
-        }
+//        let exportpdfAction = UIAlertAction(title: "Export to PDF", style: .default) { (action) in
+//            self.exportAction(item: item)
+//            sheetAlert.dismiss(animated: true)
+//        }
         let shareAction = UIAlertAction(title: "Share", style: .default) { (action) in
             self.shareAction(item: item)
             sheetAlert.dismiss(animated: true)
@@ -142,11 +142,11 @@ extension PDfHistoryRecentVC {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         sheetAlert.addAction(renameAction)
         sheetAlert.addAction(printAction)
-        if let urltypeStr = PDfMakTool.default.extractFileType(from: item.pdfFilePath), urltypeStr.lowercased() == "pdf" {
-            
-        } else {
-            sheetAlert.addAction(exportpdfAction)
-        }
+//        if let urltypeStr = PDfMakTool.default.extractFileType(from: item.pdfFilePath), urltypeStr.lowercased() == "pdf" {
+//            
+//        } else {
+//            sheetAlert.addAction(exportpdfAction)
+//        }
         
         sheetAlert.addAction(shareAction)
         sheetAlert.addAction(deleteAction)
@@ -161,9 +161,9 @@ extension PDfHistoryRecentVC {
     func shareAction(item: HistoryItem) {
         PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
-    func exportAction(item: HistoryItem) {
-        PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
-    }
+//    func exportAction(item: HistoryItem) {
+//        PDfMakTool.default.exportFileToPDF(targetUrl: item.pdfPathUrl(), fatherV: self.view)
+//    }
     func renameAction(item: HistoryItem) {
         PDfMakTool.default.showRenameFileAlert(item: item, fatherVC: self)
     }

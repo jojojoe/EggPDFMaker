@@ -15,7 +15,7 @@ class PDfMakTool: NSObject {
     
     static let `default` = PDfMakTool()
     var historyItems: [HistoryItem] = []
-    
+    var importPDFSuccessBlock: ((HistoryItem)->Void)?
     let k_historyItemChange = "historyItemChange"
     let k_historyItemDelete = "historyItemDelete"
     let pdfwidth: CGFloat = 612
@@ -81,9 +81,9 @@ class PDfMakTool: NSObject {
             let displayName = dict["displayName"] as? String ?? ""
             let pdfFilePath = dict["pdfFilePath"] as? String ?? ""
             let pdfInfoPath = dict["pdfInfoPath"] as? String ?? ""
-            let thumbImgPath = dict["thumbImgPath"] as? String ?? ""
+//            let thumbImgPath = dict["thumbImgPath"] as? String ?? ""
             
-            let item = HistoryItem(timeStr: timestr, pdfFilePath: pdfFilePath, displayName: displayName, pdfInfoPath: pdfInfoPath, thumbImgPath: thumbImgPath)
+            let item = HistoryItem(timeStr: timestr, pdfFilePath: pdfFilePath, displayName: displayName, pdfInfoPath: pdfInfoPath)
             historyItems.append(item)
         }
     }
@@ -139,8 +139,8 @@ class PDfMakTool: NSObject {
         let infoDictJsonPath = documentDirectoryPath + pinjiePath + "/info.json"
         let pdfinfoPathstr = pinjiePath + "/info.json"
         
-        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
-        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
+//        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
+//        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
         
         //
         
@@ -179,24 +179,24 @@ class PDfMakTool: NSObject {
         dict["displayName"] = disname
         dict["pdfFilePath"] = pdfPathNameStr
         dict["pdfInfoPath"] = pdfinfoPathstr
-        dict["thumbImgPath"] = thumbImgPathStr
+//        dict["thumbImgPath"] = thumbImgPathStr
         
         let success = saveDictToSandbox(dict: dict, filename: infoDictJsonPath)
         
         //
         let webV = WKWebView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         webV.load(URLRequest(url: originFileUrl))
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            [weak self] in
-            guard let `self` = self else {return}
-            if let thumb = webV.screenshot, let img = thumb.scaled(toWidth: 100) {
-                let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
-                debugPrint("thumbsuccess = \(thumbsuccess)")
-            }
-        }
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+//            [weak self] in
+//            guard let `self` = self else {return}
+//            if let thumb = webV.screenshot, let img = thumb.scaled(toWidth: 100) {
+//                let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
+//                debugPrint("thumbsuccess = \(thumbsuccess)")
+//            }
+//        }
         
         debugPrint("saveDictToSandbox Success = \(success)")
-        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr, thumbImgPath: thumbImgPathStr)
+        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr)
         if historyItems.count == 0 {
             historyItems.append(item)
         } else {
@@ -276,8 +276,8 @@ class PDfMakTool: NSObject {
         
         let infoDictJsonPath = documentDirectoryPath + pinjiePath + "/info.json"
         
-        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
-        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
+//        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
+//        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
         
         
         var dict: [String: Any] = [:]
@@ -290,17 +290,17 @@ class PDfMakTool: NSObject {
         dict["displayName"] = disname
         dict["pdfFilePath"] = pdfPathNameStr
         dict["pdfInfoPath"] = pdfinfoPathstr
-        dict["thumbImgPath"] = thumbImgPathStr
+//        dict["thumbImgPath"] = thumbImgPathStr
         
         
         let success = saveDictToSandbox(dict: dict, filename: infoDictJsonPath)
-        if let thumb = images.first, let img = thumb.scaled(toWidth: 100) {
-            let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
-            debugPrint("thumbsuccess = \(thumbsuccess)")
-        }
+//        if let thumb = images.first, let img = thumb.scaled(toWidth: 100) {
+//            let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
+//            debugPrint("thumbsuccess = \(thumbsuccess)")
+//        }
         
         
-        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr, thumbImgPath: thumbImgPathStr)
+        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr)
         if historyItems.count == 0 {
             historyItems.append(item)
         } else {
@@ -468,7 +468,8 @@ extension PDfMakTool {
 }
 
 extension PDfMakTool: WKNavigationDelegate {
-    func exportFileToPDF(targetUrl: URL, fatherV: UIView) {
+    func exportFileToPDF(targetUrl: URL, fatherV: UIView, importPDFSuccessBlock: @escaping ((HistoryItem)->Void)) {
+        self.importPDFSuccessBlock = importPDFSuccessBlock
         let jscript = "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta); var imgs = document.getElementsByTagName('img');for (var i in imgs){imgs[i].style.maxWidth='100%';imgs[i].style.height='auto';}"
         let script = WKUserScript(source: jscript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
         let wkUController = WKUserContentController()
@@ -482,7 +483,7 @@ extension PDfMakTool: WKNavigationDelegate {
         fatherV.addSubview(webV)
         webV.navigationDelegate = self
         //
-        if targetUrl.absoluteString.lowercased().contains("txt") {
+        if targetUrl.absoluteString.lowercased().contains("txt") || targetUrl.absoluteString.lowercased().contains("md") {
             do {
                 let data = try Data(contentsOf: targetUrl)
                 webV.load(data, mimeType: "text/html", characterEncodingName: "UTF-8", baseURL: targetUrl)
@@ -499,7 +500,7 @@ extension PDfMakTool: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         debugPrint("webView: WKWebView, didFinish")
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.exportWebV(webView: webView)
             KRProgressHUD.dismiss()
         }
@@ -508,6 +509,8 @@ extension PDfMakTool: WKNavigationDelegate {
     }
     
     private func exportWebV(webView: WKWebView) {
+        
+        
         let manager = FileManager.default
         let dateStr = CLongLong(round(Date().unixTimestamp*1000)).string
         
@@ -539,8 +542,8 @@ extension PDfMakTool: WKNavigationDelegate {
         let pdfFilePath = filePath + "/\(fileNameStr)\(".pdf")"
         let pdfPathNameStr = pinjiePath + "/\(fileNameStr)\(".pdf")"
         
-        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
-        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
+//        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
+//        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
         
         debugPrint("pdf url - \(pdfFilePath)")
         
@@ -549,24 +552,29 @@ extension PDfMakTool: WKNavigationDelegate {
         
         let currentTimestamp = Int(Date().timeIntervalSince1970)
         let formattedDateString = timestampToString(timestamp: currentTimestamp)
-        let disname: String = "Document"
+        var disname: String = "Document"
+        
+        if let nameStr = webView.url?.absoluteString.lastPathComponent, nameStr.contains(".") {
+            let strs = nameStr.components(separatedBy: ".")
+            if let name = strs.first {
+                disname = name
+            }
+        }
+        
         let pdfinfoPathstr = pinjiePath + "/info.json"
         dict["timeStr"] = formattedDateString
         dict["displayName"] = disname
         dict["pdfFilePath"] = pdfPathNameStr
         dict["pdfInfoPath"] = pdfinfoPathstr
-        dict["thumbImgPath"] = thumbImgPathStr
+//        dict["thumbImgPath"] = thumbImgPathStr
         
         let success = saveDictToSandbox(dict: dict, filename: infoDictJsonPath)
-        if let thumb = webView.screenshot, let img = thumb.scaled(toWidth: 100) {
-            let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
-            debugPrint("thumbsuccess = \(thumbsuccess)")
-        }
+//        if let thumb = webView.screenshot, let img = thumb.scaled(toWidth: 100) {
+//            let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
+//            debugPrint("thumbsuccess = \(thumbsuccess)")
+//        }
         
-        
-        
-        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr, thumbImgPath: thumbImgPathStr)
-        
+        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr)
         //
         let printPageRenderer = UIPrintPageRenderer()
         // 设置打印页面大小和边距
@@ -613,12 +621,13 @@ extension PDfMakTool: WKNavigationDelegate {
             }
             
             postAddHistoryItem()
-            KRProgressHUD.showSuccess(withMessage: "Export PDF successfully!")
+            
+            self.importPDFSuccessBlock?(item)
             
         } catch {
             // PDF导出失败
             debugPrint("PDF导出失败 \(error.localizedDescription)")
-            KRProgressHUD.showSuccess(withMessage: "Export failed Please try again.")
+            KRProgressHUD.showSuccess(withMessage: "Import failed Please try again.")
         }
         
         //
@@ -680,14 +689,14 @@ class HistoryItem {
     var displayName: String
     var pdfFilePath: String
     var pdfInfoPath: String
-    var thumbImgPath: String
+//    var thumbImgPath: String
     
-    init(timeStr: String, pdfFilePath: String, displayName: String, pdfInfoPath: String, thumbImgPath: String) {
+    init(timeStr: String, pdfFilePath: String, displayName: String, pdfInfoPath: String) {
         self.timeStr = timeStr
         self.displayName = displayName
         self.pdfFilePath = pdfFilePath
         self.pdfInfoPath = pdfInfoPath
-        self.thumbImgPath = thumbImgPath
+//        self.thumbImgPath = thumbImgPath
     }
     
     func pdfPathUrl() -> URL {
@@ -704,12 +713,12 @@ class HistoryItem {
         return url
     }
     
-    func thumbImgPathUrl() -> URL {
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let pinjiePath = documentDirectoryPath + thumbImgPath
-        let url = URL(fileURLWithPath: pinjiePath)
-        return url
-    }
+//    func thumbImgPathUrl() -> URL {
+//        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//        let pinjiePath = documentDirectoryPath + thumbImgPath
+//        let url = URL(fileURLWithPath: pinjiePath)
+//        return url
+//    }
     
     
     func dirFilePath() -> URL {
