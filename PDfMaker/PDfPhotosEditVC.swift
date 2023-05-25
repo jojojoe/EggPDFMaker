@@ -298,16 +298,38 @@ extension PDfPhotosEditVC {
     }
     
     func exportAction() {
+        KRProgressHUD.show()
         let imgs = imgItems.compactMap {
             $0.processedImg
         }
-        let item = PDfMakTool.default.saveHistoryImgsToPDF(images: imgs)
-        let pdfURL = item.pdfPathUrl()
-        debugPrint("pdfurl = \(pdfURL)")
-        let previewVc = PDfWePreviewVC(webUrl: pdfURL)
-        self.navigationController?.pushViewController(previewVc, animated: true)
-        //
-        KRProgressHUD.showSuccess(withMessage: "Export PDF successfully!")
+        KRProgressHUD.show()
+        PDfMakTool.default.saveHistoryImgsToPDF(images: imgs) {[weak self] hisItem in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                KRProgressHUD.dismiss()
+                let pdfURL = hisItem.pdfPathUrl()
+                debugPrint("pdfurl = \(pdfURL)")
+                KRProgressHUD.dismiss()
+                let previewVc = PDfWePreviewVC(webUrl: pdfURL)
+                self.navigationController?.pushViewController(previewVc, animated: true)
+                //
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+                    KRProgressHUD.showSuccess(withMessage: "Export PDF successfully!")
+                }
+
+            }
+            
+        }
+        
+         
+//        let item = PDfMakTool.default.saveHistoryImgsToPDF(images: imgs)
+//        let pdfURL = item.pdfPathUrl()
+//        debugPrint("pdfurl = \(pdfURL)")
+//        KRProgressHUD.dismiss()
+//        let previewVc = PDfWePreviewVC(webUrl: pdfURL)
+//        self.navigationController?.pushViewController(previewVc, animated: true)
+//        //
+//        KRProgressHUD.showSuccess(withMessage: "Export PDF successfully!")
         
     }
     

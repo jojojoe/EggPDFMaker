@@ -35,7 +35,8 @@ class PDfSettingPage: UIView {
         setupSettingInfoItem()
         updateSubBannerStatus()
         
-        restoreBtn.isHidden = true
+        
+        
         addNotifi()
     }
     
@@ -61,22 +62,27 @@ class PDfSettingPage: UIView {
     }
     
     func updateSubBannerStatus() {
-        
-        if PDfSubscribeStoreManager.default.inSubscription {
-            subscribeBanner.isHidden = true
-            supportFeedBtn.snp.remakeConstraints {
-                $0.left.right.equalToSuperview()
-                $0.height.equalTo(60)
-                $0.top.equalTo(titLB.snp.bottom).offset(34 + 25)
-            }
-        } else {
-            subscribeBanner.isHidden = false
-            supportFeedBtn.snp.remakeConstraints {
-                $0.left.right.equalToSuperview()
-                $0.height.equalTo(60)
-                $0.top.equalTo(titLB.snp.bottom).offset(34 + 89 + 25)
-            }
+        subscribeBanner.isHidden = true
+        supportFeedBtn.snp.remakeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(60)
+            $0.top.equalTo(titLB.snp.bottom).offset(34 + 5)
         }
+//        if PDfSubscribeStoreManager.default.inSubscription {
+//            subscribeBanner.isHidden = true
+//            supportFeedBtn.snp.remakeConstraints {
+//                $0.left.right.equalToSuperview()
+//                $0.height.equalTo(60)
+//                $0.top.equalTo(titLB.snp.bottom).offset(34 + 25)
+//            }
+//        } else {
+//            subscribeBanner.isHidden = false
+//            supportFeedBtn.snp.remakeConstraints {
+//                $0.left.right.equalToSuperview()
+//                $0.height.equalTo(60)
+//                $0.top.equalTo(titLB.snp.bottom).offset(34 + 89 + 25)
+//            }
+//        }
     }
     
     
@@ -187,7 +193,7 @@ class PDfSettingPage: UIView {
         shareappBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(60)
-            $0.top.equalTo(restoreBtn.snp.bottom).offset(4)
+            $0.top.equalTo(privacyBtn.snp.bottom).offset(4)
         }
         termsBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()

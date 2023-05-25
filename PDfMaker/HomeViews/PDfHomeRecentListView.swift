@@ -46,7 +46,7 @@ class PDfHomeRecentListView: UIView {
         addSubview(nodoucV)
         nodoucV.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(50)
+            $0.centerY.equalTo(snp.centerY).offset(-30)
             $0.width.equalTo(160)
             $0.height.equalTo(160+22)
         }
@@ -178,26 +178,34 @@ class PDfRecentFileCell: UICollectionViewCell {
 //            self.coverImgV.image = UIImage(named: "fileimagecover")
 //        }
         
-        let request = QLThumbnailGenerator.Request(
-          fileAt: item.pdfPathUrl(),
-          size: CGSize(width: 60, height: 80),
-          scale: 1,
-          representationTypes: .all)
-        // 2
-        let generator = QLThumbnailGenerator.shared
-        generator.generateRepresentations(for: request) {[weak self] thumbnail,
-            _, error in
-            guard let `self` = self else {return}
-            DispatchQueue.main.async {
-                if let thumbnail = thumbnail {
-                    debugPrint("thumbnail generated")
-                    self.coverImgV.image = thumbnail.uiImage
-                } else if let error = error {
-                    self.coverImgV.image = UIImage(named: "fileimagecover")
-                    debugPrint(" - \(error)")
+        if let thumbIm = item.thumbImg {
+            debugPrint("save cache thumb image")
+            self.coverImgV.image = thumbIm
+        } else {
+            let request = QLThumbnailGenerator.Request(
+              fileAt: item.pdfPathUrl(),
+              size: CGSize(width: 60 * 2, height: 80 * 2),
+              scale: 1,
+              representationTypes: .all)
+            // 2
+            let generator = QLThumbnailGenerator.shared
+            generator.generateRepresentations(for: request) {[weak self] thumbnail,
+                _, error in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if let thumbnail = thumbnail {
+                        debugPrint("thumbnail generated")
+                        self.coverImgV.image = thumbnail.uiImage
+                        item.thumbImg = thumbnail.uiImage
+                    } else if let error = error {
+                        self.coverImgV.image = UIImage(named: "fileimagecover")
+                        debugPrint(" - \(error)")
+                    }
                 }
             }
         }
+        
+        
         
     }
     

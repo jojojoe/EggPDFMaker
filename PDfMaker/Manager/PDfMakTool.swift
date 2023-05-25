@@ -217,108 +217,108 @@ class PDfMakTool: NSObject {
         return item
     }
     
-    func  saveHistoryImgsToPDF(images: [UIImage]) -> HistoryItem {
-        
-        let manager = FileManager.default
-        let dateStr = CLongLong(round(Date().unixTimestamp*1000)).string
-        
-        let pinjiePath = "/history/\(dateStr)"
-        
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-
-        let filePath = documentDirectoryPath + pinjiePath
-        
-        let isExist = manager.fileExists(atPath: filePath)
-        if !isExist {
-            do {
-                try manager.createDirectory(atPath: filePath, withIntermediateDirectories: true)
-            } catch {
-                debugPrint("createDirectory error:\(error)")
-            }
-        } else {
-            do {
-                try manager.removeItem(atPath: filePath)
-                try manager.createDirectory(atPath: filePath, withIntermediateDirectories: true)
-            } catch {
-                
-                debugPrint("removeItem error:\(error)")
-            }
-        }
-        
-        //
-        let fileNameStr = CLongLong(round(Date().unixTimestamp*1000)).string
-        let pdfFilePath = filePath + "/\(fileNameStr)\(".pdf")"
-        let pdfPathNameStr = pinjiePath + "/\(fileNameStr)\(".pdf")"
-        UIGraphicsBeginPDFContextToFile(pdfFilePath, .zero, nil)
-        
-        let bounds = UIGraphicsGetPDFContextBounds()
-        let pdfWidth = bounds.size.width
-        let pdfHeight = bounds.size.height
-        
-        for image in images {
+    func saveHistoryImgsToPDF(images: [UIImage], completionBlock: @escaping ((HistoryItem)->Void)) {
+        DispatchQueue.global().async {
+            [weak self] in
+            guard let `self` = self else {return}
             
-            UIGraphicsBeginPDFPage()
-            let imageW = image.size.width
-            let imageH = image.size.height
-            if (imageW <= pdfWidth && imageH <= pdfHeight) {
-                let originX = (pdfWidth - imageW) / 2
-                let originY = (pdfHeight - imageH) / 2
-                image.draw(in: CGRect(x: originX, y: originY, width: imageW, height: imageH))
-            } else {
-                var widthm: CGFloat = 0
-                var heightm: CGFloat = 0
-                
-                if ((imageW / imageH) > (pdfWidth / pdfHeight)) {
-                    widthm = pdfWidth
-                    heightm = widthm * imageH / imageW
-                } else {
-                    heightm = pdfHeight;
-                    widthm = heightm * imageW / imageH;
+            let manager = FileManager.default
+            let dateStr = CLongLong(round(Date().unixTimestamp*1000)).string
+            
+            let pinjiePath = "/history/\(dateStr)"
+            
+            let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+
+            let filePath = documentDirectoryPath + pinjiePath
+            
+            let isExist = manager.fileExists(atPath: filePath)
+            if !isExist {
+                do {
+                    try manager.createDirectory(atPath: filePath, withIntermediateDirectories: true)
+                } catch {
+                    debugPrint("createDirectory error:\(error)")
                 }
-                image.draw(in: CGRect(x: (pdfWidth - widthm) / 2, y: (pdfHeight - heightm) / 2, width: widthm, height: heightm))
+            } else {
+                do {
+                    try manager.removeItem(atPath: filePath)
+                    try manager.createDirectory(atPath: filePath, withIntermediateDirectories: true)
+                } catch {
+                    
+                    debugPrint("removeItem error:\(error)")
+                }
             }
+            
+            //
+            let fileNameStr = CLongLong(round(Date().unixTimestamp*1000)).string
+            let pdfFilePath = filePath + "/\(fileNameStr)\(".pdf")"
+            let pdfPathNameStr = pinjiePath + "/\(fileNameStr)\(".pdf")"
+            UIGraphicsBeginPDFContextToFile(pdfFilePath, .zero, nil)
+            
+            let bounds = UIGraphicsGetPDFContextBounds()
+            let pdfWidth = bounds.size.width
+            let pdfHeight = bounds.size.height
+            
+            for image in images {
+                
+                UIGraphicsBeginPDFPage()
+                let imageW = image.size.width
+                let imageH = image.size.height
+                if (imageW <= pdfWidth && imageH <= pdfHeight) {
+                    let originX = (pdfWidth - imageW) / 2
+                    let originY = (pdfHeight - imageH) / 2
+                    image.draw(in: CGRect(x: originX, y: originY, width: imageW, height: imageH))
+                } else {
+                    var widthm: CGFloat = 0
+                    var heightm: CGFloat = 0
+                    
+                    if ((imageW / imageH) > (pdfWidth / pdfHeight)) {
+                        widthm = pdfWidth
+                        heightm = widthm * imageH / imageW
+                    } else {
+                        heightm = pdfHeight;
+                        widthm = heightm * imageW / imageH;
+                    }
+                    image.draw(in: CGRect(x: (pdfWidth - widthm) / 2, y: (pdfHeight - heightm) / 2, width: widthm, height: heightm))
+                }
+            }
+            
+            UIGraphicsEndPDFContext()
+            
+            debugPrint("pdf url - \(pdfFilePath)")
+            
+            let infoDictJsonPath = documentDirectoryPath + pinjiePath + "/info.json"
+            
+    //        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
+    //        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
+            
+            
+            var dict: [String: Any] = [:]
+            
+            let currentTimestamp = Int(Date().timeIntervalSince1970)
+            let formattedDateString = self.timestampToString(timestamp: currentTimestamp)
+            let disname: String = "Document"
+            let pdfinfoPathstr = pinjiePath + "/info.json"
+            dict["timeStr"] = formattedDateString
+            dict["displayName"] = disname
+            dict["pdfFilePath"] = pdfPathNameStr
+            dict["pdfInfoPath"] = pdfinfoPathstr
+    //        dict["thumbImgPath"] = thumbImgPathStr
+            
+            let success = self.saveDictToSandbox(dict: dict, filename: infoDictJsonPath)
+            
+            let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr)
+            if self.historyItems.count == 0 {
+                self.historyItems.append(item)
+            } else {
+                self.historyItems.insert(item, at: 0)
+            }
+            //
+            self.postAddHistoryItem()
+            completionBlock(item)
         }
+       
         
-        UIGraphicsEndPDFContext()
-        
-        debugPrint("pdf url - \(pdfFilePath)")
-        
-        let infoDictJsonPath = documentDirectoryPath + pinjiePath + "/info.json"
-        
-//        let thumbImgPath = documentDirectoryPath + pinjiePath + "/thumb.jpg"
-//        let thumbImgPathStr = pinjiePath + "/thumb.jpg"
-        
-        
-        var dict: [String: Any] = [:]
-        
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
-        let formattedDateString = timestampToString(timestamp: currentTimestamp)
-        let disname: String = "Document"
-        let pdfinfoPathstr = pinjiePath + "/info.json"
-        dict["timeStr"] = formattedDateString
-        dict["displayName"] = disname
-        dict["pdfFilePath"] = pdfPathNameStr
-        dict["pdfInfoPath"] = pdfinfoPathstr
-//        dict["thumbImgPath"] = thumbImgPathStr
-        
-        
-        let success = saveDictToSandbox(dict: dict, filename: infoDictJsonPath)
-//        if let thumb = images.first, let img = thumb.scaled(toWidth: 100) {
-//            let thumbsuccess = self.saveUrlThumbToSandbox(thumbImg: thumb, filename: thumbImgPath)
-//            debugPrint("thumbsuccess = \(thumbsuccess)")
-//        }
-        
-        
-        let item = HistoryItem(timeStr: formattedDateString, pdfFilePath: pdfPathNameStr, displayName: disname, pdfInfoPath: pdfinfoPathstr)
-        if historyItems.count == 0 {
-            historyItems.append(item)
-        } else {
-            historyItems.insert(item, at: 0)
-        }
-        //
-        postAddHistoryItem()
-        
-        return item
+//        return item
     }
     
     func timestampToString(timestamp: Int) -> String {
@@ -851,6 +851,7 @@ class HistoryItem {
     var displayName: String
     var pdfFilePath: String
     var pdfInfoPath: String
+    var thumbImg: UIImage?
 //    var thumbImgPath: String
     
     init(timeStr: String, pdfFilePath: String, displayName: String, pdfInfoPath: String) {

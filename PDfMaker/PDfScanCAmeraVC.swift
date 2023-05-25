@@ -203,7 +203,7 @@ class PDfScanCAmeraVC: UIViewController {
         scanDocBtn.addTarget(self, action: #selector(scanDocBtnClick(sender: )), for: .touchUpInside)
         scanDocBtn.setTitle("Scan Document", for: .normal)
         scanDocBtn.setTitleColor(.white, for: .normal)
-        scanDocBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 16)
+        scanDocBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 15)
         
         //
 
@@ -217,7 +217,7 @@ class PDfScanCAmeraVC: UIViewController {
         scanPhotoBtn.addTarget(self, action: #selector(scanPhotoBtnClick(sender: )), for: .touchUpInside)
         scanPhotoBtn.setTitle("Take Photo", for: .normal)
         scanPhotoBtn.setTitleColor(.white, for: .normal)
-        scanPhotoBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 16)
+        scanPhotoBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 15)
         //
 
         toolBtnBar.addSubview(scanCardBtn)
@@ -230,7 +230,7 @@ class PDfScanCAmeraVC: UIViewController {
         scanCardBtn.addTarget(self, action: #selector(scanCardBtnClick(sender: )), for: .touchUpInside)
         scanCardBtn.setTitle("Scan Card", for: .normal)
         scanCardBtn.setTitleColor(.white, for: .normal)
-        scanCardBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 16)
+        scanCardBtn.titleLabel?.font = FontCusNames.MontMedium.font(sizePoint: 15)
         
         //
         
