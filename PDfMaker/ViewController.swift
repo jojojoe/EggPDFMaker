@@ -22,15 +22,9 @@ class ViewController: UIViewController {
     let homeBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_home_s", iconStrN: "tab_home_n", nameStr: "Home")
     let settingBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_sett_s", iconStrN: "tab_setting_n", nameStr: "Setting")
     let scaneCameraBtn = UIButton()
-    let settingPage = UIView()
-    let settingV = PDfSettingPage()
-    
+    let settingPageV = PDfSettingPage()
     var isSearchingStr: String? = nil
  
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#EFEFEF")
@@ -38,14 +32,18 @@ class ViewController: UIViewController {
         addnoti()
         setupHomePage()
         setupSettingPage()
+        setupBottomV()
         setupScaneCamera()
+        homeBottomBtnClick()
         
         
+        proBtn.isHidden = true
     }
     
     
     func addnoti() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(subscribeSuccessAction(notification: )), name: NSNotification.Name(rawValue: PDfSubscribeStoreManager.PurchaseNotificationKeys.success), object: nil)
     }
 
     @objc func updateContentProStatus(noti: Notification) {
@@ -54,6 +52,14 @@ class ViewController: UIViewController {
         }
     }
 
+    @objc func subscribeSuccessAction(notification: Notification) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.updateSubsProBtnStatus()
+        }
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -66,6 +72,13 @@ class ViewController: UIViewController {
         }
     }
     
+    func updateSubsProBtnStatus() {
+        if PDfSubscribeStoreManager.default.inSubscription {
+            proBtn.isHidden = true
+        } else {
+            proBtn.isHidden = false
+        }
+    }
 }
 
 
@@ -218,7 +231,8 @@ extension ViewController {
         
         homePageV.addSubview(fileCollection)
         fileCollection.snp.makeConstraints {
-            $0.left.right.bottom.equalToSuperview()
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-100)
             $0.top.equalTo(recentLabel.snp.bottom).offset(30)
         }
         fileCollection.itemSelectBlock = {
@@ -239,9 +253,25 @@ extension ViewController {
         fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
         
         
+        
+    }
+    
+    
+    
+    func setupSettingPage() {
+        settingPageV.fahterViewController = self
+        view.addSubview(settingPageV)
+        settingPageV.snp.makeConstraints {
+            $0.left.top.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    
+    func setupBottomV() {
+        
         //
         let bottomMaskLeftImgV = UIImageView()
-        homePageV.addSubview(bottomMaskLeftImgV)
+        view.addSubview(bottomMaskLeftImgV)
         bottomMaskLeftImgV.snp.makeConstraints {
             $0.left.bottom.equalToSuperview()
             $0.right.equalTo(homePageV.snp.centerX)
@@ -251,7 +281,7 @@ extension ViewController {
         
         //
         let bottomMaskRightImgV = UIImageView()
-        homePageV.addSubview(bottomMaskRightImgV)
+        view.addSubview(bottomMaskRightImgV)
         bottomMaskRightImgV.snp.makeConstraints {
             $0.right.bottom.equalToSuperview()
             $0.left.equalTo(homePageV.snp.centerX)
@@ -283,21 +313,7 @@ extension ViewController {
         settingBottomBtn.isSelected = false
         
         
-        
     }
-    
-    
-    
-    func setupSettingPage() {
-        settingV.fahterViewController = self
-        view.addSubview(settingV)
-        settingV.snp.makeConstraints {
-            $0.left.top.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-    }
-    
-   
     
 }
 
@@ -377,7 +393,9 @@ extension ViewController {
 }
 
 extension ViewController {
-    
+    func endEditKeyboard() {
+        
+    }
 }
 
 extension ViewController {
@@ -402,11 +420,20 @@ extension ViewController {
     }
     
     @objc func homeBottomBtnClick() {
+        homeBottomBtn.isSelected = true
+        settingBottomBtn.isSelected = false
         
+        homePageV.isHidden = false
+        settingPageV.isHidden = true
     }
     
     @objc func settingBottomBtnClick() {
+        homeBottomBtn.isSelected = false
+        settingBottomBtn.isSelected = true
         
+        homePageV.isHidden = true
+        settingPageV.isHidden = false
+        settingPageV.updateSubBannerStatus()
     }
     
     @objc func scaneBtnClick(sender: UIButton) {

@@ -50,7 +50,7 @@ class PDfScanCAmeraVC: UIViewController {
     let saveBtn = UIButton()
     
     var userImageItemList: [UserImgItem] = []
-    var userIdCardImageList: [UIImage] = []
+//    var userIdCardImageList: [UIImage] = []
     var onceLayout = Once()
     
     var currentScanType: ScanType = .scanDoc
@@ -548,22 +548,15 @@ extension PDfScanCAmeraVC {
                 } else if self.currentScanType == .scanPhoto {
                     if self.singleFloatV.currentSingleType == .single {
                         
-//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                         let photoEditVC = PDfPhotosEditVC(imgItems: [item])
                         self.navigationController?.pushViewController(photoEditVC, animated: true)
                     } else {
-//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
                         self.addNewCapturePhoto(imgItem: item)
-                        
                     }
-                    
                     
                 } else if self.currentScanType == .scanIDCard {
                     
                     if let originImg_m = originImg {
-//                        let item = UserImgItem(originImg: originImg_m, quad: quad)
-//                        let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
-                        
                         let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
                         self.view.addSubview(boundDetectCropView)
                         boundDetectCropView.closeClickBlock = {
@@ -583,70 +576,91 @@ extension PDfScanCAmeraVC {
                             }
                         }
                     }
-                    
-                    
                 }
-                
             }
         }
-         
     }
     
     func processAddCardImg(filteredImg: UIImage) {
         
-        if self.userIdCardImageList.count == 0 {
-            self.idcardFloatV.contentImgV.isHighlighted = true
-            self.idcardFloatV.controlBtn.isSelected = true
-            self.userIdCardImageList.append(filteredImg)
-        } else if self.userIdCardImageList.count == 1 {
-            self.userIdCardImageList.append(filteredImg)
-            let pageWidth: CGFloat = 210 * 5
-            let pageHeight: CGFloat = 297 * 5
-            let imgWidth: CGFloat = pageWidth/10 * 4
-            let imgHieght: CGFloat = imgWidth * (3.0/4.0)
-            let verpadding: CGFloat = (pageHeight - imgHieght * 2) / 3
-            
-            
-            let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
-            let imgV2Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
-            
-            
-            let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
-            whiterPage.backgroundColor = .white
-            let imgV1 = UIImageView(frame: imgV1Frame)
-            if let firstImg = self.userIdCardImageList.first {
-                let img = self.fixIDcardImg(cardImg: firstImg)
-                imgV1.image = img
-            }
-            
-            whiterPage.addSubview(imgV1)
-            let imgV2 = UIImageView(frame: imgV2Frame)
-            if let lastImg = self.userIdCardImageList.last {
-                let img = self.fixIDcardImg(cardImg: lastImg)
-                imgV2.image = img
-            }
-            whiterPage.addSubview(imgV2)
-            
-            imgV1.contentMode = .scaleAspectFit
-            imgV1.clipsToBounds = false
-            imgV2.contentMode = .scaleAspectFit
-            imgV2.clipsToBounds = false
-            
-            
-            if let cardpageImg = whiterPage.screenshot {
-                let item = UserImgItem(originImg: cardpageImg)
-                let photoEditVC = PDfPhotosEditVC(imgItems: [item])
-                self.navigationController?.pushViewController(photoEditVC, animated: true)
-                self.userIdCardImageList = []
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                self.idcardFloatV.contentImgV.isHighlighted = false
-                self.idcardFloatV.controlBtn.isSelected = false
-            }
-            
+        let pageWidth: CGFloat = 210 * 5
+        let pageHeight: CGFloat = 297 * 5
+        let imgWidth: CGFloat = pageWidth/10 * 4
+        let imgHieght: CGFloat = imgWidth * (3.0/4.0)
+        let verpadding: CGFloat = (pageHeight - imgHieght) / 2
+        let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
+        let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+        whiterPage.backgroundColor = .white
+        let imgV1 = UIImageView(frame: imgV1Frame)
+        let img = self.fixIDcardImg(cardImg: filteredImg)
+        imgV1.image = img
+        whiterPage.addSubview(imgV1)
+        imgV1.contentMode = .scaleAspectFit
+        imgV1.clipsToBounds = false
+        if let cardpageImg = whiterPage.screenshot {
+            let item = UserImgItem(originImg: cardpageImg)
+            let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+            self.navigationController?.pushViewController(photoEditVC, animated: true)
         }
+        
     }
+    
+    
+//    func processAddCardImg(filteredImg: UIImage) {
+//
+//        if self.userIdCardImageList.count == 0 {
+//            self.idcardFloatV.contentImgV.isHighlighted = true
+//            self.idcardFloatV.controlBtn.isSelected = true
+//            self.userIdCardImageList.append(filteredImg)
+//        } else if self.userIdCardImageList.count == 1 {
+//            self.userIdCardImageList.append(filteredImg)
+//            let pageWidth: CGFloat = 210 * 5
+//            let pageHeight: CGFloat = 297 * 5
+//            let imgWidth: CGFloat = pageWidth/10 * 4
+//            let imgHieght: CGFloat = imgWidth * (3.0/4.0)
+//            let verpadding: CGFloat = (pageHeight - imgHieght * 2) / 3
+//
+//
+//            let imgV1Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding, width: imgWidth, height: imgHieght)
+//            let imgV2Frame = CGRect(x: (pageWidth - imgWidth)/2, y: verpadding + imgHieght + verpadding, width: imgWidth, height: imgHieght)
+//
+//
+//            let whiterPage = UIView(frame: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+//            whiterPage.backgroundColor = .white
+//            let imgV1 = UIImageView(frame: imgV1Frame)
+//            if let firstImg = self.userIdCardImageList.first {
+//                let img = self.fixIDcardImg(cardImg: firstImg)
+//                imgV1.image = img
+//            }
+//
+//            whiterPage.addSubview(imgV1)
+//            let imgV2 = UIImageView(frame: imgV2Frame)
+//            if let lastImg = self.userIdCardImageList.last {
+//                let img = self.fixIDcardImg(cardImg: lastImg)
+//                imgV2.image = img
+//            }
+//            whiterPage.addSubview(imgV2)
+//
+//            imgV1.contentMode = .scaleAspectFit
+//            imgV1.clipsToBounds = false
+//            imgV2.contentMode = .scaleAspectFit
+//            imgV2.clipsToBounds = false
+//
+//
+//            if let cardpageImg = whiterPage.screenshot {
+//                let item = UserImgItem(originImg: cardpageImg)
+//                let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+//                self.navigationController?.pushViewController(photoEditVC, animated: true)
+//                self.userIdCardImageList = []
+//            }
+//
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+//                self.idcardFloatV.contentImgV.isHighlighted = false
+//                self.idcardFloatV.controlBtn.isSelected = false
+//            }
+//
+//        }
+//    }
     
     func fixIDcardImg(cardImg: UIImage) -> UIImage {
         // 获取拍照图片

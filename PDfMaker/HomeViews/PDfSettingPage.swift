@@ -34,6 +34,8 @@ class PDfSettingPage: UIView {
         setupSubscribeBanner()
         setupSettingInfoItem()
         updateSubBannerStatus()
+        
+        restoreBtn.isHidden = true
         addNotifi()
     }
     
@@ -54,6 +56,9 @@ class PDfSettingPage: UIView {
         }
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func updateSubBannerStatus() {
         
@@ -157,10 +162,10 @@ class PDfSettingPage: UIView {
         
         
         addSubview(supportFeedBtn)
-        addSubview(restoreBtn)
         addSubview(shareappBtn)
         addSubview(termsBtn)
         addSubview(privacyBtn)
+        addSubview(restoreBtn)
         
         supportFeedBtn.addTarget(self, action: #selector(supportFeedBtnClick), for: .touchUpInside)
         restoreBtn.addTarget(self, action: #selector(restoreBtnClick), for: .touchUpInside)
@@ -174,7 +179,7 @@ class PDfSettingPage: UIView {
             $0.top.equalTo(titLB.snp.bottom).offset(34 + 89 + 25)
             
         }
-        restoreBtn.snp.makeConstraints {
+        privacyBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(60)
             $0.top.equalTo(supportFeedBtn.snp.bottom).offset(4)
@@ -189,34 +194,36 @@ class PDfSettingPage: UIView {
             $0.height.equalTo(60)
             $0.top.equalTo(shareappBtn.snp.bottom).offset(4)
         }
-        privacyBtn.snp.makeConstraints {
+        restoreBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(60)
             $0.top.equalTo(termsBtn.snp.bottom).offset(4)
         }
         
-        
     }
-    
     
     @objc func supportFeedBtnClick() {
-        
+        if let vc = self.fahterViewController {
+            PDfMakTool.default.showFeedbcak(fatherViewController: vc)
+        }
     }
+    
     @objc func restoreBtnClick() {
-        
+        PDfSubscribeStoreManager.default.restore()
     }
+    
     @objc func shareappBtnClick() {
-        
+        if let vc = self.fahterViewController {
+            PDfMakTool.default.openShareApp(fatherViewController: vc)
+        }
     }
     @objc func termsBtnClick() {
-        
+        PDfMakTool.default.openSafiPrivacyURL(str: PDfMakTool.termsUrl)
     }
+    
     @objc func privacyBtnClick() {
-        
+        PDfMakTool.default.openSafiPrivacyURL(str: PDfMakTool.privacyUrl)
     }
-    
-    
-    
     
 }
 

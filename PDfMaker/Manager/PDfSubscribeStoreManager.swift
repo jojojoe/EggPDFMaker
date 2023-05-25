@@ -55,6 +55,23 @@ class PDfSubscribeStoreManager: NSObject {
 }
 
 extension PDfSubscribeStoreManager {
+    func completeTransactions() {
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                    break
+                case .failed, .purchasing, .deferred:
+                    break
+                @unknown default:
+                    break
+                }
+            }
+        }
+    }
     
     public func fetchPurchaseInfo(block: @escaping (([PDfSubscribeStoreManager.IAPProduct]) -> Void)) {
         let iapList = iapTypeList.map { $0.rawValue }
@@ -74,7 +91,7 @@ extension PDfSubscribeStoreManager {
         }
         
     }
-
+    
     public func restore(_ successBlock: ((Bool) -> Void)? = nil) {
         
         SwiftyStoreKit.restorePurchases(atomically: true) { [weak self] results in

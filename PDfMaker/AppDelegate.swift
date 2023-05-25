@@ -6,16 +6,22 @@
 //
 
 import UIKit
+import SwiftyStoreKit
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     //    com.xx.888888
     //    com.superegg.okeydokey
-    //    com.find.cellphones
+    //    com.convert.files.PDF
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        PDfSubscribeStoreManager.default.completeTransactions()
+        
+        
         return true
     }
 

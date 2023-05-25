@@ -10,6 +10,8 @@ import UIKit
 import WebKit
 import KRProgressHUD
 import PDFKit
+import MessageUI
+import Photos
 
 class PDfMakTool: NSObject {
     
@@ -20,6 +22,14 @@ class PDfMakTool: NSObject {
     let k_historyItemDelete = "historyItemDelete"
     let pdfwidth: CGFloat = 612
     let pdfheight: CGFloat = 792
+    
+    //Picture Scan
+    static let privacyUrl = "https://sites.google.com/view/picture-scan-privacy-policy/home"
+    static let termsUrl = "https://sites.google.com/view/picture-scan-terms-of-use/home"
+    static let feedbackEmail = "cobinjian110@163.com"
+    static let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? ""
+    static let shareStr = "Share with friends:\("itms-apps://itunes.apple.com/cn/app/id\("6449423346")?mt=8")"
+    
     
     override init() {
         super.init()
@@ -43,7 +53,6 @@ class PDfMakTool: NSObject {
             userInfo: nil)
         
     }
-    
     
     // 在history collection添加通知 刷新页面
     
@@ -510,7 +519,6 @@ extension PDfMakTool: WKNavigationDelegate {
     
     private func exportWebV(webView: WKWebView) {
         
-        
         let manager = FileManager.default
         let dateStr = CLongLong(round(Date().unixTimestamp*1000)).string
         
@@ -608,11 +616,11 @@ extension PDfMakTool: WKNavigationDelegate {
         
         UIGraphicsEndPDFContext()
         
-        // 将PDF数据写入文件
+        //
         do {
             try pdfData.write(to: URL(fileURLWithPath: pdfFilePath), options: .atomic)
-            // PDF导出成功，你可以在这里进行进一步处理或导出
-            debugPrint("PDF导出成功：\(pdfFilePath)")
+            //
+            debugPrint("PDF success:\(pdfFilePath)")
             
             if historyItems.count == 0 {
                 historyItems.append(item)
@@ -625,35 +633,52 @@ extension PDfMakTool: WKNavigationDelegate {
             self.importPDFSuccessBlock?(item)
             
         } catch {
-            // PDF导出失败
-            debugPrint("PDF导出失败 \(error.localizedDescription)")
+            //
+            debugPrint("PDF error \(error.localizedDescription)")
             KRProgressHUD.showSuccess(withMessage: "Import failed Please try again.")
         }
-        
         //
         webView.removeFromSuperview()
-        
-         
     }
-
-
-
 }
 
-public class Once {
-    var already: Bool = false
-
-    public init() {}
-
-    public func run(_ block: () -> Void) {
-        guard !already else {
-            return
+extension PDfMakTool: MFMailComposeViewControllerDelegate {
+    func showFeedbcak(fatherViewController: UIViewController) {
+        if MFMailComposeViewController.canSendMail() {
+            let version = UIDevice.current.systemVersion
+            let modelName = UIDevice.current.modelName
+            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] ?? "0.0.0"
+            let appName = "\(PDfMakTool.appName)"
+            let vc = MFMailComposeViewController()
+            vc.mailComposeDelegate = self
+            vc.setSubject("\(appName) Feedback")
+            vc.setToRecipients([PDfMakTool.feedbackEmail])
+            vc.setMessageBody("\n\n\nSystem Version：\(version)\n Device Name：\(modelName)\n App Name：\(appName)\n App Version：\(appVersion)", isHTML: false)
+            fatherViewController.present(vc, animated: true, completion: nil)
+        } else {
+            KRProgressHUD.showError(withMessage: "The device doesn't support email")
         }
-        block()
-        already = true
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func openSafiPrivacyURL(str: String) {
+        if let path = URL(string: str) {
+            if UIApplication.shared.canOpenURL(path) {
+                UIApplication.shared.open(path, options: [:]) { success in
+                }
+            }
+        }
+    }
+    
+    func openShareApp(fatherViewController: UIViewController) {
+        let activityItems = [PDfMakTool.shareStr] as [Any]
+        let vc = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        fatherViewController.present(vc, animated: true)
     }
 }
-
 
 enum FontCusNames: String {
     case SFProRegular = "SFProText-Regular"
@@ -672,17 +697,154 @@ enum FontCusNames: String {
     }
 }
 
+public class Once {
+    var already: Bool = false
 
+    public init() {}
 
+    public func run(_ block: () -> Void) {
+        guard !already else {
+            return
+        }
+        block()
+        already = true
+    }
+}
 
+extension UIDevice {
+    ///The device model name, e.g. "iPhone 6s", "iPhone SE", etc
+    var modelName: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else {
+                return identifier
+            }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        
+        switch identifier {
+        case "iPad1,1":            return "iPad"
+        case "iPad2,1":            return "iPad 2"
+        case "iPad3,1":            return "iPad (3rd generation)"
+        case "iPad3,4":            return "iPad (4th generation)"
+        case "iPad6,11":           return "iPad (5th generation)"
+        case "iPad7,5":            return "iPad (6th generation)"
+        case "iPad7,11":           return "iPad (7th generation)"
+        case "iPad11,6":           return "iPad (8th generation)"
+        case "iPad12,1":           return "iPad (9th generation)"
+        case "iPad4,1":            return "iPad Air"
+        case "iPad5,3":            return "iPad Air 2"
+        case "iPad11,3":           return "iPad Air (3rd generation)"
+        case "iPad13,1":           return "iPad Air (4th generation)"
+        case "iPad13,16":          return "iPad Air (5th generation)"
+        case "iPad6,7":            return "iPad Pro (12.9-inch)"
+        case "iPad6,3":            return "iPad Pro (9.7-inch)"
+        case "iPad7,1":            return "iPad Pro (12.9-inch) (2nd generation)"
+        case "iPad7,3":            return "iPad Pro (10.5-inch)"
+        case "iPad8,1":            return "iPad Pro (11-inch)"
+        case "iPad8,5":            return "iPad Pro (12.9-inch) (3rd generation)"
+        case "iPad8,9":            return "iPad Pro (11-inch) (2nd generation)"
+        case "iPad8,11":           return "iPad Pro (12.9-inch) (4th generation)"
+        case "iPad13,4":           return "iPad Pro (11-inch) (3rd generation)"
+        case "iPad13,8":           return "iPad Pro (12.9-inch) (5th generation)"
+        case "iPad2,5":            return "iPad mini"
+        case "iPad4,4":            return "iPad mini 2"
+        case "iPad4,7":            return "iPad mini 3"
+        case "iPad5,1":            return "iPad mini 4"
+        case "iPad11,1":           return "iPad mini (5th generation)"
+        case "iPad14,1":           return "iPad mini (6th generation)"
+        case "iPhone1,1":          return "iPhone"
+        case "iPhone1,2":          return "iPhone 3G"
+        case "iPhone2,1":          return "iPhone 3GS"
+        case "iPhone3,1":          return "iPhone 4"
+        case "iPhone4,1":          return "iPhone 4S"
+        case "iPhone5,1":          return "iPhone 5"
+        case "iPhone5,3":          return "iPhone 5c"
+        case "iPhone6,1":          return "iPhone 5s"
+        case "iPhone7,2":          return "iPhone 6"
+        case "iPhone7,1":          return "iPhone 6 Plus"
+        case "iPhone8,1":          return "iPhone 6s"
+        case "iPhone8,2":          return "iPhone 6s Plus"
+        case "iPhone8,4":          return "iPhone SE (1st generation)"
+        case "iPhone9,1":          return "iPhone 7"
+        case "iPhone9,2":          return "iPhone 7 Plus"
+        case "iPhone10,1":         return "iPhone 8"
+        case "iPhone10,2":         return "iPhone 8 Plus"
+        case "iPhone10,3":         return "iPhone X"
+        case "iPhone11,8":         return "iPhone XR"
+        case "iPhone11,2":         return "iPhone XS"
+        case "iPhone11,6":         return "iPhone XS Max"
+        case "iPhone12,1":         return "iPhone 11"
+        case "iPhone12,3":         return "iPhone 11 Pro"
+        case "iPhone12,5":         return "iPhone 11 Pro Max"
+        case "iPhone12,8":         return "iPhone SE (2nd generation)"
+        case "iPhone13,1":         return "iPhone 12 mini"
+        case "iPhone13,2":         return "iPhone 12"
+        case "iPhone13,3":         return "iPhone 12 Pro"
+        case "iPhone13,4":         return "iPhone 12 Pro Max"
+        case "iPhone14,4":         return "iPhone 13 mini"
+        case "iPhone14,5":         return "iPhone 13"
+        case "iPhone14,2":         return "iPhone 13 Pro"
+        case "iPhone14,3":         return "iPhone 13 Pro Max"
+        case "iPhone14,6":         return "iPhone SE (3rd generation)"
+        case "iPhone14,7":         return "iPhone 14"
+        case "iPhone14,8":         return "iPhone 14 Plus"
+        case "iPhone15,2":         return "iPhone 14 Pro"
+        case "iPhone15,3":         return "iPhone 14 Pro Max"
+        case "iPod1,1":            return "iPod touch"
+        case "iPod2,1":            return "iPod touch (2nd generation)"
+        case "iPod3,1":            return "iPod touch (3rd generation)"
+        case "iPod4,1":            return "iPod touch (4th generation)"
+        case "iPod5,1":            return "iPod touch (5th generation)"
+        case "iPod7,1":            return "iPod touch (6th generation)"
+        case "iPod9,1":            return "iPod touch (7th generation)"
 
+        case "i386", "x86_64":     return "Simulator"
+        default:                   return identifier
+        }
+    }
+}
 
-
-
-
-
-
-
+public class TaskDelay {
+    
+    public init() {}
+    public static var `default` = TaskDelay()
+    var taskBlock: ((_ cancel: Bool)->Void)?
+    var actionBlock: (()->Void)?
+    
+    public func taskDelay(afterTime: TimeInterval, task:@escaping ()->Void) {
+        actionBlock = task
+        taskBlock = { cancel in
+            if let actionBlock = TaskDelay.default.actionBlock {
+                if !cancel {
+                    DispatchQueue.main.async {
+                        actionBlock()
+                    }
+                    
+                }
+            }
+            TaskDelay.default.taskBlock = nil
+            TaskDelay.default.actionBlock = nil
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + afterTime) {
+            if let taskBlock = TaskDelay.default.taskBlock {
+                taskBlock(false)
+            }
+        }
+        
+    }
+    
+    public func taskCancel() {
+        DispatchQueue.main.async {
+            if let taskBlock = TaskDelay.default.taskBlock {
+                taskBlock(true)
+            }
+        }
+    }
+}
 
 class HistoryItem {
     var timeStr: String
@@ -731,3 +893,4 @@ class HistoryItem {
     }
     
 }
+
