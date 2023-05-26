@@ -11,7 +11,7 @@ import SwiftyStoreKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    //    Picture Scan
     //    com.xx.888888
     //    com.superegg.okeydokey
     //    com.convert.files.PDF

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import KRProgressHUD
 
 class UserImgItem: NSObject {
     var originImg: UIImage
@@ -54,6 +55,8 @@ class PDfScanCAmeraVC: UIViewController {
     var onceLayout = Once()
     
     var currentScanType: ScanType = .scanDoc
+    var isCaptureing = false
+    
     
     lazy var captureCameraView: MADCameraCaptureView = {
         
@@ -330,7 +333,7 @@ class PDfScanCAmeraVC: UIViewController {
 
     func addCaptureView() {
         centerBgV.addSubview(captureCameraView)
-        captureCameraView.setupCameraView(true)
+        captureCameraView.setupCameraView(false)
         captureCameraView.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
@@ -515,7 +518,19 @@ extension PDfScanCAmeraVC {
                     quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
                 }
                 
-                let item = UserImgItem(originImg: filteredOriginImg, processedImg: filteredDetectImg, quad: quad)
+                //
+                var itemfilteredOriginImg = filteredOriginImg
+                var itemfilteredDetectImg = filteredDetectImg
+                if self.speedFloatV.currentDetectType == .speed {
+                    if let dataimg = PDfMakTool.default.compressImage(filteredOriginImg, maxLength: 1024 * 1024 / 2), let img = UIImage(data: dataimg) {
+                        itemfilteredOriginImg = img
+                    }
+                } else {
+                    if let dataimg = PDfMakTool.default.compressImage(filteredDetectImg, maxLength: 1024 * 1024 * 2), let img = UIImage(data: dataimg) {
+                        itemfilteredDetectImg = img
+                    }
+                }
+                let item = UserImgItem(originImg: itemfilteredOriginImg, processedImg: itemfilteredDetectImg, quad: quad)
                 
                 if self.currentScanType == .scanDoc {
                     if self.singleFloatV.currentSingleType == .single {
@@ -763,8 +778,22 @@ extension PDfScanCAmeraVC {
         updateBoundFloatStatus()
     }
     @objc func captureTakeBtnClick(sender: UIButton) {
-        hiddenFloatPop()
-        captureImgAction()
+        if userImageItemList.count == 25 {
+            KRProgressHUD.showInfo(withMessage: "Limit up to 50 images")
+            return
+        }
+        if isCaptureing == false {
+            isCaptureing = true
+            hiddenFloatPop()
+            captureImgAction()
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.isCaptureing = false
+            }
+        }
+        
+        
     }
     @objc func saveBtnClick() {
         hiddenFloatPop()

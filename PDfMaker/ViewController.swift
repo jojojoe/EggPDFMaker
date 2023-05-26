@@ -22,6 +22,9 @@ class ViewController: UIViewController {
     let homeBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_home_s", iconStrN: "tab_home_n", nameStr: "Home")
     let settingBottomBtn = HomeBottomSettingBtn(frame: .zero, iconStrS: "tab_sett_s", iconStrN: "tab_setting_n", nameStr: "Setting")
     let scaneCameraBtn = UIButton()
+    let searchTextField = UITextField()
+    let bgEndEditBtn = UIButton()
+    
     let settingPageV = PDfSettingPage()
     var isSearchingStr: String? = nil
  
@@ -30,6 +33,8 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor(hexString: "#EFEFEF")
         PDfMakTool.default.loadHistoryItem()
         addnoti()
+        registKeyboradNotification()
+        
         setupHomePage()
         setupSettingPage()
         setupBottomV()
@@ -44,6 +49,23 @@ class ViewController: UIViewController {
     func addnoti() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(subscribeSuccessAction(notification: )), name: NSNotification.Name(rawValue: PDfSubscribeStoreManager.PurchaseNotificationKeys.success), object: nil)
+    }
+    
+    func registKeyboradNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification , object:nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification , object:nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let keyboardHeight = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+        debugPrint(keyboardHeight)
+        bgEndEditBtn.isHidden = false
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let keyboardHeight = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+        debugPrint(keyboardHeight)
+        bgEndEditBtn.isHidden = true
     }
 
     @objc func updateContentProStatus(noti: Notification) {
@@ -65,11 +87,13 @@ class ViewController: UIViewController {
     }
 
     func updateHistoryStatus() {
-        if isSearchingStr == nil {
-            fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
+        if let searchingStr = isSearchingStr {
+            let searchingItemList = PDfMakTool.default.searchingHistory(contnetStr: searchingStr)
+            fileCollection.updateContent(fileList: searchingItemList)
         } else {
-            fileCollection.collection.reloadData()
+            fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
         }
+        
     }
     
     func updateSubsProBtnStatus() {
@@ -156,7 +180,7 @@ extension ViewController {
         searchIconImgV.image = UIImage(named: "MagnifyingGlass")
         
         //
-        let searchTextField = UITextField()
+        
         searchBgV.addSubview( searchTextField)
         searchTextField.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -192,7 +216,7 @@ extension ViewController {
             $0.height.equalTo(120)
         }
         photoBtn.addTarget(self, action: #selector(photoBtnClick), for: .touchUpInside)
-        
+        photoBtn.isHidden = true
         //
         let fileBtn = HomeTypeBtn(frame: .zero, iconStr: "home_file", nameStr: "Import File")
         homePageV.addSubview(fileBtn)
@@ -203,13 +227,14 @@ extension ViewController {
             $0.height.equalTo(120)
         }
         fileBtn.addTarget(self, action: #selector(fileBtnClick), for: .touchUpInside)
-        
+        fileBtn.isHidden = true
         //
         let recentLabel = UILabel()
         homePageV.addSubview(recentLabel)
         recentLabel.snp.makeConstraints {
             $0.left.equalToSuperview().offset(24)
-            $0.top.equalTo(fileBtn.snp.bottom).offset(30)
+//            $0.top.equalTo(fileBtn.snp.bottom).offset(30)
+            $0.top.equalTo(fileBtn.snp.top).offset(0)
             $0.width.height.greaterThanOrEqualTo(10)
         }
         recentLabel.font = FontCusNames.MontBold.font(sizePoint: 20)
@@ -252,17 +277,18 @@ extension ViewController {
         
         fileCollection.updateContent(fileList: PDfMakTool.default.historyItems)
         
-//        
-//        fileCollection.nodoucV.snp.makeConstraints {
-//            $0.centerX.equalToSuperview()
-//            $0.top.equalToSuperview().offset(50)
-//            $0.width.equalTo(160)
-//            $0.height.equalTo(160+22)
-//        }
+
+        //
         
-        
+        homePageV.addSubview(bgEndEditBtn)
+        bgEndEditBtn.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalTo(topBannerBgV.snp.bottom)
+            $0.bottom.equalTo(fileCollection.snp.bottom)
+        }
+        bgEndEditBtn.addTarget(self, action: #selector(bgEndEditBtnClick), for: .touchUpInside)
+        bgEndEditBtn.isHidden = true
     }
-    
     
     
     func setupSettingPage() {
@@ -444,6 +470,7 @@ extension ViewController {
     }
     
     @objc func scaneBtnClick(sender: UIButton) {
+        
         checkCameraAuthorizatino {
             [weak self] in
             guard let `self` = self else {return}
@@ -452,10 +479,17 @@ extension ViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
-
     }
     
     
+    @objc func bgEndEditBtnClick() {
+        searchTextField.resignFirstResponder()
+    }
+    
+    func clearSearchingStatus() {
+        self.isSearchingStr = nil
+        self.updateHistoryStatus()
+    }
 }
 
 extension ViewController: UITextFieldDelegate {
@@ -467,8 +501,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        self.isSearchingStr = nil
-        self.updateHistoryStatus()
+        clearSearchingStatus()
         return true
     }
     

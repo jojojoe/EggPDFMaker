@@ -35,7 +35,7 @@ class PDfSettingPage: UIView {
         setupSettingInfoItem()
         updateSubBannerStatus()
         
-        
+        restoreBtn.isHidden = true
         
         addNotifi()
     }
@@ -174,11 +174,10 @@ class PDfSettingPage: UIView {
         addSubview(restoreBtn)
         
         supportFeedBtn.addTarget(self, action: #selector(supportFeedBtnClick), for: .touchUpInside)
-        restoreBtn.addTarget(self, action: #selector(restoreBtnClick), for: .touchUpInside)
         shareappBtn.addTarget(self, action: #selector(shareappBtnClick), for: .touchUpInside)
         termsBtn.addTarget(self, action: #selector(termsBtnClick), for: .touchUpInside)
         privacyBtn.addTarget(self, action: #selector(privacyBtnClick), for: .touchUpInside)
-        
+        restoreBtn.addTarget(self, action: #selector(restoreBtnClick), for: .touchUpInside)
         supportFeedBtn.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(60)

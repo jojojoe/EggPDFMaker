@@ -373,6 +373,21 @@ extension PDfMakTool {
         fatherVC.present(vc, animated: true)
     }
 }
+
+extension PDfMakTool {
+    func compressImage(_ image: UIImage, maxLength: CGFloat) -> Data? {
+        var compression: CGFloat = 0.9
+        let maxCompression: CGFloat = 0.1
+        var imageData = image.jpegData(compressionQuality: compression)
+        
+        while let data = imageData, CGFloat(data.count) > maxLength && compression > maxCompression {
+            compression -= 0.1
+            imageData = image.jpegData(compressionQuality: compression)
+        }
+        
+        return imageData
+    }
+}
     
 extension PDfMakTool: UIPrintInteractionControllerDelegate {
     func printFile(item: HistoryItem) {
