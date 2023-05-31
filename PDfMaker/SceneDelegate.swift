@@ -6,24 +6,95 @@
 //
 
 import UIKit
+import StoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+
     var window: UIWindow?
-
-
+    var rootNav: UINavigationController?
+    let VC = ViewController()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        let currentVersion: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        var showS = true
+        if let saveVersion = UserDefaults.standard.string(forKey: "saveVersion") {
+            if saveVersion == currentVersion {
+                showS = false
+            } else {
+                UserDefaults.standard.set(currentVersion, forKey: "saveVersion")
+            }
+        } else {
+            UserDefaults.standard.set(currentVersion, forKey: "saveVersion")
+        }
+        if showS {
+            PDfSubscribeStoreManager.default.isSplashBegin = true
+            let splashVC = PDfGoSplashGuideVC()
+            let nav = UINavigationController.init(rootViewController: splashVC)
+            nav.isNavigationBarHidden = true
+            window?.rootViewController = nav
+            window?.makeKeyAndVisible()
+            splashVC.continueCloseBlock = {
+                [weak self] in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    self.setupViewController(isShowingSplase: true)
+                }
+            }
+        } else {
+            PDfSubscribeStoreManager.default.isSplashBegin = false
+            setupViewController(isShowingSplase: false)
+        }
+        //
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+        
+    }
+    
+    
+    func setupViewController(isShowingSplase: Bool) {
+        
+        let nav = UINavigationController.init(rootViewController: VC)
+        nav.isNavigationBarHidden = true
+        self.rootNav = nav
+        window?.rootViewController = nav
+        window?.makeKeyAndVisible()
+        
+        PDfSubscribeStoreManager.default.isPurchased {[weak self] purchased in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                debugPrint("purchased - \(purchased)")
+                 
+                if !PDfSubscribeStoreManager.default.inSubscription {
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+                        [weak self] in
+                        guard let `self` = self else {return}
+                        let subsVC = PDfGoPremiumVC()
+                        subsVC.modalPresentationStyle = .fullScreen
+                        self.VC.present(subsVC, animated: true)
+                        subsVC.pageDisappearBlock = {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            DispatchQueue.main.async {
+                                SKStoreReviewController.requestReview()
+//                                self.VC.searchAgainAction()
+                            }
+                        }
+                    }
+                } else {
+                    SKStoreReviewController.requestReview()
+//                    let subsVC = BSiegDeSubscVC()
+//                    subsVC.modalPresentationStyle = .fullScreen
+//                    self.VC.present(subsVC, animated: true)
+                    
+//                    self.VC.searchAgainAction()
+                }
+            }
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {

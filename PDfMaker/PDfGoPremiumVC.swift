@@ -20,8 +20,12 @@ class PDfGoPremiumVC: UIViewController {
     let subsTitleLabel = UILabel()
     let subsDesLabel = UILabel()
     let bottomPurchaseTextView = UITextView()
+    var pageDisappearBlock: (()->Void)?
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        pageDisappearBlock?()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

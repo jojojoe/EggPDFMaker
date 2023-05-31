@@ -36,7 +36,7 @@ class PDfSettingPage: UIView {
         setupSettingInfoItem()
         updateSubBannerStatus()
         
-        restoreBtn.isHidden = true
+//        restoreBtn.isHidden = true
         
         addNotifi()
     }
@@ -63,27 +63,27 @@ class PDfSettingPage: UIView {
     }
     
     func updateSubBannerStatus() {
-        subscribeBanner.isHidden = true
-        supportFeedBtn.snp.remakeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.height.equalTo(60)
-            $0.top.equalTo(titLB.snp.bottom).offset(34 + 5)
-        }
-//        if PDfSubscribeStoreManager.default.inSubscription {
-//            subscribeBanner.isHidden = true
-//            supportFeedBtn.snp.remakeConstraints {
-//                $0.left.right.equalToSuperview()
-//                $0.height.equalTo(60)
-//                $0.top.equalTo(titLB.snp.bottom).offset(34 + 25)
-//            }
-//        } else {
-//            subscribeBanner.isHidden = false
-//            supportFeedBtn.snp.remakeConstraints {
-//                $0.left.right.equalToSuperview()
-//                $0.height.equalTo(60)
-//                $0.top.equalTo(titLB.snp.bottom).offset(34 + 89 + 25)
-//            }
+//        subscribeBanner.isHidden = true
+//        supportFeedBtn.snp.remakeConstraints {
+//            $0.left.right.equalToSuperview()
+//            $0.height.equalTo(60)
+//            $0.top.equalTo(titLB.snp.bottom).offset(34 + 5)
 //        }
+        if PDfSubscribeStoreManager.default.inSubscription {
+            subscribeBanner.isHidden = true
+            supportFeedBtn.snp.remakeConstraints {
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(60)
+                $0.top.equalTo(titLB.snp.bottom).offset(34 + 25)
+            }
+        } else {
+            subscribeBanner.isHidden = false
+            supportFeedBtn.snp.remakeConstraints {
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(60)
+                $0.top.equalTo(titLB.snp.bottom).offset(34 + 89 + 25)
+            }
+        }
     }
     
     
@@ -163,6 +163,14 @@ class PDfSettingPage: UIView {
             $0.left.equalTo(guanImgV.snp.right).offset(14)
             $0.width.height.greaterThanOrEqualTo(20)
         }
+        //
+        let proBtn = UIButton()
+        subscribeBanner.addSubview(proBtn)
+        proBtn.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        proBtn.addTarget(self, action: #selector(proBtnClick), for: .touchUpInside)
+        
     }
     
     func setupSettingInfoItem() {
@@ -242,6 +250,11 @@ class PDfSettingPage: UIView {
         PDfMakTool.default.openSafiPrivacyURL(str: PDfMakTool.privacyUrl)
     }
     
+    
+    @objc func proBtnClick() {
+        let vc = PDfGoPremiumVC()
+        self.fahterViewController?.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 

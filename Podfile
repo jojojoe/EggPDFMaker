@@ -14,4 +14,5 @@ target 'PDfMaker' do
   pod 'TPInAppReceipt'
   pod 'Masonry'
   pod 'YPImagePicker'
+  pod 'DeviceKit'
 end

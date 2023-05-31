@@ -36,7 +36,7 @@ class PDfSubscribeStoreManager: NSObject {
     var currentMonthPrice: String = "9.99"
     var currentYearPrice: String = "29.99"
     var currentSymbol: String = "$"
-    
+    var isSplashBegin: Bool = false
     
     public enum VerifyLocalReceiptResult {
         case success(receipt: InAppReceipt)

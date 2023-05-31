@@ -42,11 +42,11 @@ class ViewController: UIViewController {
         homeBottomBtnClick()
         
         
-        proBtn.isHidden = true
+//        proBtn.isHidden = true
         
         
-        let vc = PDfGoPremiumVC()
-        self.navigationController?.pushViewController(vc)
+//        let vc = PDfGoPremiumVC()
+//        self.navigationController?.pushViewController(vc)
         
         
     }
@@ -222,7 +222,7 @@ extension ViewController {
             $0.height.equalTo(120)
         }
         photoBtn.addTarget(self, action: #selector(photoBtnClick), for: .touchUpInside)
-        photoBtn.isHidden = true
+//        photoBtn.isHidden = true
         //
         let fileBtn = HomeTypeBtn(frame: .zero, iconStr: "home_file", nameStr: "Import File")
         homePageV.addSubview(fileBtn)
@@ -233,14 +233,14 @@ extension ViewController {
             $0.height.equalTo(120)
         }
         fileBtn.addTarget(self, action: #selector(fileBtnClick), for: .touchUpInside)
-        fileBtn.isHidden = true
+//        fileBtn.isHidden = true
         //
         let recentLabel = UILabel()
         homePageV.addSubview(recentLabel)
         recentLabel.snp.makeConstraints {
             $0.left.equalToSuperview().offset(24)
-//            $0.top.equalTo(fileBtn.snp.bottom).offset(30)
-            $0.top.equalTo(fileBtn.snp.top).offset(0)
+            $0.top.equalTo(fileBtn.snp.bottom).offset(24)
+//            $0.top.equalTo(fileBtn.snp.top).offset(0)
             $0.width.height.greaterThanOrEqualTo(10)
         }
         recentLabel.font = FontCusNames.MontBold.font(sizePoint: 20)
@@ -439,7 +439,8 @@ extension ViewController {
 
 extension ViewController {
     @objc func proBtnClick() {
-        
+        let vc = PDfGoPremiumVC()
+        self.navigationController?.pushViewController(vc)
     }
     
     @objc func photoBtnClick() {
