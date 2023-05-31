@@ -43,6 +43,12 @@ class ViewController: UIViewController {
         
         
         proBtn.isHidden = true
+        
+        
+        let vc = PDfGoPremiumVC()
+        self.navigationController?.pushViewController(vc)
+        
+        
     }
     
     

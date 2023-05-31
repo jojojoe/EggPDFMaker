@@ -7,12 +7,21 @@
 
 import UIKit
 import KRProgressHUD
- 
+import SnapKit
+
+
+
 class PDfGoPremiumVC: UIViewController {
 
     let bottomBar = UIView()
-   
-    var currentIapType: PDfSubscribeStoreManager.IAPType = .month
+    let gopremiumBtn = UIButton()
+    let yearBtn = PPfSubscribeIapBtn(frame: .zero, iapItem: .year)
+    let monthBtn = PPfSubscribeIapBtn(frame: .zero, iapItem: .month)
+    let subsTitleLabel = UILabel()
+    let subsDesLabel = UILabel()
+    let bottomPurchaseTextView = UITextView()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +29,8 @@ class PDfGoPremiumVC: UIViewController {
         setupContentV()
         setupIapBtns()
         setupInfoListView()
-        
-        yearBtnClick()
+        fetchPriceLabels()
+        monthBtnClick()
     }
     
 
@@ -52,7 +61,7 @@ class PDfGoPremiumVC: UIViewController {
         }
         restoreBtn.addTarget(self, action: #selector(restoreBtnClick), for: .touchUpInside)
         //
-        let subsTitleLabel = UILabel()
+
         view.addSubview(subsTitleLabel)
         subsTitleLabel.text = "GO PREMIUM"
         subsTitleLabel.font = FontCusNames.SFProBold.font(sizePoint: 40)
@@ -62,11 +71,11 @@ class PDfGoPremiumVC: UIViewController {
         subsTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(44)
-            $0.top.equalTo(backBtn.snp.bottom).offset(24)
+            $0.top.equalTo(backBtn.snp.bottom).offset(14)
             $0.left.equalToSuperview().offset(27)
         }
         //
-        let subsDesLabel = UILabel()
+        
         view.addSubview(subsDesLabel)
         subsDesLabel.text = "Upgrade to Premium for all services"
         subsDesLabel.font = FontCusNames.SFProSemiBold.font(sizePoint: 16)
@@ -80,134 +89,11 @@ class PDfGoPremiumVC: UIViewController {
             $0.left.equalTo(subsTitleLabel.snp.left)
         }
         
-        
-        
-        
-//
-//        //
-//        let proImgV = UIImageView()
-//        view.addSubview(proImgV)
-//        proImgV.snp.makeConstraints {
-//            $0.centerY.equalTo(subsLabel2.snp.centerY)
-//            $0.left.equalTo(subsLabel2.snp.right).offset(4)
-//            $0.width.equalTo(142/2)
-//            $0.height.equalTo(54/2)
-//        }
-//        proImgV.image = UIImage(named: "pro_money")
-//        //
-//        let infoLabel1 = FMontInfoLabel(frame: .zero, contentStr: "Remove Watermark")
-//        view.addSubview(infoLabel1)
-//        infoLabel1.snp.makeConstraints {
-//            $0.left.equalToSuperview().offset(38)
-//            $0.right.equalTo(view.snp.centerX).offset(-7)
-//            $0.height.equalTo(32)
-//            $0.top.equalTo(subsLabel2.snp.bottom).offset(24)
-//        }
-//        //
-//        let infoLabel2 = FMontInfoLabel(frame: .zero, contentStr: "Various Font Choices")
-//        view.addSubview(infoLabel2)
-//        infoLabel2.snp.makeConstraints {
-//            $0.right.equalToSuperview().offset(-38)
-//            $0.left.equalTo(view.snp.centerX).offset(7)
-//            $0.height.equalTo(32)
-//            $0.top.equalTo(infoLabel1.snp.top)
-//        }
-//
-//        //
-//        let infoLabel3 = FMontInfoLabel(frame: .zero, contentStr: "Use three different styles of stickers")
-//        view.addSubview(infoLabel3)
-//        infoLabel3.snp.makeConstraints {
-//            $0.left.equalToSuperview().offset(38)
-//            $0.right.equalToSuperview().offset(-38)
-//            $0.height.equalTo(32)
-//            $0.top.equalTo(infoLabel2.snp.bottom).offset(8)
-//        }
-//
-//        //
-//        let infoLabel4 = FMontInfoLabel(frame: .zero, contentStr: "Use three different styles of filters")
-//        view.addSubview(infoLabel4)
-//        infoLabel4.snp.makeConstraints {
-//            $0.left.equalToSuperview().offset(38)
-//            $0.right.equalToSuperview().offset(-38)
-//            $0.height.equalTo(32)
-//            $0.top.equalTo(infoLabel3.snp.bottom).offset(8)
-//        }
-//
-//        //
-//
-//        view.addSubview(bottomBar)
-//        bottomBar.backgroundColor = UIColor(hexString: "#FFFFFF")
-//        bottomBar.snp.makeConstraints {
-//            $0.left.right.equalToSuperview()
-//            $0.bottom.equalToSuperview().offset(60)
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(320)
-//
-//        }
-//        bottomBar.layer.cornerRadius = 30
-//
-//        //
-//        let subscriNBtn = UIButton()
-//        bottomBar.addSubview(subscriNBtn)
-//        subscriNBtn.snp.makeConstraints {
-//            $0.centerX.equalToSuperview()
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-48)
-//            $0.width.equalTo(327)
-//            $0.height.equalTo(60)
-//        }
-//        subscriNBtn.backgroundColor = UIColor(hexString: "#0A1E24")
-//        subscriNBtn.layer.cornerRadius = 9
-//        subscriNBtn.addTarget(self, action: #selector(subNowBtnClick), for: .touchUpInside)
-//        subscriNBtn.setTitle("Subscription Now", for: .normal)
-//        subscriNBtn.titleLabel?.font = UIFont(name: "PingFangSC-Semibold", size: 16)
-//        subscriNBtn.setTitleColor(UIColor(hexString: "#FDFDFD")!, for: .normal)
-//        //
-//        setupBottomBtns()
-//        //
-//        let autorenewbel = UILabel()
-//        bottomBar.addSubview(autorenewbel)
-//        autorenewbel.text = "Auto-renewable. Cancel anytime."
-//        autorenewbel.snp.makeConstraints {
-//            $0.centerX.equalToSuperview()
-//            $0.width.greaterThanOrEqualTo(10)
-//            $0.height.greaterThanOrEqualTo(14)
-//            $0.bottom.equalTo(subscriNBtn.snp.top).offset(-10)
-//        }
-//        autorenewbel.font = UIFont(name: "PingFangSC-Medium", size: 14)
-//        autorenewbel.textColor = UIColor(hexString: "#939393")
-//
-//        //
-//        let btnBgV = UIView()
-//        bottomBar.addSubview(btnBgV)
-//        btnBgV.snp.makeConstraints {
-//            $0.left.right.equalToSuperview()
-//            $0.top.equalToSuperview().offset(30)
-//            $0.bottom.equalTo(autorenewbel.snp.top).offset(-20)
-//        }
-//        //
-//
-//        btnBgV.addSubview(subYearBtn)
-//        subYearBtn.snp.makeConstraints {
-//            $0.bottom.equalTo(btnBgV.snp.centerY).offset(-8)
-//            $0.width.equalTo(343)
-//            $0.height.equalTo(76)
-//            $0.centerX.equalToSuperview()
-//        }
-//        subYearBtn.addTarget(self, action: #selector(yearBtnClick), for: .touchUpInside)
-//        //
-//        btnBgV.addSubview(subMonthBtn)
-//        subMonthBtn.snp.makeConstraints {
-//            $0.top.equalTo(subYearBtn.snp.bottom).offset(16)
-//            $0.width.equalTo(343)
-//            $0.height.equalTo(76)
-//            $0.centerX.equalToSuperview()
-//        }
-//        subMonthBtn.addTarget(self, action: #selector(monthBtnClick), for: .touchUpInside)
-        
     }
     
     
     func setupIapBtns() {
-        let gopremiumBtn = UIButton()
+        
         view.addSubview(gopremiumBtn)
         gopremiumBtn.backgroundColor = UIColor(hexString: "#AE0000")
         gopremiumBtn.layer.cornerRadius = 30
@@ -224,74 +110,181 @@ class PDfGoPremiumVC: UIViewController {
         gopremiumBtn.addTarget(self, action: #selector(subNowBtnClick), for: .touchUpInside)
         
         //
+
+        view.addSubview(yearBtn)
+        yearBtn.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(24)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(gopremiumBtn.snp.top).offset(-30)
+            $0.height.equalTo(72)
+        }
+        yearBtn.addTarget(self, action: #selector(yearBtnClick), for: .touchUpInside)
+        
+        //
+        
+        view.addSubview(monthBtn)
+        monthBtn.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(24)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(yearBtn.snp.top).offset(-15)
+            $0.height.equalTo(72)
+        }
+        monthBtn.addTarget(self, action: #selector(monthBtnClick), for: .touchUpInside)
+        let bestImgV = UIImageView()
+        bestImgV.image = UIImage(named: "storebest")
+        view.addSubview(bestImgV)
+        bestImgV.snp.makeConstraints {
+            $0.right.equalTo(monthBtn.snp.right).offset(-7)
+            $0.centerY.equalTo(monthBtn.snp.top)
+            $0.width.equalTo(101)
+            $0.height.equalTo(24)
+        }
         
         
         
+        
+        setupBottomPrivacyBtns()
         
     }
+ 
     
     func setupInfoListView() {
-        
+        let infoScrollV = UIScrollView()
+        view.addSubview(infoScrollV)
+        infoScrollV.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalTo(subsDesLabel.snp.bottom).offset(20)
+            $0.bottom.equalTo(monthBtn.snp.top).offset(-20)
+        }
+        infoScrollV.contentSize = CGSize(width: UIScreen.main.bounds.size.width, height: 240)
+        let stackV = UIStackView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 240))
+        infoScrollV.addSubview(stackV)
+        stackV.axis = .vertical
+        stackV.spacing = 0
+        stackV.alignment = .fill
+        stackV.distribution = .fillEqually
+        let btnH: CGFloat = 40
+        let btnW: CGFloat = UIScreen.main.bounds.size.width
+        let info1 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "Unlimited Scans")
+        let info2 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "Unlimited number of PDF")
+        let info3 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "Keep all historical files")
+        let info4 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "Free Cloud & Backup")
+        let info5 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "Print using AirPrint")
+        let info6 = PPfSubsInfoLabel(frame: CGRect(x: 0, y: 0, width: btnW, height: btnH), contentStr: "No Ads No Limits")
+        stackV.addArrangedSubview(info1)
+        stackV.addArrangedSubview(info2)
+        stackV.addArrangedSubview(info3)
+        stackV.addArrangedSubview(info4)
+        stackV.addArrangedSubview(info5)
+        stackV.addArrangedSubview(info6)
     }
     
-    func setupBottomBtns() {
-        let btnColor = UIColor(hexString: "#939393")
+    func setupBottomPrivacyBtns() {
+        let btnColor = UIColor(hexString: "#AE0000")
         
         let termsBtn = UIButton()
         let privacyBtn = UIButton()
         
-        
-        // 添加termsBtn
-        termsBtn.setTitle("Terms of use", for: .normal)
-        termsBtn.setTitleColor(btnColor, for: .normal)
-        termsBtn.titleLabel?.font = UIFont(name: "PingFangSC-Medium", size: 12)
-        termsBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        bottomBar.addSubview(termsBtn)
-        termsBtn.addTarget(self, action: #selector(termBtnClick), for: .touchUpInside)
         // 添加privacyBtn
         privacyBtn.setTitle("Privacy Policy", for: .normal)
         privacyBtn.setTitleColor(btnColor, for: .normal)
-        privacyBtn.titleLabel?.font = UIFont(name: "PingFangSC-Medium", size: 12)
+        privacyBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
         privacyBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        bottomBar.addSubview(privacyBtn)
+        view.addSubview(privacyBtn)
         privacyBtn.addTarget(self, action: #selector(privacyBtnClick), for: .touchUpInside)
-         
+        // 添加termsBtn
+        termsBtn.setTitle("Terms of use", for: .normal)
+        termsBtn.setTitleColor(btnColor, for: .normal)
+        termsBtn.titleLabel?.font = FontCusNames.SFProMedium.font(sizePoint: 12)
+        termsBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        view.addSubview(termsBtn)
+        termsBtn.addTarget(self, action: #selector(termBtnClick), for: .touchUpInside)
         
-        privacyBtn.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(22)
-            make.width.equalTo(80)
+        privacyBtn.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            $0.right.equalTo(view.snp.centerX).offset(-8)
+            $0.height.equalTo(15)
+            $0.width.equalTo(80)
         }
         
-        termsBtn.snp.makeConstraints { make in
-            make.centerY.equalTo(privacyBtn.snp.centerY)
-            make.right.equalTo(privacyBtn.snp.left).offset(-20)
-            make.height.equalTo(22)
-            make.width.equalTo(80)
+        termsBtn.snp.makeConstraints {
+            $0.centerY.equalTo(privacyBtn.snp.centerY)
+            $0.left.equalTo(view.snp.centerX).offset(7)
+            $0.height.equalTo(15)
+            $0.width.equalTo(80)
         }
         
         //
-        let viewline1 = UIView()
-        viewline1.backgroundColor = btnColor
-        bottomBar.addSubview(viewline1)
-        viewline1.snp.makeConstraints {
+        let viewline = UIView()
+        viewline.backgroundColor = UIColor(hexString: "#E0E3EA")
+        view.addSubview(viewline)
+        viewline.snp.makeConstraints {
             $0.width.equalTo(1)
             $0.height.equalTo(8)
-            $0.right.equalTo(privacyBtn.snp.left).offset(-9.5)
+            $0.centerX.equalToSuperview()
             $0.centerY.equalTo(termsBtn.snp.centerY)
         }
+        
         //
-        let viewline2 = UIView()
-        viewline2.backgroundColor = btnColor
-        bottomBar.addSubview(viewline2)
-        viewline2.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(8)
-            $0.left.equalTo(privacyBtn.snp.right).offset(9.5)
-            $0.centerY.equalTo(termsBtn.snp.centerY)
+        
+        bottomPurchaseTextView.isEditable = false
+        bottomPurchaseTextView.textColor = UIColor(hexString: "#B6BAC8")
+        bottomPurchaseTextView.font = FontCusNames.SFProMedium.font(sizePoint: 10)
+        bottomPurchaseTextView.textAlignment = .center
+        
+        view.addSubview(bottomPurchaseTextView)
+        bottomPurchaseTextView.snp.makeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalTo(viewline.snp.bottom).offset(8)
+        }
+        
+    }
+    
+    
+}
+
+extension PDfGoPremiumVC {
+    
+    func updatePrice(productsm: [PDfSubscribeStoreManager.IAPProduct]?) {
+        if let products = productsm {
+            let product0 = products[0]
+            let product1 = products[1]
+            
+            PDfSubscribeStoreManager.default.currentSymbol = product0.priceLocale.currencySymbol ?? "$"
+            
+            if product0.iapID == PDfSubscribeStoreManager.IAPType.month.rawValue {
+                PDfSubscribeStoreManager.default.currentMonthPrice = product0.price.accuracyToString(position: 2)
+                PDfSubscribeStoreManager.default.currentYearPrice = product1.price.accuracyToString(position: 2)
+            } else {
+                PDfSubscribeStoreManager.default.currentYearPrice = product0.price.accuracyToString(position: 2)
+                PDfSubscribeStoreManager.default.currentMonthPrice = product1.price.accuracyToString(position: 2)
+            }
+        }
+        monthBtn.priceLabe.text = "\(PDfSubscribeStoreManager.default.currentSymbol)\(PDfSubscribeStoreManager.default.currentMonthPrice)"
+        yearBtn.priceLabe.text = "\(PDfSubscribeStoreManager.default.currentSymbol)\(PDfSubscribeStoreManager.default.currentYearPrice)"
+        
+        
+        bottomPurchaseTextView.text = "You can subscribe to Picture Scan VIP to get all the background effects provided in the app. \nPicture Scan VIP provides an annual subscription. The subscription price is: \(PDfSubscribeStoreManager.default.currentMonthPrice)/month, \(PDfSubscribeStoreManager.default.currentYearPrice)/year. \nPayment will be charged to iTunes Account at confirmation of purchase. \nSubscriptions will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current subscription period. \nYour account will be charged for renewal 24 hours before the end of the current period, and the renewal fee will be determined. \nSubscriptions may be managed by the user and auto-renewal may also be turned off in the user's Account Settings after purchase. \nIf any portion of the offered free trial period is unused, the unused portion will be forfeited if the user purchases a subscription for that portion, where applicable. \nIf you do not purchase an auto-renewing subscription, you can still use our app as normal, and any unlocked content will work normally after the subscription expires."
+        //"\(currentSymbol)\(Double(defaultYearPrice/12).accuracyToString(position: 2))/mo"
+    }
+    
+    func fetchPriceLabels() {
+        
+        if PDfSubscribeStoreManager.default.currentProducts.count == PDfSubscribeStoreManager.default.iapTypeList.count {
+            updatePrice(productsm: PDfSubscribeStoreManager.default.currentProducts)
+        } else {
+            updatePrice(productsm: nil)
+            PDfSubscribeStoreManager.default.fetchPurchaseInfo {[weak self] productList in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if productList.count == PDfSubscribeStoreManager.default.iapTypeList.count {
+                        self.updatePrice(productsm: productList)
+                    }
+                }
+            }
         }
     }
+    
 }
 
 extension PDfGoPremiumVC {
@@ -314,18 +307,35 @@ extension PDfGoPremiumVC {
     }
     
     @objc func restoreBtnClick() {
-        PDfSubscribeStoreManager.default.restore()
+        
+        
+        if PDfSubscribeStoreManager.default.inSubscription {
+            KRProgressHUD.showSuccess(withMessage: "You are already in the subscription period!")
+        } else {
+            PDfSubscribeStoreManager.default.restore { success in
+                if success {
+                    KRProgressHUD.showSuccess(withMessage: "The subscription was restored successfully")
+                } else {
+                    KRProgressHUD.showMessage("Nothing to Restore")
+                }
+            }
+        }
+        
     }
     
     @objc func yearBtnClick() {
-        currentIapType = .year
+        PDfSubscribeStoreManager.default.currentIapType = .year
+        yearBtn.isSelected = true
+        monthBtn.isSelected = false
     }
     @objc func monthBtnClick() {
-        currentIapType = .month
+        PDfSubscribeStoreManager.default.currentIapType = .month
+        yearBtn.isSelected = false
+        monthBtn.isSelected = true
     }
     @objc func subNowBtnClick() {
          
-        PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: currentIapType, source: "") {[weak self] success, errorstr in
+        PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: PDfSubscribeStoreManager.default.currentIapType, source: "") {[weak self] success, errorstr in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
                 if success {
@@ -348,11 +358,26 @@ extension PDfGoPremiumVC {
 
 
 
-class SubscribeIapBtn: UIButton {
+class PPfSubscribeIapBtn: UIButton {
     var iapItem: PDfSubscribeStoreManager.IAPType
     let titleLabe = UILabel()
     let priceLabe = UILabel()
     let deletePriceLabe = UILabel()
+    
+    override var isSelected: Bool {
+        didSet {
+            if isSelected {
+                titleLabe.textColor = UIColor(hexString: "#AE0000")
+                priceLabe.textColor = UIColor(hexString: "#AE0000")
+                layer.borderColor = UIColor(hexString: "#AE0000")?.cgColor
+            } else {
+                titleLabe.textColor = UIColor(hexString: "#1C1E37")
+                priceLabe.textColor = UIColor(hexString: "#1C1E37")
+                layer.borderColor = UIColor(hexString: "#E0E3EA")?.cgColor
+            }
+        }
+    }
+    
     
     init(frame: CGRect, iapItem: PDfSubscribeStoreManager.IAPType) {
         self.iapItem = iapItem
@@ -367,7 +392,8 @@ class SubscribeIapBtn: UIButton {
     func setupCon() {
         backgroundColor = .white
         layer.borderColor = UIColor(hexString: "#E0E3EA")?.cgColor
-        layer.borderWidth = 1
+        layer.borderWidth = 2
+        layer.cornerRadius = 20
         
         //
         addSubview(titleLabe)
@@ -384,30 +410,44 @@ class SubscribeIapBtn: UIButton {
         
         //
         addSubview(priceLabe)
-        priceLabe.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(snp.centerY).offset(4)
-            $0.width.greaterThanOrEqualTo(24)
-            $0.height.equalTo(24)
-        }
-        priceLabe.textColor = UIColor(hexString: "#1C1E37")
-        priceLabe.font = FontCusNames.SFProSemiBold.font(sizePoint: 16)
-        priceLabe.textAlignment = .center
         
+        priceLabe.textColor = UIColor(hexString: "#1C1E37")
+        priceLabe.font = FontCusNames.SFProRegular.font(sizePoint: 16)
+        priceLabe.textAlignment = .center
+        priceLabe.text = "$9.99/month"
         //
         let monthBeforeStr = "$99.99"
         addSubview(deletePriceLabe)
-        deletePriceLabe.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(snp.centerY).offset(4)
-            $0.width.greaterThanOrEqualTo(24)
-            $0.height.equalTo(24)
-        }
+        
         deletePriceLabe.textAlignment = .center
-        let attriStr = NSAttributedString(string: monthBeforeStr, attributes: [NSAttributedString.Key.font : FontCusNames.SFProSemiBold.font(sizePoint: 16), NSAttributedString.Key.foregroundColor : UIColor(hexString: "#B6BAC8")!, NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.strikethroughColor : UIColor(hexString: "#B6BAC8")!])
+        let attriStr = NSAttributedString(string: monthBeforeStr, attributes: [NSAttributedString.Key.font : FontCusNames.SFProRegular.font(sizePoint: 16), NSAttributedString.Key.foregroundColor : UIColor(hexString: "#B6BAC8")!, NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.strikethroughColor : UIColor(hexString: "#B6BAC8")!])
         deletePriceLabe.attributedText = attriStr
         
-        
+        if iapItem == .month {
+            titleLabe.text = "Monthly"
+            deletePriceLabe.isHidden = true
+            priceLabe.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.equalTo(snp.centerY).offset(4)
+                $0.width.greaterThanOrEqualTo(24)
+                $0.height.greaterThanOrEqualTo(24)
+            }
+        } else {
+            titleLabe.text = "Annual"
+            deletePriceLabe.isHidden = false
+            priceLabe.snp.makeConstraints {
+                $0.left.equalTo(snp.centerX).offset(8)
+                $0.top.equalTo(snp.centerY).offset(4)
+                $0.width.greaterThanOrEqualTo(24)
+                $0.height.greaterThanOrEqualTo(24)
+            }
+            deletePriceLabe.snp.makeConstraints {
+                $0.right.equalTo(snp.centerX).offset(-8)
+                $0.centerY.equalTo(priceLabe.snp.centerY).offset(0)
+                $0.width.greaterThanOrEqualTo(24)
+                $0.height.greaterThanOrEqualTo(24)
+            }
+        }
     }
     
     
@@ -415,7 +455,7 @@ class SubscribeIapBtn: UIButton {
     
 }
 
-class SubsInfoLabel: UIView {
+class PPfSubsInfoLabel: UIView {
     var contentStr: String
     let infolabel = UILabel()
     
@@ -431,27 +471,30 @@ class SubsInfoLabel: UIView {
     
     func setupV() {
         backgroundColor = UIColor.clear
-        let duiImgV = UIImageView()
-        addSubview(duiImgV)
-        duiImgV.image = UIImage(named: "sub_duihao")
-        duiImgV.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.left.equalToSuperview()
-            $0.width.equalTo(17)
-            $0.height.equalTo(12)
-        }
+        
         addSubview(infolabel)
         infolabel.textColor = .black
         infolabel.textAlignment = .left
         infolabel.adjustsFontSizeToFitWidth = true
-        infolabel.font = UIFont(name: "PingFangSC-Regular", size: 14)
+        infolabel.font = FontCusNames.SFProMedium.font(sizePoint: 16)
         infolabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.left.equalToSuperview().offset(20)
-            $0.right.equalToSuperview()
+            $0.left.equalToSuperview().offset(100)
+            $0.right.equalToSuperview().offset(-20)
             $0.height.greaterThanOrEqualTo(10)
         }
         infolabel.adjustsFontSizeToFitWidth = true
         infolabel.text = contentStr
+        
+        //
+        let duiImgV = UIImageView()
+        addSubview(duiImgV)
+        duiImgV.image = UIImage(named: "subinfoicon")
+        duiImgV.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalTo(infolabel.snp.left).offset(-10)
+            $0.width.equalTo(22)
+            $0.height.equalTo(22)
+        }
     }
 }

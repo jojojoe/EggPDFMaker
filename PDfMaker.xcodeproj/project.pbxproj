@@ -94,6 +94,7 @@
 		D88C8A4D2A0E808A00CE73F2 /* PDfPhotoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoCropVC.swift; sourceTree = "<group>"; };
 		D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotoRotateVC.swift; sourceTree = "<group>"; };
 		D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfPhotosEditVC.swift; sourceTree = "<group>"; };
+		D8E769BC2A22246B008BD289 /* configstore.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = configstore.storekit; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
 		EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfGoPremiumVC.swift; sourceTree = "<group>"; };
 		EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfWePreviewVC.swift; sourceTree = "<group>"; };
@@ -374,6 +375,7 @@
 				D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */,
 				EBB3B5A02A1B801600884EA7 /* PDfHistoryRecentVC.swift */,
 				EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */,
+				D8E769BC2A22246B008BD289 /* configstore.storekit */,
 				EBCA1A5D29FBC6A200473A6A /* Views */,
 				EBAB51642A08ADC5003C1838 /* CameraViews */,
 				EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */,

@@ -8,6 +8,7 @@
 import UIKit
 import SwifterSwift
 import SnapKit
+import KRProgressHUD
 
 class PDfSettingPage: UIView {
 
@@ -214,7 +215,18 @@ class PDfSettingPage: UIView {
     }
     
     @objc func restoreBtnClick() {
-        PDfSubscribeStoreManager.default.restore()
+        
+        if PDfSubscribeStoreManager.default.inSubscription {
+            KRProgressHUD.showSuccess(withMessage: "You are already in the subscription period!")
+        } else {
+            PDfSubscribeStoreManager.default.restore { success in
+                if success {
+                    KRProgressHUD.showSuccess(withMessage: "The subscription was restored successfully")
+                } else {
+                    KRProgressHUD.showMessage("Nothing to Restore")
+                }
+            }
+        }
     }
     
     @objc func shareappBtnClick() {

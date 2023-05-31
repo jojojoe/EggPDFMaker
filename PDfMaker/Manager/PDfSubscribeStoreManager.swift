@@ -30,10 +30,13 @@ class PDfSubscribeStoreManager: NSObject {
     }
     
     public enum IAPType: String {
-        
-        case month = "com.scan.print.fast.month"
-        case year = "com.scan.print.fast.year"
+        case month = "com.convert.files.pdf.month"
+        case year = "com.convert.files.pdf.year"
     }
+    var currentMonthPrice: String = "9.99"
+    var currentYearPrice: String = "29.99"
+    var currentSymbol: String = "$"
+    
     
     public enum VerifyLocalReceiptResult {
         case success(receipt: InAppReceipt)
@@ -48,9 +51,11 @@ class PDfSubscribeStoreManager: NSObject {
     }
     
     var iapTypeList: [IAPType] = [.month, .year]
-    var currentIapType: IAPType = .year
+    var currentIapType: IAPType = .month
     var inSubscription: Bool = false
     var currentProducts: [PDfSubscribeStoreManager.IAPProduct] = []
+    
+
     
 }
 
