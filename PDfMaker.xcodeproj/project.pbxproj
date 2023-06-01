@@ -53,6 +53,7 @@
 		EB55EF2C2A0E475A007D7B15 /* Quadrilateral.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEFB2A0E475A007D7B15 /* Quadrilateral.swift */; };
 		EB55EF2F2A0E4767007D7B15 /* WeScanCropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EF2E2A0E4767007D7B15 /* WeScanCropManager.swift */; };
 		EB55EF312A0E48DB007D7B15 /* ImageScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EF302A0E48DB007D7B15 /* ImageScannerController.swift */; };
+		EB9A4D672A28A7CB0044CFDD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB9A4D662A28A7CB0044CFDD /* StoreKit.framework */; };
 		EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */; };
 		EBAB51682A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */; };
 		EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */; };
@@ -136,6 +137,7 @@
 		EB55EEFB2A0E475A007D7B15 /* Quadrilateral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quadrilateral.swift; sourceTree = "<group>"; };
 		EB55EF2E2A0E4767007D7B15 /* WeScanCropManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeScanCropManager.swift; sourceTree = "<group>"; };
 		EB55EF302A0E48DB007D7B15 /* ImageScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageScannerController.swift; sourceTree = "<group>"; };
+		EB9A4D662A28A7CB0044CFDD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		EBAB51652A08AE75003C1838 /* PDfCameraSinglePageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSinglePageControlView.swift; sourceTree = "<group>"; };
 		EBAB51672A08AE9E003C1838 /* PDfCameraBoundDetectControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraBoundDetectControlView.swift; sourceTree = "<group>"; };
 		EBAB51692A08AEF0003C1838 /* PDfCameraSpeedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfCameraSpeedControlView.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54220C83F2D4C68E72D35FC8 /* Pods_PDfMaker.framework in Frameworks */,
+				EB9A4D672A28A7CB0044CFDD /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +208,7 @@
 		1ED9753DDCBEA3F70FCCC0CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB9A4D662A28A7CB0044CFDD /* StoreKit.framework */,
 				06005B817620887ECC0A0E14 /* Pods_PDfMaker.framework */,
 			);
 			name = Frameworks;
