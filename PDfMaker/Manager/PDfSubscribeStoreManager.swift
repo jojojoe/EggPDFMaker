@@ -28,13 +28,16 @@ class PDfSubscribeStoreManager: NSObject {
         public var localizedPrice: String?
         public var currencyCode: String?
     }
+    /*
     
+     */
+//    com.convert.picture.PDF
     public enum IAPType: String {
-        case month = "com.convert.files.pdf.month"
-        case year = "com.convert.files.pdf.year"
+        case month = "com.convert.picture.PDF.month"
+        case year = "com.convert.picture.PDF.year"
     }
-    var currentMonthPrice: String = "9.99"
-    var currentYearPrice: String = "29.99"
+    var currentMonthPrice: String = "7.99"
+    var currentYearPrice: String = "49.99"
     var currentSymbol: String = "$"
     var isSplashBegin: Bool = false
     

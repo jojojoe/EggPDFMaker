@@ -298,11 +298,18 @@ extension PDfPhotosEditVC {
     }
     
     func exportAction() {
+        
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        
+        
         KRProgressHUD.show()
         let imgs = imgItems.compactMap {
             $0.processedImg
         }
-        KRProgressHUD.show()
+        
         PDfMakTool.default.saveHistoryImgsToPDF(images: imgs) {[weak self] hisItem in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
@@ -336,6 +343,13 @@ extension PDfPhotosEditVC {
     
     
     func shareAction() {
+        
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        
+        
         let imgs = imgItems.compactMap {
             $0.processedImg
         }

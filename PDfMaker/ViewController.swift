@@ -415,6 +415,10 @@ extension ViewController {
     }
     
     func shareAction(item: HistoryItem) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
         PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
      
@@ -439,8 +443,12 @@ extension ViewController {
 
 extension ViewController {
     @objc func proBtnClick() {
-        let vc = PDfGoPremiumVC()
-        self.navigationController?.pushViewController(vc)
+        PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+        
+//        let vc = PDfGoPremiumVC()
+//        vc.modalPresentationStyle = .fullScreen
+//        self.present(vc, animated: true)
+        
     }
     
     @objc func photoBtnClick() {

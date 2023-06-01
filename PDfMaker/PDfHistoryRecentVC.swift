@@ -159,6 +159,10 @@ extension PDfHistoryRecentVC {
         PDfMakTool.default.printFile(item: item)
     }
     func shareAction(item: HistoryItem) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
         PDfMakTool.default.shareFile(item: item, fatherVC: self)
     }
 //    func exportAction(item: HistoryItem) {

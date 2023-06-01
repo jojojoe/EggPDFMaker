@@ -121,6 +121,11 @@ extension PDfWePreviewVC {
         }
     }
     @objc func shareBtnClick() {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        
         let vc = UIActivityViewController(activityItems: [webUrl], applicationActivities: nil)
         vc.popoverPresentationController?.sourceView = self.sharebtn
         self.present(vc, animated: true)

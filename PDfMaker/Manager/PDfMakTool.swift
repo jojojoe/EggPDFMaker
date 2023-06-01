@@ -22,13 +22,13 @@ class PDfMakTool: NSObject {
     let k_historyItemDelete = "historyItemDelete"
     let pdfwidth: CGFloat = 612
     let pdfheight: CGFloat = 792
-    
+ 
     //Picture Scan
-    static let privacyUrl = "https://sites.google.com/view/picture-scan-privacy-policy/home"
-    static let termsUrl = "https://sites.google.com/view/picture-scan-terms-of-use/home"
-    static let feedbackEmail = "cobinjian110@163.com"
+    static let privacyUrl = "https://sites.google.com/view/picture-scan-privacy-policy/homepage"
+    static let termsUrl = "https://sites.google.com/view/picture-scan-terms-of-use/homepage"
+    static let feedbackEmail = "dham_huang_dad390@outlook.com"
     static let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? ""
-    static let shareStr = "Share with friends:\("itms-apps://itunes.apple.com/cn/app/id\("6449423346")?mt=8")"
+    static let shareStr = "Share with friends:\("itms-apps://itunes.apple.com/cn/app/id\("6449591727")?mt=8")"
     
     
     override init() {
@@ -692,6 +692,12 @@ extension PDfMakTool: MFMailComposeViewControllerDelegate {
         let activityItems = [PDfMakTool.shareStr] as [Any]
         let vc = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         fatherViewController.present(vc, animated: true)
+    }
+    
+    func showSubscribeStoreVC(contentVC: UIViewController?) {
+        let vc = PDfGoPremiumVC()
+        vc.modalPresentationStyle = .fullScreen
+        contentVC?.present(vc, animated: true)
     }
 }
 

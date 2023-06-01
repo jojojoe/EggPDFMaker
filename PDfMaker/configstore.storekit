@@ -50,7 +50,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.convert.files.pdf.month",
+          "productID" : "com.convert.picture.PDF.month",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly",
           "subscriptionGroupID" : "FBB07ECC",
@@ -75,7 +75,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.convert.files.pdf.year",
+          "productID" : "com.convert.picture.PDF.year",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Yearly",
           "subscriptionGroupID" : "FBB07ECC",

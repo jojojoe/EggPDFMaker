@@ -252,8 +252,13 @@ class PDfSettingPage: UIView {
     
     
     @objc func proBtnClick() {
-        let vc = PDfGoPremiumVC()
-        self.fahterViewController?.navigationController?.pushViewController(vc, animated: true)
+//        let vc = PDfGoPremiumVC()
+//        self.fahterViewController?.navigationController?.pushViewController(vc, animated: true)
+        PDfMakTool.default.showSubscribeStoreVC(contentVC: self.fahterViewController)
+        
+//        let vc = PDfGoPremiumVC()
+//        vc.modalPresentationStyle = .fullScreen
+//        self.fahterViewController?.present(vc, animated: true)
     }
 }
 

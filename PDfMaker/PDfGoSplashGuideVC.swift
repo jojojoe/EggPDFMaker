@@ -42,8 +42,8 @@ class PDfGoSplashGuideVC: UIViewController {
         collection.isPagingEnabled = true
         view.addSubview(collection)
         collection.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.bottom.equalTo(view.snp.bottom)
+            $0.top.equalToSuperview().offset(0)
+            $0.bottom.equalToSuperview().offset(0)
             $0.right.left.equalToSuperview()
         }
         collection.register(cellWithClass: BSiegSplashCell.self)
@@ -119,7 +119,7 @@ extension PDfGoSplashGuideVC: UICollectionViewDataSource {
 
 extension PDfGoSplashGuideVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        return CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height + 20)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -147,17 +147,17 @@ extension PDfGoSplashGuideVC: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-//        if scrollView == collection {
-//            if let indexP = collection.indexPathForItem(at: CGPoint(x: view.bounds.width/2 + collection.contentOffset.x, y: 50)) {
-//                if indexP.item != currentIndexP.item {
-//
-//                    currentIndexP = indexP
-////                    pagecontrol.currentPage = currentInfoIndex
-////                    infoLabel.text = infoList[currentInfoIndex]["name"]
-//                }
-//
-//            }
-//        }
+        if scrollView == collection {
+            if let indexP = collection.indexPathForItem(at: CGPoint(x: view.bounds.width/2 + collection.contentOffset.x, y: 50)) {
+                if indexP.item != currentIndexP.item {
+
+                    currentIndexP = indexP
+//                    pagecontrol.currentPage = currentInfoIndex
+//                    infoLabel.text = infoList[currentInfoIndex]["name"]
+                }
+
+            }
+        }
     }
     
 }
@@ -181,7 +181,7 @@ class BSiegSplashCell: UICollectionViewCell {
         backgroundColor = .black
         contentView.backgroundColor = .black
         
-        contentImgV.contentMode = .scaleAspectFit
+        contentImgV.contentMode = .scaleAspectFill
         contentImgV.clipsToBounds = true
         contentView.addSubview(contentImgV)
         contentImgV.snp.makeConstraints {

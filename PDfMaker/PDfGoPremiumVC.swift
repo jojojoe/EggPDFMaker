@@ -416,7 +416,7 @@ class PPfSubscribeIapBtn: UIButton {
         addSubview(priceLabe)
         
         priceLabe.textColor = UIColor(hexString: "#1C1E37")
-        priceLabe.font = FontCusNames.SFProRegular.font(sizePoint: 16)
+        priceLabe.font = FontCusNames.SFProMedium.font(sizePoint: 16)
         priceLabe.textAlignment = .center
         priceLabe.text = "$9.99/month"
         //
@@ -424,7 +424,7 @@ class PPfSubscribeIapBtn: UIButton {
         addSubview(deletePriceLabe)
         
         deletePriceLabe.textAlignment = .center
-        let attriStr = NSAttributedString(string: monthBeforeStr, attributes: [NSAttributedString.Key.font : FontCusNames.SFProRegular.font(sizePoint: 16), NSAttributedString.Key.foregroundColor : UIColor(hexString: "#B6BAC8")!, NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.strikethroughColor : UIColor(hexString: "#B6BAC8")!])
+        let attriStr = NSAttributedString(string: monthBeforeStr, attributes: [NSAttributedString.Key.font : FontCusNames.SFProMedium.font(sizePoint: 16), NSAttributedString.Key.foregroundColor : UIColor(hexString: "#B6BAC8")!, NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.strikethroughColor : UIColor(hexString: "#B6BAC8")!])
         deletePriceLabe.attributedText = attriStr
         
         if iapItem == .month {
