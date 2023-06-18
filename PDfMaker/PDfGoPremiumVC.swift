@@ -298,6 +298,10 @@ extension PDfGoPremiumVC {
         } else {
             self.dismiss(animated: true, completion: nil)
         }
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: k_subscribeVCback),
+            object: nil,
+            userInfo: nil)
     }
     
     @objc func termBtnClick() {

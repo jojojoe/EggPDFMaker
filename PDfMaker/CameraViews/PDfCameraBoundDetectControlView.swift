@@ -14,7 +14,7 @@ enum BoundDetectControlType: String {
 }
 
 class PDfCameraBoundDetectControlView: UIView {
-
+    var faVC: UIViewController?
     let controlLabel = UILabel()
     let topContentV = UIView()
     var isshowStatus = false
@@ -141,7 +141,14 @@ class PDfCameraBoundDetectControlView: UIView {
         if isshowStatus {
             hiddenTopContentV()
         } else {
-            showTopContentV()
+            if !PDfSubscribeStoreManager.default.inSubscription {
+                if let vc = faVC {
+                    PDfMakTool.default.showSubscribeStoreVC(contentVC: vc)
+                }
+                return
+            } else {
+                showTopContentV()
+            }
         }
     }
     @objc func autoBtnClick() {
@@ -168,14 +175,17 @@ class PDfCameraBoundDetectControlView: UIView {
     }
     
     func hiddenTopContentV() {
-        isshowStatus = false
-        UIView.animate(withDuration: 0.3, delay: 0) {
-            self.topContentV.alpha = 0
-            self.topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
-            
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
+        if isshowStatus {
+            isshowStatus = false
+            UIView.animate(withDuration: 0.3, delay: 0) {
+                self.topContentV.alpha = 0
+                self.topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
+                
+                self.setNeedsLayout()
+                self.layoutIfNeeded()
+            }
         }
+        
     }
     
 }

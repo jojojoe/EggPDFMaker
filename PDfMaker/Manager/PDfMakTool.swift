@@ -20,6 +20,7 @@ class PDfMakTool: NSObject {
     var importPDFSuccessBlock: ((HistoryItem)->Void)?
     let k_historyItemChange = "historyItemChange"
     let k_historyItemDelete = "historyItemDelete"
+    let k_subscribeVCback = "subscribeVCback"
     let pdfwidth: CGFloat = 612
     let pdfheight: CGFloat = 792
  

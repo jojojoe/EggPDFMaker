@@ -28,6 +28,11 @@ class ViewController: UIViewController {
     let settingPageV = PDfSettingPage()
     var isSearchingStr: String? = nil
  
+    
+    var currentAddingPhotos: [UserImgItem]?
+    var currentAddingFile: URL?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#EFEFEF")
@@ -55,6 +60,9 @@ class ViewController: UIViewController {
     func addnoti() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(subscribeSuccessAction(notification: )), name: NSNotification.Name(rawValue: PDfSubscribeStoreManager.PurchaseNotificationKeys.success), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSubscribeCloseStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_subscribeVCback), object: nil)
+        
     }
     
     func registKeyboradNotification() {
@@ -79,13 +87,36 @@ class ViewController: UIViewController {
             self.updateHistoryStatus()
         }
     }
-
+    
+    @objc func updateSubscribeCloseStatus(noti: Notification) {
+        DispatchQueue.main.async {
+            self.currentAddingFile = nil
+            self.currentAddingPhotos = nil
+        }
+    }
+    
     @objc func subscribeSuccessAction(notification: Notification) {
         DispatchQueue.main.async {
             [weak self] in
             guard let `self` = self else {return}
             self.updateSubsProBtnStatus()
+            self.checkCurrentAddingFilePhotos()
         }
+    }
+    
+    func checkCurrentAddingFilePhotos() {
+        if let addingPhotos = currentAddingPhotos {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.55) {
+                let editVC = PDfPhotosEditVC(imgItems: addingPhotos)
+                self.navigationController?.pushViewController(editVC, animated: true)
+            }
+        }
+        if let addingFile = currentAddingFile {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.55) {
+                self.processPreviewPageURL(targetUrl: addingFile)
+            }
+        }
+        
     }
     
     deinit {
@@ -452,10 +483,14 @@ extension ViewController {
     }
     
     @objc func photoBtnClick() {
+        currentAddingPhotos = nil
+        currentAddingFile = nil
         checkAlbumAuthorization()
     }
     
     @objc func fileBtnClick() {
+        currentAddingPhotos = nil
+        currentAddingFile = nil
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.microsoft.word.doc", "com.microsoft.excel.xls", "com.adobe.pdf", "public.text", "public.utf8-plain-text", "public.composite-content", "public.image"], in: .import)
         documentPicker.delegate = self
         documentPicker.modalPresentationStyle = .fullScreen
@@ -549,18 +584,31 @@ extension ViewController: UIDocumentPickerDelegate {
             }
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
                 if let targetUrl = urls.first {
-                    if targetUrl.absoluteString.lowercased().contains("pdf") {
-                        let fileitem = PDfMakTool.default.saveHistoryFile(originFileUrl: targetUrl)
-                        self.showPreviewPage(fileitem: fileitem)
-
+                    if !PDfSubscribeStoreManager.default.inSubscription {
+                        currentAddingFile = targetUrl
+                        PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+                        return
                     } else {
-                        PDfMakTool.default.exportFileToPDF(targetUrl: targetUrl, fatherV: self.view) {[weak self] fileitem in
-                            guard let `self` = self else {return}
-                            DispatchQueue.main.async {
-                                self.showPreviewPage(fileitem: fileitem)
-                            }
-                        }
+                        //
+                        self.processPreviewPageURL(targetUrl: targetUrl)
+                        
                     }
+                    
+                }
+            }
+        }
+    }
+    
+    func processPreviewPageURL(targetUrl: URL) {
+        if targetUrl.absoluteString.lowercased().contains("pdf") {
+            let fileitem = PDfMakTool.default.saveHistoryFile(originFileUrl: targetUrl)
+            self.showPreviewPage(fileitem: fileitem)
+
+        } else {
+            PDfMakTool.default.exportFileToPDF(targetUrl: targetUrl, fatherV: self.view) {[weak self] fileitem in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    self.showPreviewPage(fileitem: fileitem)
                 }
             }
         }
@@ -715,7 +763,11 @@ extension ViewController: UIImagePickerControllerDelegate {
     }
     
     func showPreviewVC(imageItems: [UserImgItem]) {
-        
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            currentAddingPhotos = imageItems
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
         let editVC = PDfPhotosEditVC(imgItems: imageItems)
         self.navigationController?.pushViewController(editVC, animated: true)
         
