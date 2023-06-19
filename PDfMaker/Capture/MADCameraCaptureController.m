@@ -232,15 +232,15 @@
     
     [UIView animateWithDuration:0.4 animations:^
      {
-         self.focusIndicator.alpha = 1.0;
-     }
+        self.focusIndicator.alpha = 1.0;
+    }
                      completion:^(BOOL finished)
      {
-         [UIView animateWithDuration:0.4 animations:^
-          {
-              self.focusIndicator.alpha = 0.0;
-          }];
-     }];
+        [UIView animateWithDuration:0.4 animations:^
+         {
+            self.focusIndicator.alpha = 0.0;
+        }];
+    }];
 }
 
 - (void)popSelf

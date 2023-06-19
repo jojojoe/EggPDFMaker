@@ -344,7 +344,23 @@
 
 - (CIImage *)filteredImageUsingContrastFilterOnImage:(CIImage *)image
 {
-    return [CIFilter filterWithName:@"CIColorControls" withInputParameters:@{@"inputContrast":@(1.1),kCIInputImageKey:image}].outputImage;
+//    let filter = CIFilter(name: "CIColorMonochrome")!
+//    let ciImage = CIImage(image: image)!
+//    filter.setValue(ciImage, forKey: kCIInputImageKey)
+//    filter.setValue(CIColor.black, forKey: kCIInputColorKey)
+//    filter.setValue(sharpness, forKey: kCIInputIntensityKey)
+    
+//    NSDictionary *filter1Dict = @{kCIInputColorKey: [CIColor blackColor], kCIInputImageKey:image, kCIInputIntensityKey: @(1)};
+//    CIFilter *filter1 = [CIFilter filterWithName:@"CIColorMonochrome" withInputParameters:filter1Dict];
+//
+//    CIImage *outputimg = filter1.outputImage;
+//    return outputimg;
+    
+    
+//    return [CIFilter filterWithName:@"CIColorControls" withInputParameters:@{@"inputContrast":@(1.1),kCIInputImageKey:image}].outputImage;
+    
+    return image;
+    
 }
 
 /// 将任意四边形转换成长方形
@@ -582,7 +598,7 @@
 //
 //
 //
-////    CGFloat cropRect = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+
 //
 //}
 
