@@ -13,7 +13,7 @@ enum SinglePageControlType: String {
 }
 
 class PDfCameraSinglePageControlView: UIView {
-
+    var faVC: UIViewController?
     let controlLabel = UILabel()
     let topContentV = UIView()
     var isshowStatus = false
@@ -22,6 +22,9 @@ class PDfCameraSinglePageControlView: UIView {
             controlLabel.text = currentSingleType.rawValue
         }
     }
+    var valueChangeBlock: (()->Void)?
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -138,16 +141,25 @@ class PDfCameraSinglePageControlView: UIView {
         if isshowStatus {
             hiddenTopContentV()
         } else {
-            showTopContentV()
+            if !PDfSubscribeStoreManager.default.inSubscription {
+                if let vc = faVC {
+                    PDfMakTool.default.showSubscribeStoreVC(contentVC: vc)
+                }
+                return
+            } else {
+                showTopContentV()
+            }
         }
     }
     @objc func singleBtnClick() {
         hiddenTopContentV()
         currentSingleType = .single
+        valueChangeBlock?()
     }
     @objc func multiBtnClick() {
         hiddenTopContentV()
         currentSingleType = .multi
+        valueChangeBlock?()
     }
     
     func showTopContentV() {
@@ -163,14 +175,17 @@ class PDfCameraSinglePageControlView: UIView {
     }
     
     func hiddenTopContentV() {
-        isshowStatus = false
-        UIView.animate(withDuration: 0.3, delay: 0) {
-            self.topContentV.alpha = 0
-            self.topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
-            
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
+        if isshowStatus {
+            isshowStatus = false
+            UIView.animate(withDuration: 0.3, delay: 0) {
+                self.topContentV.alpha = 0
+                self.topContentV.transform = CGAffineTransform(translationX: 0, y: 30).scaledBy(x: 0.1, y: 0.1)
+                
+                self.setNeedsLayout()
+                self.layoutIfNeeded()
+            }
         }
+        
     }
     
 }

@@ -40,7 +40,7 @@ class PDfScanCAmeraVC: UIViewController {
     let toolBtnIndicateView = UIView()
     let centerBgV = UIView()
     let lightBtn = UIButton()
-    let filterBtn = UIButton()
+//    let filterBtn = UIButton()
     let autoBtn = UIButton()
     let singleFloatV = PDfCameraSinglePageControlView()
     let boundFloatV = PDfCameraBoundDetectControlView()
@@ -153,7 +153,9 @@ class PDfScanCAmeraVC: UIViewController {
         topBanner.addSubview(lightBtn)
         lightBtn.snp.makeConstraints {
             $0.centerY.equalTo(cancelBtn.snp.centerY)
-            $0.left.equalTo(cancelBtn.snp.right).offset(btnPadding)
+            $0.centerX.equalToSuperview()
+//            $0.left.equalTo(cancelBtn.snp.right).offset(btnPadding)
+//            $0.right.equalTo(autoBtn.snp.left).offset(-btnPadding)
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
@@ -163,17 +165,17 @@ class PDfScanCAmeraVC: UIViewController {
         
         //
         
-        filterBtn.backgroundColor = .clear
-        topBanner.addSubview(filterBtn)
-        filterBtn.snp.makeConstraints {
-            $0.centerY.equalTo(cancelBtn.snp.centerY)
-            $0.right.equalTo(autoBtn.snp.left).offset(-btnPadding)
-            $0.width.equalTo(40)
-            $0.height.equalTo(40)
-        }
-        filterBtn.setImage(UIImage(named: "filter_n"), for: .normal)
-        filterBtn.setImage(UIImage(named: "filter_s"), for: .selected)
-        filterBtn.addTarget(self, action: #selector(filterBtnClick(sender: )), for: .touchUpInside)
+//        filterBtn.backgroundColor = .clear
+//        topBanner.addSubview(filterBtn)
+//        filterBtn.snp.makeConstraints {
+//            $0.centerY.equalTo(cancelBtn.snp.centerY)
+//            $0.right.equalTo(autoBtn.snp.left).offset(-btnPadding)
+//            $0.width.equalTo(40)
+//            $0.height.equalTo(40)
+//        }
+//        filterBtn.setImage(UIImage(named: "filter_n"), for: .normal)
+//        filterBtn.setImage(UIImage(named: "filter_s"), for: .selected)
+//        filterBtn.addTarget(self, action: #selector(filterBtnClick(sender: )), for: .touchUpInside)
         
         
         //
@@ -354,7 +356,7 @@ class PDfScanCAmeraVC: UIViewController {
 
 extension PDfScanCAmeraVC {
     func addControlFloatView() {
-
+        singleFloatV.faVC = self
         view.addSubview(singleFloatV)
         singleFloatV.snp.makeConstraints {
             $0.width.equalTo(140)
@@ -362,8 +364,16 @@ extension PDfScanCAmeraVC {
             $0.right.equalTo(view.snp.centerX).offset(-5)
             $0.bottom.equalTo(bottomBanner.snp.top).offset(-15)
         }
-        
+        singleFloatV.valueChangeBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.boundFloatV.hiddenTopContentV()
+                self.speedFloatV.hiddenTopContentV()
+            }
+        }
         //
+        boundFloatV.faVC = self
         view.addSubview(boundFloatV)
         boundFloatV.snp.makeConstraints {
             $0.width.equalTo(140)
@@ -383,10 +393,13 @@ extension PDfScanCAmeraVC {
                     self.captureCameraView.isBorderDetectionEnabled = false
                     self.autoBtn.isSelected = true
                 }
+                
+                self.singleFloatV.hiddenTopContentV()
+                self.speedFloatV.hiddenTopContentV()
             }
         }
         //
-        
+        speedFloatV.faVC = self
         view.addSubview(speedFloatV)
         speedFloatV.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -403,7 +416,8 @@ extension PDfScanCAmeraVC {
                 } else {
                     self.updateCaptureCameraViewPhotoSession(isHigh: true)
                 }
-                
+                self.singleFloatV.hiddenTopContentV()
+                self.boundFloatV.hiddenTopContentV()
             }
         }
         //
@@ -468,11 +482,11 @@ extension PDfScanCAmeraVC {
 extension PDfScanCAmeraVC {
     
     func processBlackFilter(img: UIImage) -> UIImage {
-        if filterBtn.isSelected {
-            return self.applySharpeningEffect(to: img) ?? img
-        } else {
+//        if filterBtn.isSelected {
+//            return self.applySharpeningEffect(to: img) ?? img
+//        } else {
             return img
-        }
+//        }
     }
     
 //    func cropFixBoundViewImg(originImg: UIImage, cropImgOffsetYBili: CGFloat) -> UIImage {
@@ -802,6 +816,12 @@ extension PDfScanCAmeraVC {
         self.navigationController?.pushViewController(photoEditVC, animated: true)
     }
     @objc func scanDocBtnClick(sender: UIButton) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        
+        //
         currentScanType = .scanDoc
         hiddenFloatPop()
         toolBtnIndicateView.snp.remakeConstraints {
@@ -830,6 +850,11 @@ extension PDfScanCAmeraVC {
         
     }
     @objc func scanPhotoBtnClick(sender: UIButton) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        //
         currentScanType = .scanPhoto
         hiddenFloatPop()
         toolBtnIndicateView.snp.remakeConstraints {
@@ -856,6 +881,11 @@ extension PDfScanCAmeraVC {
         
     }
     @objc func scanCardBtnClick(sender: UIButton) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
+        //
         currentScanType = .scanIDCard
         hiddenFloatPop()
         toolBtnIndicateView.snp.remakeConstraints {
