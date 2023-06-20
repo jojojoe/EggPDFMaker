@@ -585,7 +585,7 @@ extension ViewController: UIDocumentPickerDelegate {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
                 if let targetUrl = urls.first {
                     if !PDfSubscribeStoreManager.default.inSubscription {
-                        currentAddingFile = targetUrl
+                        self.currentAddingFile = targetUrl
                         PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
                         return
                     } else {

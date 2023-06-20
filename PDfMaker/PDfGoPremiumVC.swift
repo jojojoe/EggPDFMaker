@@ -299,7 +299,7 @@ extension PDfGoPremiumVC {
             self.dismiss(animated: true, completion: nil)
         }
         NotificationCenter.default.post(
-            name: NSNotification.Name(rawValue: k_subscribeVCback),
+            name: NSNotification.Name(rawValue: PDfMakTool.default.k_subscribeVCback),
             object: nil,
             userInfo: nil)
     }
