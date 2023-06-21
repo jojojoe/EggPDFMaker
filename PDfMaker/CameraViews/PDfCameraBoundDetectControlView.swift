@@ -25,6 +25,7 @@ class PDfCameraBoundDetectControlView: UIView {
     }
     
     var valueChangeBlock: (()->Void)?
+    var contentClickBlock: (()->Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -138,6 +139,7 @@ class PDfCameraBoundDetectControlView: UIView {
     }
 
     @objc func controlBtnClick() {
+        contentClickBlock?()
         if isshowStatus {
             hiddenTopContentV()
         } else {

@@ -2,7 +2,7 @@
 //  PDfGoSplashGuideVC.swift
 //  PDfMaker
 //
-//  Created by Joe on 2023/5/31.
+//  Created by Jbai go on 2023/5/31.
 //
 
 import UIKit
@@ -14,12 +14,12 @@ class PDfGoSplashGuideVC: UIViewController {
     let theContinueBtn = UIButton()
     var continueCloseBlock:(()->Void)?
     
-    var sp_list = ["sp01", "sp02", "sp03", "sp04", "sp05", "sp06", "sp07", "sp08"]
+    var sp_list = ["sp02", "sp05", "sp06", "sp07", "sp08"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7 || Device.current.diagonal == 5.5 {
-            sp_list = ["sp8_01", "sp8_02", "sp8_03", "sp8_04", "sp8_05", "sp8_06", "sp8_07", "sp8_08"]
+            sp_list = ["sp8_02", "sp8_05", "sp8_06", "sp8_07", "sp8_08"]
         }
         setupV()
     }

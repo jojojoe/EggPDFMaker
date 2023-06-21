@@ -17,13 +17,13 @@ class PDfCameraSinglePageControlView: UIView {
     let controlLabel = UILabel()
     let topContentV = UIView()
     var isshowStatus = false
-    var currentSingleType: SinglePageControlType = .single {
+    var currentSingleType: SinglePageControlType = .multi {
         didSet {
             controlLabel.text = currentSingleType.rawValue
         }
     }
     var valueChangeBlock: (()->Void)?
-    
+    var contentClickBlock: (()->Void)?
     
     
     override init(frame: CGRect) {
@@ -54,7 +54,7 @@ class PDfCameraSinglePageControlView: UIView {
         //
         
         controlBtn.addSubview(controlLabel)
-        controlLabel.text = SinglePageControlType.single.rawValue
+        controlLabel.text = SinglePageControlType.multi.rawValue
         controlLabel.textColor = .white
         controlLabel.font = FontCusNames.SFProRegular.font(sizePoint: 11)
         controlLabel.snp.makeConstraints {
@@ -138,6 +138,7 @@ class PDfCameraSinglePageControlView: UIView {
     }
 
     @objc func controlBtnClick() {
+        contentClickBlock?()
         if isshowStatus {
             hiddenTopContentV()
         } else {

@@ -2,35 +2,13 @@
 //  PDfNewCameraScanCAmeraVC.swift
 //  PDfMaker
 //
-//  Created by Joe on 2023/6/20.
+//  Created by Jbai go on 2023/6/20.
 //
 
 import UIKit
 import UIKit
 import KRProgressHUD
-
-//class UserImgItem: NSObject {
-//    var originImg: UIImage
-//    var processedImg: UIImage
-//    var quad: Quadrilateral
-//    init(originImg: UIImage, processedImg: UIImage? = nil, quad: Quadrilateral? = nil) {
-//        self.originImg = originImg
-//        if let quad_m = quad {
-//            self.quad = quad_m
-//        } else {
-//            self.quad = WeScanCropManager.default.defaultQuad(forImage: originImg)
-//        }
-//        self.processedImg = processedImg ?? originImg
-//        super.init()
-//    }
-//}
-//
-//enum ScanType {
-//    case scanDoc
-//    case scanPhoto
-//    case scanIDCard
-//}
-
+ 
 class PDfNewCameraScanCAmeraVC: UIViewController {
     let topBanner = UIView()
     let bottomBanner = UIView()
@@ -42,7 +20,6 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
     let centerBgV = UIView()
     var controller: CameraScannerViewController!
     let lightBtn = UIButton()
-//    let filterBtn = UIButton()
     let autoBtn = UIButton()
     let singleFloatV = PDfCameraSinglePageControlView()
     let boundFloatV = PDfCameraBoundDetectControlView()
@@ -51,23 +28,11 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
     let multiPhotoAreaView = UIImageView()
     let multiPhotoAreaCountLabel = UILabel()
     let saveBtn = UIButton()
-    
     var userImageItemList: [UserImgItem] = []
-//    var userIdCardImageList: [UIImage] = []
     var onceLayout = Once()
-    
     var currentScanType: ScanType = .scanDoc
     var isCaptureing = false
-    
-    
-//    lazy var captureCameraView: MADCameraCaptureView = {
-//
-//        let cameraView = MADCameraCaptureView(frame: centerBgV.bounds)
-//        cameraView.isBorderDetectionEnabled = true
-//        cameraView.backgroundColor = .black
-//
-//        return cameraView
-//    }()
+     
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +52,7 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
                 self.addCaptureView()
                 self.addControlFloatView()
                 self.updateDefaultAutoBtnStatus()
-                self.scanPhotoBtnClick(sender: scanPhotoBtn)
+                self.scanDocBtnClick(sender: scanDocBtn)
             }
         }
     }
@@ -95,19 +60,13 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // 关闭闪光灯
-//        self.captureCameraView.isTorchEnabled = false
-//        // 停止捕获图像
-//        self.captureCameraView.stop()
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        self.captureCameraView.start()
         
     }
-    
     
     func setupContentV() {
         
@@ -156,29 +115,12 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
         lightBtn.snp.makeConstraints {
             $0.centerY.equalTo(cancelBtn.snp.centerY)
             $0.centerX.equalToSuperview()
-//            $0.left.equalTo(cancelBtn.snp.right).offset(btnPadding)
-//            $0.right.equalTo(autoBtn.snp.left).offset(-btnPadding)
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
         lightBtn.setImage(UIImage(named: "light_n"), for: .normal)
         lightBtn.setImage(UIImage(named: "light_s"), for: .selected)
         lightBtn.addTarget(self, action: #selector(lightBtnClick(sender: )), for: .touchUpInside)
-        
-        //
-        
-//        filterBtn.backgroundColor = .clear
-//        topBanner.addSubview(filterBtn)
-//        filterBtn.snp.makeConstraints {
-//            $0.centerY.equalTo(cancelBtn.snp.centerY)
-//            $0.right.equalTo(autoBtn.snp.left).offset(-btnPadding)
-//            $0.width.equalTo(40)
-//            $0.height.equalTo(40)
-//        }
-//        filterBtn.setImage(UIImage(named: "filter_n"), for: .normal)
-//        filterBtn.setImage(UIImage(named: "filter_s"), for: .selected)
-//        filterBtn.addTarget(self, action: #selector(filterBtnClick(sender: )), for: .touchUpInside)
-        
         
         //
         
@@ -356,18 +298,158 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
     
 }
 
+extension PDfNewCameraScanCAmeraVC {
+    func cropImage(image: UIImage, withQuad quad: Quadrilateral) -> UIImage {
+        
+        guard let ciImage = CIImage(image: image) else {
+            return image
+        }
+
+        let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
+        let orientedImage = ciImage.oriented(forExifOrientation: Int32(cgOrientation.rawValue))
+        let scaledQuad = quad
+//        let scaledQuad = quad.scale(quadView.bounds.size, image.size)
+//        self.quad = scaledQuad
+
+        // Cropped Image
+        var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: image.size.height)
+        cartesianScaledQuad.reorganize()
+
+        let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
+            "inputTopLeft": CIVector(cgPoint: cartesianScaledQuad.bottomLeft),
+            "inputTopRight": CIVector(cgPoint: cartesianScaledQuad.bottomRight),
+            "inputBottomLeft": CIVector(cgPoint: cartesianScaledQuad.topLeft),
+            "inputBottomRight": CIVector(cgPoint: cartesianScaledQuad.topRight)
+        ])
+
+        let croppedImage = UIImage.from(ciImage: filteredImage)
+        return croppedImage
+    }
+}
+
 extension PDfNewCameraScanCAmeraVC: CameraScannerViewOutputDelegate {
     func captureImageFailWithError(error: Error) {
         print(error)
     }
 
     func captureImageSuccess(image: UIImage, withQuad quad: Quadrilateral?) {
-        guard let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewEditImageView") as? EditImageViewController
-            else { return }
-        controller.modalPresentationStyle = .fullScreen
-        controller.captureImage = image
-        controller.quad = quad
-        navigationController?.pushViewController(controller, animated: false)
+        hiddenFloatPop()
+        
+        var filteredOriginImg = image
+        var filteredDetectImg = image
+        var itemfilteredOriginImg = image
+        var itemfilteredDetectImg = image
+        
+        var hasAutoDetectAndHasQuad = false
+        if let quad_m = quad, controller.isAutoScanEnabled == true {
+            // 自动检测边框
+            hasAutoDetectAndHasQuad = true
+            filteredDetectImg = cropImage(image: image, withQuad: quad_m)
+            itemfilteredDetectImg = cropImage(image: image, withQuad: quad_m)
+            
+        }
+        //
+        if self.speedFloatV.currentDetectType == .speed {
+            if let dataimg = PDfMakTool.default.compressImage(filteredOriginImg, maxLength: 720 * 1024 / 2), let img = UIImage(data: dataimg) {
+                itemfilteredOriginImg = img
+            }
+        } else {
+            if let dataimg = PDfMakTool.default.compressImage(filteredDetectImg, maxLength: 1024 * 1024 * 2), let img = UIImage(data: dataimg) {
+                itemfilteredDetectImg = img
+            }
+        }
+        
+        let item = UserImgItem(originImg: itemfilteredOriginImg, processedImg: itemfilteredDetectImg, quad: quad)
+
+        if self.currentScanType == .scanDoc {
+            if self.singleFloatV.currentSingleType == .single {
+                let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                self.navigationController?.pushViewController(photoEditVC, animated: true)
+            } else {
+                
+                if hasAutoDetectAndHasQuad {
+                    self.addNewCapturePhoto(imgItem: item)
+                    self.controller.startScan()
+                } else {
+                    let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+                    self.view.addSubview(boundDetectCropView)
+                    boundDetectCropView.closeClickBlock = {
+                        [weak self] in
+                        guard let `self` = self else {return}
+                        DispatchQueue.main.async {
+                            boundDetectCropView.removeFromSuperview()
+                            self.controller.startScan()
+                        }
+                    }
+                    boundDetectCropView.saveClickBlock = {
+                        [weak self] imgI in
+                        guard let `self` = self else {return}
+                        DispatchQueue.main.async {
+                            self.addNewCapturePhoto(imgItem: imgI)
+                            boundDetectCropView.removeFromSuperview()
+                            self.controller.startScan()
+                        }
+                    }
+                }
+            }
+
+        } else if self.currentScanType == .scanPhoto {
+            if self.singleFloatV.currentSingleType == .single {
+                let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+                self.navigationController?.pushViewController(photoEditVC, animated: true)
+            } else {
+//                let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+//                self.view.addSubview(boundDetectCropView)
+//                boundDetectCropView.closeClickBlock = {
+//                    [weak self] in
+//                    guard let `self` = self else {return}
+//                    DispatchQueue.main.async {
+//                        boundDetectCropView.removeFromSuperview()
+//                        self.controller.startScan()
+//                    }
+//                }
+//                boundDetectCropView.saveClickBlock = {
+//                    [weak self] imgI in
+//                    guard let `self` = self else {return}
+//                    DispatchQueue.main.async {
+//                        self.addNewCapturePhoto(imgItem: imgI)
+//                        boundDetectCropView.removeFromSuperview()
+//                        self.controller.startScan()
+//                    }
+//                }
+                self.addNewCapturePhoto(imgItem: item)
+                self.controller.startScan()
+            }
+
+        } else if self.currentScanType == .scanIDCard {
+            
+            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+            self.view.addSubview(boundDetectCropView)
+            boundDetectCropView.closeClickBlock = {
+                [weak self] in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    boundDetectCropView.removeFromSuperview()
+                    self.controller.startScan()
+                }
+            }
+            boundDetectCropView.saveClickBlock = {
+                [weak self] imgI in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    //
+                    self.processAddCardImg(filteredImg: imgI.processedImg)
+                    boundDetectCropView.removeFromSuperview()
+                }
+            }
+        }
+        
+//        guard let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewEditImageView") as? EditImageViewController
+//            else { return }
+//        controller.modalPresentationStyle = .fullScreen
+//        controller.captureImage = image
+//        controller.quad = quad
+//        navigationController?.pushViewController(controller, animated: false)
     }
 }
 
@@ -382,12 +464,19 @@ extension PDfNewCameraScanCAmeraVC {
             $0.right.equalTo(view.snp.centerX).offset(-5)
             $0.bottom.equalTo(bottomBanner.snp.top).offset(-15)
         }
-        singleFloatV.valueChangeBlock = {
+        singleFloatV.contentClickBlock = {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
                 self.boundFloatV.hiddenTopContentV()
                 self.speedFloatV.hiddenTopContentV()
+            }
+        }
+        singleFloatV.valueChangeBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                
             }
         }
         //
@@ -399,21 +488,30 @@ extension PDfNewCameraScanCAmeraVC {
             $0.left.equalTo(view.snp.centerX).offset(5)
             $0.bottom.equalTo(bottomBanner.snp.top).offset(-15)
         }
+        boundFloatV.contentClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                
+                self.singleFloatV.hiddenTopContentV()
+                self.speedFloatV.hiddenTopContentV()
+            }
+        }
         boundFloatV.valueChangeBlock = {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
 
                 if self.boundFloatV.currentDetectType == .auto {
-                    self.captureCameraView.isBorderDetectionEnabled = true
+                    self.controller.isAutoScanEnabled = true
+//                    self.captureCameraView.isBorderDetectionEnabled = true
                     self.autoBtn.isSelected = false
                 } else {
-                    self.captureCameraView.isBorderDetectionEnabled = false
+                    self.controller.isAutoScanEnabled = false
+//                    self.captureCameraView.isBorderDetectionEnabled = false
                     self.autoBtn.isSelected = true
                 }
                 
-                self.singleFloatV.hiddenTopContentV()
-                self.speedFloatV.hiddenTopContentV()
             }
         }
         //
@@ -425,6 +523,14 @@ extension PDfNewCameraScanCAmeraVC {
             $0.width.equalTo(160)
             $0.height.equalTo(100)
         }
+        speedFloatV.contentClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.singleFloatV.hiddenTopContentV()
+                self.boundFloatV.hiddenTopContentV()
+            }
+        }
         speedFloatV.valueChangeBlock = {
             [weak self] in
             guard let `self` = self else {return}
@@ -434,8 +540,7 @@ extension PDfNewCameraScanCAmeraVC {
                 } else {
                     self.updateCaptureCameraViewPhotoSession(isHigh: true)
                 }
-                self.singleFloatV.hiddenTopContentV()
-                self.boundFloatV.hiddenTopContentV()
+               
             }
         }
         //
@@ -468,10 +573,12 @@ extension PDfNewCameraScanCAmeraVC {
         autoBtn.isSelected = !autoBtn.isSelected
         if autoBtn.isSelected {
             boundFloatV.currentDetectType = .manu
-            captureCameraView.isBorderDetectionEnabled = false
+            controller.isAutoScanEnabled = false
+//            captureCameraView.isBorderDetectionEnabled = false
         } else {
             boundFloatV.currentDetectType = .auto
-            captureCameraView.isBorderDetectionEnabled = true
+            controller.isAutoScanEnabled = true
+//            captureCameraView.isBorderDetectionEnabled = true
         }
     }
 }
@@ -530,102 +637,102 @@ extension PDfNewCameraScanCAmeraVC {
     
     func captureImgAction() {
         
-        captureCameraView.captureImage {[weak self] originImg, detectCropImg, borderDetectFeature, cropImgOffsetYBili in
-            guard let `self` = self else {return}
-            DispatchQueue.main.async {
-                guard var imgOrigin_m = originImg else { return }
-                guard var imgDetect_m = detectCropImg else { return }
-                imgOrigin_m = imgOrigin_m.fixOrientation()
-                imgDetect_m = imgDetect_m.fixOrientation()
-                let filteredOriginImg = self.processBlackFilter(img: imgOrigin_m)
-                let filteredDetectImg = self.processBlackFilter(img: imgDetect_m)
-                //
-                var quad: Quadrilateral?
-                if let borderDetectFeature_m = borderDetectFeature {
-                    let topLeft: CGPoint = CGPoint(x: borderDetectFeature_m.topLeft.y, y: borderDetectFeature_m.topLeft.x)
-                    let bottomLeft: CGPoint = CGPoint(x: borderDetectFeature_m.bottomLeft.y, y: borderDetectFeature_m.bottomLeft.x)
-                    let topRight: CGPoint = CGPoint(x: borderDetectFeature_m.topRight.y, y: borderDetectFeature_m.topRight.x)
-                    let bottomRight: CGPoint = CGPoint(x: borderDetectFeature_m.bottomRight.y, y: borderDetectFeature_m.bottomRight.x)
-                    
-                    quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
-                }
-                
-                //
-                var itemfilteredOriginImg = filteredOriginImg
-                var itemfilteredDetectImg = filteredDetectImg
-                if self.speedFloatV.currentDetectType == .speed {
-                    if let dataimg = PDfMakTool.default.compressImage(filteredOriginImg, maxLength: 1024 * 1024 / 2), let img = UIImage(data: dataimg) {
-                        itemfilteredOriginImg = img
-                    }
-                } else {
-                    if let dataimg = PDfMakTool.default.compressImage(filteredDetectImg, maxLength: 1024 * 1024 * 2), let img = UIImage(data: dataimg) {
-                        itemfilteredDetectImg = img
-                    }
-                }
-                let item = UserImgItem(originImg: itemfilteredOriginImg, processedImg: itemfilteredDetectImg, quad: quad)
-                
-                if self.currentScanType == .scanDoc {
-                    if self.singleFloatV.currentSingleType == .single {
-                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
-                        self.navigationController?.pushViewController(photoEditVC, animated: true)
-                    } else {
-                        if self.boundFloatV.currentDetectType == .auto {
-                            self.addNewCapturePhoto(imgItem: item)
-                        } else {
-                            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
-                            self.view.addSubview(boundDetectCropView)
-                            boundDetectCropView.closeClickBlock = {
-                                [weak self] in
-                                guard let `self` = self else {return}
-                                DispatchQueue.main.async {
-                                    boundDetectCropView.removeFromSuperview()
-                                }
-                            }
-                            boundDetectCropView.saveClickBlock = {
-                                [weak self] imgI in
-                                guard let `self` = self else {return}
-                                DispatchQueue.main.async {
-                                    self.addNewCapturePhoto(imgItem: imgI)
-                                    boundDetectCropView.removeFromSuperview()
-                                }
-                            }
-                        }
-                    }
-                    
-                } else if self.currentScanType == .scanPhoto {
-                    if self.singleFloatV.currentSingleType == .single {
-                        
-                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
-                        self.navigationController?.pushViewController(photoEditVC, animated: true)
-                    } else {
-                        self.addNewCapturePhoto(imgItem: item)
-                    }
-                    
-                } else if self.currentScanType == .scanIDCard {
-                    
-                    if let originImg_m = originImg {
-                        let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
-                        self.view.addSubview(boundDetectCropView)
-                        boundDetectCropView.closeClickBlock = {
-                            [weak self] in
-                            guard let `self` = self else {return}
-                            DispatchQueue.main.async {
-                                boundDetectCropView.removeFromSuperview()
-                            }
-                        }
-                        boundDetectCropView.saveClickBlock = {
-                            [weak self] imgI in
-                            guard let `self` = self else {return}
-                            DispatchQueue.main.async {
-                                //
-                                self.processAddCardImg(filteredImg: imgI.processedImg)
-                                boundDetectCropView.removeFromSuperview()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        captureCameraView.captureImage {[weak self] originImg, detectCropImg, borderDetectFeature, cropImgOffsetYBili in
+//            guard let `self` = self else {return}
+//            DispatchQueue.main.async {
+//                guard var imgOrigin_m = originImg else { return }
+//                guard var imgDetect_m = detectCropImg else { return }
+//                imgOrigin_m = imgOrigin_m.fixOrientation()
+//                imgDetect_m = imgDetect_m.fixOrientation()
+//                let filteredOriginImg = self.processBlackFilter(img: imgOrigin_m)
+//                let filteredDetectImg = self.processBlackFilter(img: imgDetect_m)
+//                //
+//                var quad: Quadrilateral?
+//                if let borderDetectFeature_m = borderDetectFeature {
+//                    let topLeft: CGPoint = CGPoint(x: borderDetectFeature_m.topLeft.y, y: borderDetectFeature_m.topLeft.x)
+//                    let bottomLeft: CGPoint = CGPoint(x: borderDetectFeature_m.bottomLeft.y, y: borderDetectFeature_m.bottomLeft.x)
+//                    let topRight: CGPoint = CGPoint(x: borderDetectFeature_m.topRight.y, y: borderDetectFeature_m.topRight.x)
+//                    let bottomRight: CGPoint = CGPoint(x: borderDetectFeature_m.bottomRight.y, y: borderDetectFeature_m.bottomRight.x)
+//
+//                    quad = Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+//                }
+//
+//                //
+//                var itemfilteredOriginImg = filteredOriginImg
+//                var itemfilteredDetectImg = filteredDetectImg
+//                if self.speedFloatV.currentDetectType == .speed {
+//                    if let dataimg = PDfMakTool.default.compressImage(filteredOriginImg, maxLength: 1024 * 1024 / 2), let img = UIImage(data: dataimg) {
+//                        itemfilteredOriginImg = img
+//                    }
+//                } else {
+//                    if let dataimg = PDfMakTool.default.compressImage(filteredDetectImg, maxLength: 1024 * 1024 * 2), let img = UIImage(data: dataimg) {
+//                        itemfilteredDetectImg = img
+//                    }
+//                }
+//                let item = UserImgItem(originImg: itemfilteredOriginImg, processedImg: itemfilteredDetectImg, quad: quad)
+//
+//                if self.currentScanType == .scanDoc {
+//                    if self.singleFloatV.currentSingleType == .single {
+//                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+//                        self.navigationController?.pushViewController(photoEditVC, animated: true)
+//                    } else {
+//                        if self.boundFloatV.currentDetectType == .auto {
+//                            self.addNewCapturePhoto(imgItem: item)
+//                        } else {
+//                            let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+//                            self.view.addSubview(boundDetectCropView)
+//                            boundDetectCropView.closeClickBlock = {
+//                                [weak self] in
+//                                guard let `self` = self else {return}
+//                                DispatchQueue.main.async {
+//                                    boundDetectCropView.removeFromSuperview()
+//                                }
+//                            }
+//                            boundDetectCropView.saveClickBlock = {
+//                                [weak self] imgI in
+//                                guard let `self` = self else {return}
+//                                DispatchQueue.main.async {
+//                                    self.addNewCapturePhoto(imgItem: imgI)
+//                                    boundDetectCropView.removeFromSuperview()
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                } else if self.currentScanType == .scanPhoto {
+//                    if self.singleFloatV.currentSingleType == .single {
+//
+//                        let photoEditVC = PDfPhotosEditVC(imgItems: [item])
+//                        self.navigationController?.pushViewController(photoEditVC, animated: true)
+//                    } else {
+//                        self.addNewCapturePhoto(imgItem: item)
+//                    }
+//
+//                } else if self.currentScanType == .scanIDCard {
+//
+//                    if let originImg_m = originImg {
+//                        let boundDetectCropView = PDfPhotoCropView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgItem: item, quad: quad)
+//                        self.view.addSubview(boundDetectCropView)
+//                        boundDetectCropView.closeClickBlock = {
+//                            [weak self] in
+//                            guard let `self` = self else {return}
+//                            DispatchQueue.main.async {
+//                                boundDetectCropView.removeFromSuperview()
+//                            }
+//                        }
+//                        boundDetectCropView.saveClickBlock = {
+//                            [weak self] imgI in
+//                            guard let `self` = self else {return}
+//                            DispatchQueue.main.async {
+//                                //
+//                                self.processAddCardImg(filteredImg: imgI.processedImg)
+//                                boundDetectCropView.removeFromSuperview()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     
     func processAddCardImg(filteredImg: UIImage) {
@@ -752,15 +859,13 @@ extension PDfNewCameraScanCAmeraVC {
     
     func addMoveAnimation(img: UIImage) {
         let firstImgV = UIImageView()
-        firstImgV.frame = CGRect(x: 0, y: 0, width: captureCameraView.bounds.size.width/3 * 2, height: captureCameraView.bounds.size.height/3 * 2)
+        firstImgV.frame = CGRect(x: 0, y: 0, width: centerBgV.bounds.size.width/3 * 2, height: centerBgV.bounds.size.height/3 * 2)
         centerBgV.addSubview(firstImgV)
         firstImgV.center = CGPoint(x: centerBgV.bounds.size.width/2, y: centerBgV.bounds.size.height/2)
         firstImgV.contentMode = .scaleAspectFill
         firstImgV.alpha = 1
         firstImgV.image = img
-        
-//        let targetFrame
-        
+
         let targetCenter = bottomBanner.convert(multiPhotoAreaView.center, to: centerBgV)
         debugPrint("targetCenter - \(targetCenter)")
         //
@@ -794,11 +899,7 @@ extension PDfNewCameraScanCAmeraVC {
     @objc func lightBtnClick(sender: UIButton) {
         hiddenFloatPop()
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            self.captureCameraView.isTorchEnabled = true
-        } else {
-            self.captureCameraView.isTorchEnabled = false
-        }
+        controller.toggleFlash()
         
     }
     @objc func filterBtnClick(sender: UIButton) {
@@ -817,7 +918,8 @@ extension PDfNewCameraScanCAmeraVC {
         if isCaptureing == false {
             isCaptureing = true
             hiddenFloatPop()
-            captureImgAction()
+            controller.capture()
+//            captureImgAction()
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
                 [weak self] in
                 guard let `self` = self else {return}
@@ -861,9 +963,11 @@ extension PDfNewCameraScanCAmeraVC {
         idcardFloatV.isHidden = true
         
         if boundFloatV.currentDetectType == .auto {
-            captureCameraView.isBorderDetectionEnabled = true
+            controller.isAutoScanEnabled = true
+//            captureCameraView.isBorderDetectionEnabled = true
         } else {
-            captureCameraView.isBorderDetectionEnabled = false
+            controller.isAutoScanEnabled = false
+//            captureCameraView.isBorderDetectionEnabled = false
         }
         
     }
@@ -893,8 +997,9 @@ extension PDfNewCameraScanCAmeraVC {
         speedFloatV.isHidden = false
         idcardFloatV.isHidden = true
         
+        controller.isAutoScanEnabled = false
         //
-        captureCameraView.isBorderDetectionEnabled = false
+//        captureCameraView.isBorderDetectionEnabled = false
         
         
     }
@@ -919,21 +1024,23 @@ extension PDfNewCameraScanCAmeraVC {
         idcardFloatV.isHidden = false
         
         //
-        captureCameraView.isBorderDetectionEnabled = true
+        controller.isAutoScanEnabled = false
+        
+//        captureCameraView.isBorderDetectionEnabled = true
     }
      
     
     @objc func captureCameraViewTapGesture(sender: UIGestureRecognizer) {
-        if sender.state == .recognized {
-            let location = sender.location(in: centerBgV)
-            self.captureCameraView.focus(at: location) {
-                [weak self] in
-                guard let `self` = self else {return}
-                DispatchQueue.main.async {
-                    
-                }
-            }
-        }
+//        if sender.state == .recognized {
+//            let location = sender.location(in: centerBgV)
+//            self.captureCameraView.focus(at: location) {
+//                [weak self] in
+//                guard let `self` = self else {return}
+//                DispatchQueue.main.async {
+//
+//                }
+//            }
+//        }
     }
     
     @objc func multiPhotoAreaBtnClick() {

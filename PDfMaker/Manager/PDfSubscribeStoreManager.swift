@@ -2,7 +2,7 @@
 //  PDfSubscribeStoreManager.swift
 //  PDfMaker
 //
-//  Created by Joe on 2023/5/24.
+//  Created by Jbai go on 2023/5/24.
 //
 
 import UIKit

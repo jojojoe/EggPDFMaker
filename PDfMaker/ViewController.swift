@@ -47,6 +47,13 @@ class ViewController: UIViewController {
         homeBottomBtnClick()
         
         
+        
+        #if DEBUG
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            PDfSubscribeStoreManager.default.inSubscription = true
+        }
+        
+        #endif
 //        proBtn.isHidden = true
         
         
@@ -525,7 +532,8 @@ extension ViewController {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                let vc = PDfScanCAmeraVC()
+                let vc = PDfNewCameraScanCAmeraVC()
+//                let vc = PDfScanCAmeraVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

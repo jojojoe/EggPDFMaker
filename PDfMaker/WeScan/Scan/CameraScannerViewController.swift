@@ -25,6 +25,11 @@ public final class CameraScannerViewController: UIViewController {
     public var isAutoScanEnabled: Bool = CaptureSession.current.isAutoScanEnabled {
         didSet {
             CaptureSession.current.isAutoScanEnabled = isAutoScanEnabled
+            if isAutoScanEnabled {
+                showQuadView()
+            } else {
+                hiddenQuadView()
+            }
         }
     }
 
@@ -41,8 +46,28 @@ public final class CameraScannerViewController: UIViewController {
     private let quadView = QuadrilateralView()
 
     /// Whether flash is enabled
-    private var flashEnabled = false
+    public var flashEnabled = false
 
+    
+    public func startScan() {
+        CaptureSession.current.isEditing = false
+        quadView.removeQuadrilateral()
+        captureSessionManager?.start()
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
+    
+    public func stopScan() {
+        captureSessionManager?.stop()
+    }
+    
+    public func hiddenQuadView() {
+        quadView.alpha = 0
+    }
+    
+    public func showQuadView() {
+        quadView.alpha = 1
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -133,6 +158,10 @@ public final class CameraScannerViewController: UIViewController {
         focusRectangle.setBorder(color: UIColor.white.cgColor)
         view.addSubview(focusRectangle)
 
+        TaskDelay.default.taskDelay(afterTime: 0.2) {
+            CaptureSession.current.removeFocusRectangleIfNeeded(self.focusRectangle, animated: true)
+        }
+        
         do {
             try CaptureSession.current.setFocusPointToTapPoint(convertedTouchPoint)
         } catch {

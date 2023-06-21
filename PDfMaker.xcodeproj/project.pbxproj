@@ -82,13 +82,6 @@
 		EBCA1A3029FA732600473A6A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A2E29FA732600473A6A /* LaunchScreen.storyboard */; };
 		EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */; };
 		EBCA1A3C29FA7B2A00473A6A /* TEstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A3B29FA7B2A00473A6A /* TEstViewController.m */; };
-		EBCA1A5029FA7B3100473A6A /* UIColor+MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */; };
-		EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */; };
-		EBCA1A5229FA7B3100473A6A /* MADCameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */; };
-		EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */; };
-		EBCA1A5429FA7B3100473A6A /* MADCameraCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */; };
-		EBCA1A5529FA7B3100473A6A /* MADCropScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */; };
-		EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */; };
 		EBCA1A6529FBCACC00473A6A /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6029FBCAC900473A6A /* SF-Pro-Text-Bold.otf */; };
 		EBCA1A6629FBCACC00473A6A /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6129FBCACA00473A6A /* SF-Pro-Text-Regular.otf */; };
 		EBCA1A6729FBCACC00473A6A /* SF-Pro-Text-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = EBCA1A6229FBCACB00473A6A /* SF-Pro-Text-Black.otf */; };
@@ -203,21 +196,6 @@
 		EBCA1A3929FA7B2A00473A6A /* PDfMaker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PDfMaker-Bridging-Header.h"; sourceTree = "<group>"; };
 		EBCA1A3A29FA7B2A00473A6A /* TEstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TEstViewController.h; sourceTree = "<group>"; };
 		EBCA1A3B29FA7B2A00473A6A /* TEstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEstViewController.m; sourceTree = "<group>"; };
-		EBCA1A3E29FA7B3000473A6A /* MADCameraCaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCameraCaptureController.h; sourceTree = "<group>"; };
-		EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MADColor.m"; sourceTree = "<group>"; };
-		EBCA1A4129FA7B3000473A6A /* UIColor+MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MADColor.h"; sourceTree = "<group>"; };
-		EBCA1A4229FA7B3000473A6A /* MADCropScaleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCropScaleController.h; sourceTree = "<group>"; };
-		EBCA1A4429FA7B3000473A6A /* MADCGTransfromHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCGTransfromHelper.h; sourceTree = "<group>"; };
-		EBCA1A4529FA7B3000473A6A /* MADMacroDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacroDefines.h; sourceTree = "<group>"; };
-		EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCGTransfromHelper.m; sourceTree = "<group>"; };
-		EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCameraCaptureController.m; sourceTree = "<group>"; };
-		EBCA1A4929FA7B3000473A6A /* MADCropScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCropScaleView.h; sourceTree = "<group>"; };
-		EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSnapshotButton.m; sourceTree = "<group>"; };
-		EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCameraCaptureView.m; sourceTree = "<group>"; };
-		EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCropScaleView.m; sourceTree = "<group>"; };
-		EBCA1A4D29FA7B3000473A6A /* MADSnapshotButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSnapshotButton.h; sourceTree = "<group>"; };
-		EBCA1A4E29FA7B3000473A6A /* MADCameraCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCameraCaptureView.h; sourceTree = "<group>"; };
-		EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCropScaleController.m; sourceTree = "<group>"; };
 		EBCA1A6029FBCAC900473A6A /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		EBCA1A6129FBCACA00473A6A /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		EBCA1A6229FBCACB00473A6A /* SF-Pro-Text-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Black.otf"; sourceTree = "<group>"; };
@@ -459,7 +437,6 @@
 				D8E76A392A41E451008BD289 /* WeScan */,
 				D88C1EE12A18D0A60040CE44 /* HomeViews */,
 				EB340FC42A121DDB007C8DD1 /* Manager */,
-				EBCA1A3D29FA7B3000473A6A /* Capture */,
 				EBCA1A3729FA78D100473A6A /* PDfScanCAmeraVC.swift */,
 				D8E76A372A41DB90008BD289 /* PDfNewCameraScanCAmeraVC.swift */,
 				D88C8A512A108DF800CE73F2 /* PDfPhotosEditVC.swift */,
@@ -486,52 +463,6 @@
 				EBCA1A7229FBD00100473A6A /* Montserrat-SemiBold.ttf */,
 			);
 			path = PDfMaker;
-			sourceTree = "<group>";
-		};
-		EBCA1A3D29FA7B3000473A6A /* Capture */ = {
-			isa = PBXGroup;
-			children = (
-				EBCA1A3F29FA7B3000473A6A /* category */,
-				EBCA1A3E29FA7B3000473A6A /* MADCameraCaptureController.h */,
-				EBCA1A4729FA7B3000473A6A /* MADCameraCaptureController.m */,
-				EBCA1A4229FA7B3000473A6A /* MADCropScaleController.h */,
-				EBCA1A4F29FA7B3000473A6A /* MADCropScaleController.m */,
-				EBCA1A4329FA7B3000473A6A /* utils */,
-				EBCA1A4829FA7B3000473A6A /* view */,
-			);
-			path = Capture;
-			sourceTree = "<group>";
-		};
-		EBCA1A3F29FA7B3000473A6A /* category */ = {
-			isa = PBXGroup;
-			children = (
-				EBCA1A4029FA7B3000473A6A /* UIColor+MADColor.m */,
-				EBCA1A4129FA7B3000473A6A /* UIColor+MADColor.h */,
-			);
-			path = category;
-			sourceTree = "<group>";
-		};
-		EBCA1A4329FA7B3000473A6A /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				EBCA1A4429FA7B3000473A6A /* MADCGTransfromHelper.h */,
-				EBCA1A4529FA7B3000473A6A /* MADMacroDefines.h */,
-				EBCA1A4629FA7B3000473A6A /* MADCGTransfromHelper.m */,
-			);
-			path = utils;
-			sourceTree = "<group>";
-		};
-		EBCA1A4829FA7B3000473A6A /* view */ = {
-			isa = PBXGroup;
-			children = (
-				EBCA1A4E29FA7B3000473A6A /* MADCameraCaptureView.h */,
-				EBCA1A4B29FA7B3000473A6A /* MADCameraCaptureView.m */,
-				EBCA1A4929FA7B3000473A6A /* MADCropScaleView.h */,
-				EBCA1A4C29FA7B3000473A6A /* MADCropScaleView.m */,
-				EBCA1A4D29FA7B3000473A6A /* MADSnapshotButton.h */,
-				EBCA1A4A29FA7B3000473A6A /* MADSnapshotButton.m */,
-			);
-			path = view;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -697,17 +628,13 @@
 				D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */,
 				D8E76AB92A41F235008BD289 /* WeScanCropManager.swift in Sources */,
 				EB0F0CAC2A1F67960093F471 /* PDfGoPremiumVC.swift in Sources */,
-				EBCA1A5129FA7B3100473A6A /* MADCGTransfromHelper.m in Sources */,
 				D8E76AAB2A41E452008BD289 /* EditScanCornerView.swift in Sources */,
-				EBCA1A5329FA7B3100473A6A /* MADSnapshotButton.m in Sources */,
 				D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */,
 				EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */,
 				D8E76AA42A41E452008BD289 /* Array+Utils.swift in Sources */,
-				EBCA1A5229FA7B3100473A6A /* MADCameraCaptureController.m in Sources */,
 				D8E76AA52A41E452008BD289 /* UIImage+Orientation.swift in Sources */,
 				EBCA1A3829FA78D100473A6A /* PDfScanCAmeraVC.swift in Sources */,
 				D8E76AAF2A41E452008BD289 /* QuadrilateralView.swift in Sources */,
-				EBCA1A5629FA7B3100473A6A /* MADCropScaleController.m in Sources */,
 				EBB3B5A12A1B801600884EA7 /* PDfHistoryRecentVC.swift in Sources */,
 				D8E76AA12A41E452008BD289 /* CIImage+Utils.swift in Sources */,
 				D8E76AB22A41E452008BD289 /* CaptureDevice.swift in Sources */,
@@ -725,16 +652,13 @@
 				D8E76AAE2A41E452008BD289 /* CIRectangleDetector.swift in Sources */,
 				D8E76A972A41E452008BD289 /* RectangleFeaturesFunnel.swift in Sources */,
 				D8E76AB12A41E452008BD289 /* ReviewViewController.swift in Sources */,
-				EBCA1A5529FA7B3100473A6A /* MADCropScaleView.m in Sources */,
 				EBCA1A2429FA732400473A6A /* AppDelegate.swift in Sources */,
 				D88C8A4E2A0E808A00CE73F2 /* PDfPhotoCropVC.swift in Sources */,
-				EBCA1A5429FA7B3100473A6A /* MADCameraCaptureView.m in Sources */,
 				D8E76A9E2A41E452008BD289 /* CGPoint+Utils.swift in Sources */,
 				D8E76AB62A41E452008BD289 /* CaptureSession.swift in Sources */,
 				D8E76A892A41E452008BD289 /* ImageScannerController.swift in Sources */,
 				D8E76A9A2A41E452008BD289 /* CameraScannerViewController.swift in Sources */,
 				EBAB516A2A08AEF0003C1838 /* PDfCameraSpeedControlView.swift in Sources */,
-				EBCA1A5029FA7B3100473A6A /* UIColor+MADColor.m in Sources */,
 				D88C8A502A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift in Sources */,
 				EBAB51662A08AE75003C1838 /* PDfCameraSinglePageControlView.swift in Sources */,
 				EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */,
