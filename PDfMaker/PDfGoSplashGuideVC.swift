@@ -7,21 +7,62 @@
 
 import UIKit
 import DeviceKit
+import KRProgressHUD
 
 class PDfGoSplashGuideVC: UIViewController {
     var collection: UICollectionView!
     var currentIndexP: IndexPath = IndexPath(item: 0, section: 0)
     let theContinueBtn = UIButton()
     var continueCloseBlock:(()->Void)?
+    var splashPage1: PDfSplashPageViewOne!
+    var splashPage2: PDfSplashPageViewOne!
+    var splashPage3: PDfSplashPageViewOne!
+    var splashPage4: PDfSplashPageViewOne!
+    var splashPage5: PDfSplashPageViewWeek!
+    var splashPageList: [UIView] = []
     
-    var sp_list = ["sp02", "sp05", "sp06", "sp07", "sp08"]
+    var sp_list = ["sp01", "sp02", "sp05", "sp06", "sp07", "sp08"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7 || Device.current.diagonal == 5.5 {
-            sp_list = ["sp8_02", "sp8_05", "sp8_06", "sp8_07", "sp8_08"]
+            sp_list = ["sp8_01", "sp8_02", "sp8_05", "sp8_06", "sp8_07", "sp8_08"]
         }
+        
+        
+        
+        splashPage1 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[0], sp_list[1], sp_list[2]])
+        splashPage2 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[3]])
+        splashPage3 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[4]])
+        splashPage4 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[5]])
+        
+        splashPage5 = PDfSplashPageViewWeek(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        splashPage5.closeBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.theContinueBtnClick()
+            }
+        }
+        splashPage5.purchaseBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: .week, source: "week") { success, errorstr in
+                    if success {
+                        self.theContinueBtnClick()
+                    } else {
+                        KRProgressHUD.showInfo(withMessage: errorStr)
+                    }
+                }
+            }
+        }
+        
+        splashPageList = [splashPage1, splashPage2, splashPage3, splashPage4, splashPage5]
+        
         setupV()
+        
+        splashPage1.startAnimation()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -29,7 +70,7 @@ class PDfGoSplashGuideVC: UIViewController {
     }
     
     func setupV() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         view.clipsToBounds = true
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -42,7 +83,7 @@ class PDfGoSplashGuideVC: UIViewController {
         collection.isPagingEnabled = true
         view.addSubview(collection)
         collection.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(0)
+            $0.top.equalToSuperview().offset(-30)
             $0.bottom.equalToSuperview().offset(0)
             $0.right.left.equalToSuperview()
         }
@@ -66,7 +107,7 @@ class PDfGoSplashGuideVC: UIViewController {
     }
 
     @objc func theContinueBtnClick() {
-        if currentIndexP.item == (sp_list.count - 1) {
+        if currentIndexP.item == splashPageList.count - 1 {
             continueCloseBlock?()
             debugPrint("currentIndexP = close")
         } else {
@@ -99,16 +140,34 @@ extension PDfGoSplashGuideVC: UICollectionViewDataSource {
 //            imgName = "yin03"
 //            iconimgName = "dao3"
 //        }
-        let imgName = sp_list[indexPath.item]
-        cell.contentImgV.image = UIImage(named: imgName)
+//        let imgName = sp_list[indexPath.item]
+//        cell.contentImgV.image = UIImage(named: imgName)
 //        cell.titLabelV.text = titName
 //        cell.iconImgV.image = UIImage(named: iconimgName)
+        
+        cell.bgContentV.removeSubviews()
+        let page = splashPageList[indexPath.item]
+        cell.bgContentV.addSubview(page)
+//
+//        if indexPath.item == 0 {
+//            cell.bgContentV.addSubview(splashPage1)
+//        } else if indexPath.item == 1 {
+//            cell.bgContentV.addSubview(splashPage2)
+//        } else if indexPath.item == 2 {
+//            cell.bgContentV.addSubview(splashPage3)
+//        } else if indexPath.item == 3 {
+//            cell.bgContentV.addSubview(splashPage4)
+//        } else if indexPath.item == 4 {
+//            cell.bgContentV.addSubview(splashPage5)
+//        }
+//
+        
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sp_list.count
+        return splashPageList.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -119,7 +178,7 @@ extension PDfGoSplashGuideVC: UICollectionViewDataSource {
 
 extension PDfGoSplashGuideVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height + 20)
+        return CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -138,7 +197,12 @@ extension PDfGoSplashGuideVC: UICollectionViewDelegateFlowLayout {
 
 extension PDfGoSplashGuideVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        theContinueBtnClick()
+        if indexPath.item == splashPageList.count - 1 {
+            
+        } else {
+            theContinueBtnClick()
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -152,6 +216,9 @@ extension PDfGoSplashGuideVC: UICollectionViewDelegate {
                 if indexP.item != currentIndexP.item {
 
                     currentIndexP = indexP
+                    if indexP.item == 0 {
+//                        splashPage1.startAnimation()
+                    }
 //                    pagecontrol.currentPage = currentInfoIndex
 //                    infoLabel.text = infoList[currentInfoIndex]["name"]
                 }
@@ -164,9 +231,11 @@ extension PDfGoSplashGuideVC: UICollectionViewDelegate {
 
 
 class BSiegSplashCell: UICollectionViewCell {
-    let contentImgV = UIImageView()
-    let titLabelV = UILabel()
-    let iconImgV = UIImageView()
+//    let contentImgV = UIImageView()
+//    let titLabelV = UILabel()
+//    let iconImgV = UIImageView()
+    
+    let bgContentV: UIView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -180,13 +249,17 @@ class BSiegSplashCell: UICollectionViewCell {
     func setupView() {
         backgroundColor = .black
         contentView.backgroundColor = .black
-        
-        contentImgV.contentMode = .scaleAspectFill
-        contentImgV.clipsToBounds = true
-        contentView.addSubview(contentImgV)
-        contentImgV.snp.makeConstraints {
-            $0.top.right.bottom.left.equalToSuperview()
+        //
+        contentView.addSubview(bgContentV)
+        bgContentV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
         }
+//        contentImgV.contentMode = .scaleAspectFill
+//        contentImgV.clipsToBounds = true
+//        contentView.addSubview(contentImgV)
+//        contentImgV.snp.makeConstraints {
+//            $0.top.right.bottom.left.equalToSuperview()
+//        }
         //
 //        iconImgV.contentMode = .scaleAspectFit
 //        iconImgV.clipsToBounds = true

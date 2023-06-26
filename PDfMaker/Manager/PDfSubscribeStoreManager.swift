@@ -33,9 +33,11 @@ class PDfSubscribeStoreManager: NSObject {
      */
 //    com.convert.picture.PDF
     public enum IAPType: String {
+        case week = "com.convert.picture.PDF.week"
         case month = "com.convert.picture.PDF.month"
         case year = "com.convert.picture.PDF.year"
     }
+    var currentWeekPrice: String = "2.99"
     var currentMonthPrice: String = "7.99"
     var currentYearPrice: String = "49.99"
     var currentSymbol: String = "$"
@@ -53,7 +55,7 @@ class PDfSubscribeStoreManager: NSObject {
         case notPurchased
     }
     
-    var iapTypeList: [IAPType] = [.month, .year]
+    var iapTypeList: [IAPType] = [.week, .month, .year]
     var currentIapType: IAPType = .month
     var inSubscription: Bool = false
     var currentProducts: [PDfSubscribeStoreManager.IAPProduct] = []
@@ -133,7 +135,7 @@ extension PDfSubscribeStoreManager {
             }
         }
     }
-
+    
     public func subscribeIapOrder(iapType: PDfSubscribeStoreManager.IAPType, source: String, completionBlock: ((Bool, String?) -> Void)? = nil) { // inSubscribeBool errorString
         
         SwiftyStoreKit.purchaseProduct(iapType.rawValue) { purchaseResult in

@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         } else {
             UserDefaults.standard.set(currentVersion, forKey: "saveVersion")
         }
-//        showS = true
+        showS = true
         if showS {
             PDfSubscribeStoreManager.default.isSplashBegin = true
             let splashVC = PDfGoSplashGuideVC()
@@ -69,31 +69,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let `self` = self else {return}
             DispatchQueue.main.async {
                 debugPrint("purchased - \(purchased)")
-                 
-                if !PDfSubscribeStoreManager.default.inSubscription {
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                        [weak self] in
-                        guard let `self` = self else {return}
-                        let subsVC = PDfGoPremiumVC()
-                        subsVC.modalPresentationStyle = .fullScreen
-                        self.VC.present(subsVC, animated: true)
-                        subsVC.pageDisappearBlock = {
+                if isShowingSplase {
+                    SKStoreReviewController.requestReview()
+                } else {
+                    if !PDfSubscribeStoreManager.default.inSubscription {
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
                             [weak self] in
                             guard let `self` = self else {return}
-                            DispatchQueue.main.async {
-                                SKStoreReviewController.requestReview()
-//                                self.VC.searchAgainAction()
+                            let subsVC = PDfGoPremiumVC()
+                            subsVC.modalPresentationStyle = .fullScreen
+                            self.VC.present(subsVC, animated: true)
+                            subsVC.pageDisappearBlock = {
+                                [weak self] in
+                                guard let `self` = self else {return}
+                                DispatchQueue.main.async {
+                                    SKStoreReviewController.requestReview()
+    //                                self.VC.searchAgainAction()
+                                }
                             }
                         }
+                    } else {
+                        SKStoreReviewController.requestReview()
+    //                    let subsVC = BSiegDeSubscVC()
+    //                    subsVC.modalPresentationStyle = .fullScreen
+    //                    self.VC.present(subsVC, animated: true)
+                        
+    //                    self.VC.searchAgainAction()
                     }
-                } else {
-                    SKStoreReviewController.requestReview()
-//                    let subsVC = BSiegDeSubscVC()
-//                    subsVC.modalPresentationStyle = .fullScreen
-//                    self.VC.present(subsVC, animated: true)
-                    
-//                    self.VC.searchAgainAction()
                 }
+                
             }
         }
     }
