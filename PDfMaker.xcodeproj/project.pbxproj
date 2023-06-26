@@ -66,7 +66,6 @@
 		D8E76AB72A41E452008BD289 /* CaptureSession+Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76A872A41E451008BD289 /* CaptureSession+Focus.swift */; };
 		D8E76AB92A41F235008BD289 /* WeScanCropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76AB82A41F235008BD289 /* WeScanCropManager.swift */; };
 		D8E76ABD2A4686A3008BD289 /* PDfSplashPageViewOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76ABC2A4686A3008BD289 /* PDfSplashPageViewOne.swift */; };
-		D8E76ABF2A4686B2008BD289 /* PDfSplashPageViewTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76ABE2A4686B2008BD289 /* PDfSplashPageViewTwo.swift */; };
 		D8E76AC12A4686BC008BD289 /* PDfSplashPageViewWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76AC02A4686BC008BD289 /* PDfSplashPageViewWeek.swift */; };
 		EB0F0CAC2A1F67960093F471 /* PDfGoPremiumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */; };
 		EB340FC82A123F2D007C8DD1 /* PDfWePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */; };
@@ -178,7 +177,6 @@
 		D8E76A872A41E451008BD289 /* CaptureSession+Focus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CaptureSession+Focus.swift"; sourceTree = "<group>"; };
 		D8E76AB82A41F235008BD289 /* WeScanCropManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeScanCropManager.swift; sourceTree = "<group>"; };
 		D8E76ABC2A4686A3008BD289 /* PDfSplashPageViewOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSplashPageViewOne.swift; sourceTree = "<group>"; };
-		D8E76ABE2A4686B2008BD289 /* PDfSplashPageViewTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSplashPageViewTwo.swift; sourceTree = "<group>"; };
 		D8E76AC02A4686BC008BD289 /* PDfSplashPageViewWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSplashPageViewWeek.swift; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
 		EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfGoPremiumVC.swift; sourceTree = "<group>"; };
@@ -252,7 +250,6 @@
 				D88C1EE22A18D0C60040CE44 /* PDfHomeRecentListView.swift */,
 				D88C1EE62A1912470040CE44 /* PDfSettingPage.swift */,
 				D8E76ABC2A4686A3008BD289 /* PDfSplashPageViewOne.swift */,
-				D8E76ABE2A4686B2008BD289 /* PDfSplashPageViewTwo.swift */,
 				D8E76AC02A4686BC008BD289 /* PDfSplashPageViewWeek.swift */,
 			);
 			path = HomeViews;
@@ -634,7 +631,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8E76AB72A41E452008BD289 /* CaptureSession+Focus.swift in Sources */,
-				D8E76ABF2A4686B2008BD289 /* PDfSplashPageViewTwo.swift in Sources */,
 				D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */,
 				D8E76AB92A41F235008BD289 /* WeScanCropManager.swift in Sources */,
 				EB0F0CAC2A1F67960093F471 /* PDfGoPremiumVC.swift in Sources */,
