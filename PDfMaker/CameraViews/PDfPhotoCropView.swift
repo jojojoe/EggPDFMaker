@@ -42,6 +42,7 @@ class PDfPhotoCropView: UIView {
     private lazy var quadView: QuadrilateralView = {
         let quadView = QuadrilateralView()
         quadView.editable = true
+        quadView.strokeColor = UIColor(hexString: "#D90A0A")!.cgColor
         quadView.translatesAutoresizingMaskIntoConstraints = false
         return quadView
     }()
