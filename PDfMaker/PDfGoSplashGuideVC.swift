@@ -21,15 +21,13 @@ class PDfGoSplashGuideVC: UIViewController {
     var splashPage5: PDfSplashPageViewWeek!
     var splashPageList: [UIView] = []
     
-    var sp_list = ["sp01", "sp02", "sp05", "sp06", "sp07", "sp08"]
+    var sp_list = ["sp01", "sp02", "sp03", "sp05", "sp06", "sp07"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7 || Device.current.diagonal == 5.5 {
-            sp_list = ["sp8_01", "sp8_02", "sp8_05", "sp8_06", "sp8_07", "sp8_08"]
+            sp_list = ["sp8_01", "sp8_02", "sp8_03", "sp8_05", "sp8_06", "sp8_07"]
         }
-        
-        
         
         splashPage1 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[0], sp_list[1], sp_list[2]])
         splashPage2 = PDfSplashPageViewOne(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), imgNames: [sp_list[3]])
@@ -48,7 +46,7 @@ class PDfGoSplashGuideVC: UIViewController {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: .week, source: "week") { success, errorstr in
+                PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: .week, source: "week") { success, errorStr in
                     if success {
                         self.theContinueBtnClick()
                     } else {
@@ -216,7 +214,8 @@ extension PDfGoSplashGuideVC: UICollectionViewDelegate {
                 if indexP.item != currentIndexP.item {
 
                     currentIndexP = indexP
-                    if indexP.item == 0 {
+                    if indexP.item == splashPageList.count - 1 {
+                        splashPage5.showCloseBtnStatus()
 //                        splashPage1.startAnimation()
                     }
 //                    pagecontrol.currentPage = currentInfoIndex

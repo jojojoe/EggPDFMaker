@@ -249,21 +249,9 @@ class PDfGoPremiumVC: UIViewController {
 
 extension PDfGoPremiumVC {
     
-    func updatePrice(productsm: [PDfSubscribeStoreManager.IAPProduct]?) {
-        if let products = productsm {
-            let product0 = products[0]
-            let product1 = products[1]
-            
-            PDfSubscribeStoreManager.default.currentSymbol = product0.priceLocale.currencySymbol ?? "$"
-            
-            if product0.iapID == PDfSubscribeStoreManager.IAPType.month.rawValue {
-                PDfSubscribeStoreManager.default.currentMonthPrice = product0.price.accuracyToString(position: 2)
-                PDfSubscribeStoreManager.default.currentYearPrice = product1.price.accuracyToString(position: 2)
-            } else {
-                PDfSubscribeStoreManager.default.currentYearPrice = product0.price.accuracyToString(position: 2)
-                PDfSubscribeStoreManager.default.currentMonthPrice = product1.price.accuracyToString(position: 2)
-            }
-        }
+    func updatePrice() {
+        
+        
         monthBtn.priceLabe.text = "\(PDfSubscribeStoreManager.default.currentSymbol)\(PDfSubscribeStoreManager.default.currentMonthPrice)"
         yearBtn.priceLabe.text = "\(PDfSubscribeStoreManager.default.currentSymbol)\(PDfSubscribeStoreManager.default.currentYearPrice)"
         
@@ -275,14 +263,14 @@ extension PDfGoPremiumVC {
     func fetchPriceLabels() {
         
         if PDfSubscribeStoreManager.default.currentProducts.count == PDfSubscribeStoreManager.default.iapTypeList.count {
-            updatePrice(productsm: PDfSubscribeStoreManager.default.currentProducts)
+            updatePrice()
         } else {
-            updatePrice(productsm: nil)
+            updatePrice()
             PDfSubscribeStoreManager.default.fetchPurchaseInfo {[weak self] productList in
                 guard let `self` = self else {return}
                 DispatchQueue.main.async {
                     if productList.count == PDfSubscribeStoreManager.default.iapTypeList.count {
-                        self.updatePrice(productsm: productList)
+                        self.updatePrice()
                     }
                 }
             }

@@ -84,19 +84,34 @@ extension PDfSubscribeStoreManager {
     }
     
     public func fetchPurchaseInfo(block: @escaping (([PDfSubscribeStoreManager.IAPProduct]) -> Void)) {
+        
+        
+        if self.currentProducts.count == self.iapTypeList.count {
+            block(self.currentProducts)
+            return
+        }
+        
         let iapList = iapTypeList.map { $0.rawValue }
-//        retrieveProductsInfo(iapList: iapList) {[weak self] items in
-//            guard let `self` = self else { return }
-//            self.currentProducts = items
-//            block(items)
-//        }
-        
-        
         SwiftyStoreKit.retrieveProductsInfo(Set(iapList)) { result in
             let priceList = result.retrievedProducts.compactMap { $0 }
             let localList = priceList.compactMap { PDfSubscribeStoreManager.IAPProduct(iapID: $0.productIdentifier, price: $0.price.doubleValue.rounded(digits: 2), priceLocale: $0.priceLocale, localizedPrice: $0.localizedPrice, currencyCode: $0.priceLocale.currencyCode)
             }
             self.currentProducts = localList
+            
+            //
+            self.currentSymbol = localList.first?.priceLocale.currencySymbol ?? "$"
+            
+            for producti in localList {
+                
+                if producti.iapID == PDfSubscribeStoreManager.IAPType.month.rawValue {
+                    PDfSubscribeStoreManager.default.currentMonthPrice = producti.price.accuracyToString(position: 2)
+                } else if producti.iapID == PDfSubscribeStoreManager.IAPType.year.rawValue {
+                    PDfSubscribeStoreManager.default.currentYearPrice = producti.price.accuracyToString(position: 2)
+                } else if producti.iapID == PDfSubscribeStoreManager.IAPType.week.rawValue {
+                    PDfSubscribeStoreManager.default.currentWeekPrice = producti.price.accuracyToString(position: 2)
+                }
+            }
+            
             block(localList)
         }
         
