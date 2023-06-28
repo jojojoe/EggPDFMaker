@@ -304,13 +304,20 @@ extension PDfGoPremiumVC {
     
     @objc func restoreBtnClick() {
         
-        
         if PDfSubscribeStoreManager.default.inSubscription {
             KRProgressHUD.showSuccess(withMessage: "You are already in the subscription period!")
         } else {
             PDfSubscribeStoreManager.default.restore { success in
                 if success {
                     KRProgressHUD.showSuccess(withMessage: "The subscription was restored successfully")
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
+                        KRProgressHUD.dismiss()
+                        if self.navigationController != nil {
+                            self.navigationController?.popViewController(animated: true)
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    }
                 } else {
                     KRProgressHUD.showMessage("Nothing to Restore")
                 }
