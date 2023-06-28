@@ -1046,3 +1046,36 @@ extension UIImage {
         return img
     }
 }
+
+
+extension UIScreen {
+    static func isDevice8SE() -> Bool {
+        if Device.current.diagonal <= 4.7 {
+            return true
+        }
+        return false
+    }
+    
+    static func isDevice8SEPaid() -> Bool {
+        if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7.0 {
+            return true
+        }
+        return false
+    }
+    
+    static func isDeviceHasBottomSafeAre() -> Bool {
+        if Device.current.diagonal <= 4.7 || Device.current.diagonal == 5.5 || Device.current.diagonal >= 7.0 {
+            return false
+        }
+        return true
+    }
+    
+    static func isDevice8Plus() -> Bool {
+        if Device.current.diagonal == 5.5 {
+            return true
+        }
+        return false
+    }
+    
+    
+}

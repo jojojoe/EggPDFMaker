@@ -67,6 +67,7 @@
 		D8E76AB92A41F235008BD289 /* WeScanCropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76AB82A41F235008BD289 /* WeScanCropManager.swift */; };
 		D8E76ABD2A4686A3008BD289 /* PDfSplashPageViewOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76ABC2A4686A3008BD289 /* PDfSplashPageViewOne.swift */; };
 		D8E76AC12A4686BC008BD289 /* PDfSplashPageViewWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E76AC02A4686BC008BD289 /* PDfSplashPageViewWeek.swift */; };
+		D8EEACE32A4C5E660096A62E /* PDfGoProUpgradeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EEACE22A4C5E660096A62E /* PDfGoProUpgradeVC.swift */; };
 		EB0F0CAC2A1F67960093F471 /* PDfGoPremiumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */; };
 		EB340FC82A123F2D007C8DD1 /* PDfWePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */; };
 		EB55EEA72A0E3900007D7B15 /* PDfPhotoCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB55EEA62A0E3900007D7B15 /* PDfPhotoCropView.swift */; };
@@ -178,6 +179,7 @@
 		D8E76AB82A41F235008BD289 /* WeScanCropManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeScanCropManager.swift; sourceTree = "<group>"; };
 		D8E76ABC2A4686A3008BD289 /* PDfSplashPageViewOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSplashPageViewOne.swift; sourceTree = "<group>"; };
 		D8E76AC02A4686BC008BD289 /* PDfSplashPageViewWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfSplashPageViewWeek.swift; sourceTree = "<group>"; };
+		D8EEACE22A4C5E660096A62E /* PDfGoProUpgradeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfGoProUpgradeVC.swift; sourceTree = "<group>"; };
 		E52D1A920AE5670DF263E6C2 /* Pods-PDfMaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDfMaker.debug.xcconfig"; path = "Target Support Files/Pods-PDfMaker/Pods-PDfMaker.debug.xcconfig"; sourceTree = "<group>"; };
 		EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfGoPremiumVC.swift; sourceTree = "<group>"; };
 		EB340FC72A123F2D007C8DD1 /* PDfWePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDfWePreviewVC.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				D88C8A4F2A0F5FA800CE73F2 /* PDfPhotoRotateVC.swift */,
 				EBB3B5A02A1B801600884EA7 /* PDfHistoryRecentVC.swift */,
 				EB0F0CAB2A1F67960093F471 /* PDfGoPremiumVC.swift */,
+				D8EEACE22A4C5E660096A62E /* PDfGoProUpgradeVC.swift */,
 				D8E769C92A278B1A008BD289 /* PDfGoSplashGuideVC.swift */,
 				D8E769BC2A22246B008BD289 /* configstore.storekit */,
 				D8E76AB82A41F235008BD289 /* WeScanCropManager.swift */,
@@ -634,6 +637,7 @@
 				D88C1EE72A1912470040CE44 /* PDfSettingPage.swift in Sources */,
 				D8E76AB92A41F235008BD289 /* WeScanCropManager.swift in Sources */,
 				EB0F0CAC2A1F67960093F471 /* PDfGoPremiumVC.swift in Sources */,
+				D8EEACE32A4C5E660096A62E /* PDfGoProUpgradeVC.swift in Sources */,
 				D8E76AAB2A41E452008BD289 /* EditScanCornerView.swift in Sources */,
 				D88C1EE32A18D0C60040CE44 /* PDfHomeRecentListView.swift in Sources */,
 				EBCA1A2829FA732400473A6A /* ViewController.swift in Sources */,
