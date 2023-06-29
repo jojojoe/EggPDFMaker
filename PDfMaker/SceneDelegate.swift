@@ -30,7 +30,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         } else {
             UserDefaults.standard.set(currentVersion, forKey: "saveVersion")
         }
+        #if DEBUG
         showS = true
+        #endif
+        
         if showS {
             PDfSubscribeStoreManager.default.isSplashBegin = true
             let splashVC = PDfGoSplashGuideVC()
