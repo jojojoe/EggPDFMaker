@@ -3,4 +3,4 @@
 //
 
 //#import "MADCameraCaptureController.h"
-#import "MADCameraCaptureView.h"
+//#import "MADCameraCaptureView.h"

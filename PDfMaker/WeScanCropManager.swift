@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class WeScanCropManager: NSObject {
     static let `default` = WeScanCropManager()

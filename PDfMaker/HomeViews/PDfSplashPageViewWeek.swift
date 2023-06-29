@@ -28,14 +28,16 @@ class PDfSplashPageViewWeek: UIView {
         self.addSubview(bgImgV)
         bgImgV.image = UIImage(named: "splashweekbg")
         bgImgV.contentMode = .scaleAspectFill
-        
+        bgImgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
         //
         let centerBgV = UIView()
         self.addSubview(centerBgV)
         centerBgV.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.width.equalTo(330)
-            $0.width.equalTo(395)
+            $0.height.equalTo(395)
         }
         centerBgV.backgroundColor = .white
         centerBgV.layer.cornerRadius = 20
@@ -70,7 +72,7 @@ class PDfSplashPageViewWeek: UIView {
         centerBgV.addSubview(purchaseBtn)
         purchaseBtn.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(-30)
             $0.width.equalTo(130)
             $0.height.equalTo(50)
         }
@@ -86,20 +88,19 @@ class PDfSplashPageViewWeek: UIView {
         centerInfoLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.left.equalToSuperview().offset(40)
-            $0.top.equalToSuperview().offset(30)
-            $0.bottom.equalTo(centerBgImgV.snp.top).offset(-20)
+            $0.top.equalTo(centerBgImgV.snp.bottom).offset(20)
+            $0.bottom.equalTo(purchaseBtn.snp.top).offset(-20)
         }
         centerInfoLabel.textAlignment = .center
         centerInfoLabel.font = FontCusNames.MontMedium.font(sizePoint: 12)
         centerInfoLabel.textColor = UIColor(hexString: "#666666")
         centerInfoLabel.text = "Unlimited access to all features and future updates only for $9.99 per week, auto renewable, cancel anytime."
         centerInfoLabel.numberOfLines = 0
+        centerInfoLabel.adjustsFontSizeToFitWidth = true
         //
-        //
-        
         centerBgV.addSubview(closeBtn)
         closeBtn.snp.makeConstraints {
-            $0.left.top.equalToSuperview()
+            $0.left.top.equalToSuperview().offset(5)
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }

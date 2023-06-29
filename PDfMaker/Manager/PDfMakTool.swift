@@ -12,6 +12,7 @@ import KRProgressHUD
 import PDFKit
 import MessageUI
 import Photos
+import DeviceKit
 
 class PDfMakTool: NSObject {
     
@@ -696,7 +697,7 @@ extension PDfMakTool: MFMailComposeViewControllerDelegate {
     }
     
     func showSubscribeStoreVC(contentVC: UIViewController?) {
-        let vc = PDfGoPremiumVC()
+        let vc = PDfGoProUpgradeVC()
         vc.modalPresentationStyle = .fullScreen
         contentVC?.present(vc, animated: true)
     }

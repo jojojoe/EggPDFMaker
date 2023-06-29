@@ -41,7 +41,6 @@ class PDfHomeRecentListView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     func setupNodoc() {
         addSubview(nodoucV)
         nodoucV.snp.makeConstraints {

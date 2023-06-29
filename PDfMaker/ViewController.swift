@@ -45,15 +45,15 @@ class ViewController: UIViewController {
         setupBottomV()
         setupScaneCamera()
         homeBottomBtnClick()
+        updateSubsProBtnStatus()
         
         
-        
-        #if DEBUG
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            PDfSubscribeStoreManager.default.inSubscription = true
-        }
-        
-        #endif
+//        #if DEBUG
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+//            PDfSubscribeStoreManager.default.inSubscription = true
+//        }
+//
+//        #endif
 //        proBtn.isHidden = true
         
         
@@ -65,7 +65,7 @@ class ViewController: UIViewController {
     
     
     func addnoti() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateContentProStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateContentHistoryStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_historyItemChange), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(subscribeSuccessAction(notification: )), name: NSNotification.Name(rawValue: PDfSubscribeStoreManager.PurchaseNotificationKeys.success), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateSubscribeCloseStatus(noti: )), name: NSNotification.Name(rawValue: PDfMakTool.default.k_subscribeVCback), object: nil)
@@ -89,7 +89,7 @@ class ViewController: UIViewController {
         bgEndEditBtn.isHidden = true
     }
 
-    @objc func updateContentProStatus(noti: Notification) {
+    @objc func updateContentHistoryStatus(noti: Notification) {
         DispatchQueue.main.async {
             self.updateHistoryStatus()
         }
@@ -482,10 +482,6 @@ extension ViewController {
 extension ViewController {
     @objc func proBtnClick() {
         PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
-        
-//        let vc = PDfGoPremiumVC()
-//        vc.modalPresentationStyle = .fullScreen
-//        self.present(vc, animated: true)
         
     }
     

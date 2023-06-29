@@ -69,6 +69,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let `self` = self else {return}
             DispatchQueue.main.async {
                 debugPrint("purchased - \(purchased)")
+                if purchased {
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name(rawValue: PDfSubscribeStoreManager.PurchaseNotificationKeys.success),
+                        object: nil,
+                        userInfo: nil)
+                }
                 if isShowingSplase {
                     SKStoreReviewController.requestReview()
                 } else {
@@ -76,7 +82,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let subsVC = PDfGoPremiumVC()
+                            let subsVC = PDfGoProUpgradeVC()
                             subsVC.modalPresentationStyle = .fullScreen
                             self.VC.present(subsVC, animated: true)
                             subsVC.pageDisappearBlock = {
