@@ -52,7 +52,8 @@ class PDfNewCameraScanCAmeraVC: UIViewController {
                 self.addCaptureView()
                 self.addControlFloatView()
                 self.updateDefaultAutoBtnStatus()
-                self.scanDocBtnClick(sender: scanDocBtn)
+//                self.scanDocBtnClick(sender: scanDocBtn)
+                self.selectScanDocAction()
             }
         }
     }
@@ -885,6 +886,37 @@ extension PDfNewCameraScanCAmeraVC {
         multiPhotoAreaView.isHidden = true
         multiPhotoAreaCountLabel.isHidden = true
     }
+    
+    func selectScanDocAction() {
+        //
+        currentScanType = .scanDoc
+        hiddenFloatPop()
+        toolBtnIndicateView.snp.remakeConstraints {
+            $0.centerX.equalTo(scanDocBtn)
+            $0.top.equalToSuperview()
+            $0.width.equalTo(115)
+            $0.height.equalTo(3)
+        }
+        singleFloatV.snp.remakeConstraints {
+            $0.width.equalTo(140)
+            $0.height.equalTo(100)
+            $0.right.equalTo(centerBgV.snp.centerX).offset(-5)
+            $0.bottom.equalTo(centerBgV.snp.bottom).offset(-15)
+        }
+        
+        singleFloatV.isHidden = false
+        boundFloatV.isHidden = false
+        speedFloatV.isHidden = true
+        idcardFloatV.isHidden = true
+        
+        if boundFloatV.currentDetectType == .auto {
+            controller.isAutoScanEnabled = true
+//            captureCameraView.isBorderDetectionEnabled = true
+        } else {
+            controller.isAutoScanEnabled = false
+//            captureCameraView.isBorderDetectionEnabled = false
+        }
+    }
 }
 
 extension PDfNewCameraScanCAmeraVC {
@@ -941,36 +973,12 @@ extension PDfNewCameraScanCAmeraVC {
             return
         }
         
-        //
-        currentScanType = .scanDoc
-        hiddenFloatPop()
-        toolBtnIndicateView.snp.remakeConstraints {
-            $0.centerX.equalTo(scanDocBtn)
-            $0.top.equalToSuperview()
-            $0.width.equalTo(115)
-            $0.height.equalTo(3)
-        }
-        singleFloatV.snp.remakeConstraints {
-            $0.width.equalTo(140)
-            $0.height.equalTo(100)
-            $0.right.equalTo(centerBgV.snp.centerX).offset(-5)
-            $0.bottom.equalTo(centerBgV.snp.bottom).offset(-15)
-        }
-        
-        singleFloatV.isHidden = false
-        boundFloatV.isHidden = false
-        speedFloatV.isHidden = true
-        idcardFloatV.isHidden = true
-        
-        if boundFloatV.currentDetectType == .auto {
-            controller.isAutoScanEnabled = true
-//            captureCameraView.isBorderDetectionEnabled = true
-        } else {
-            controller.isAutoScanEnabled = false
-//            captureCameraView.isBorderDetectionEnabled = false
-        }
+        selectScanDocAction()
         
     }
+    
+    
+    
     @objc func scanPhotoBtnClick(sender: UIButton) {
         if !PDfSubscribeStoreManager.default.inSubscription {
             PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
