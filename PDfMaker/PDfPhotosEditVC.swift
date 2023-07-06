@@ -274,6 +274,10 @@ class PDfPhotosEditVC: UIViewController {
 
 extension PDfPhotosEditVC {
     func printAction() {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
         
         let imgs = imgItems.compactMap {
             $0.processedImg

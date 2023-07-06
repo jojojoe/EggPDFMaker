@@ -449,6 +449,10 @@ extension ViewController {
     }
     
     func printAction(item: HistoryItem) {
+        if !PDfSubscribeStoreManager.default.inSubscription {
+            PDfMakTool.default.showSubscribeStoreVC(contentVC: self)
+            return
+        }
         PDfMakTool.default.printFile(item: item)
     }
     

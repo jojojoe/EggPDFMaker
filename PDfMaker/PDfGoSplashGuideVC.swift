@@ -46,12 +46,26 @@ class PDfGoSplashGuideVC: UIViewController {
             [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
+                KRProgressHUD.show()
+                
                 PDfSubscribeStoreManager.default.subscribeIapOrder(iapType: .week, source: "week") { success, errorStr in
-                    if success {
-                        self.theContinueBtnClick()
-                    } else {
-                        KRProgressHUD.showInfo(withMessage: errorStr)
+                   
+                    DispatchQueue.main.async {
+                        KRProgressHUD.dismiss()
+                        if success {
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                KRProgressHUD.showSuccess(withMessage: "Subscribe Successful!")
+                            }
+
+                            self.theContinueBtnClick()
+                        } else {
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                                KRProgressHUD.showInfo(withMessage: errorStr)
+                            }
+                            
+                        }
                     }
+                    
                 }
             }
         }
