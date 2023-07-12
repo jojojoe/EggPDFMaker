@@ -37,7 +37,7 @@ class PDfSubscribeStoreManager: NSObject {
         case month = "com.convert.picture.PDF.month"
         case year = "com.convert.picture.PDF.year"
     }
-    var currentWeekPrice: String = "1.99"
+    var currentWeekPrice: String = "4.99"
     var currentMonthPrice: String = "7.99"
     var currentYearPrice: String = "49.99"
     var currentSymbol: String = "$"
